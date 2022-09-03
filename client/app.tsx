@@ -1,10 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
 
-const app = () => {
+import "./stylesheets/style.scss"
+
+const App = (): JSX.Element => {
   return (
-    <div>app</div>
+     <div className='puny'>Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!</div>
   )
 }
 
-export default app
+export default App

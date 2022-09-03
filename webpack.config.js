@@ -14,22 +14,36 @@ module.exports = [
     },
     output: {
       path: __dirname + '/dist',
-      filename: 'bundle.js'
+      filename: 'electron.js'
     }
   },
   {
     mode: 'development',
-    entry: './client/react.tsx',
+    entry: './client/index.tsx',
     target: 'electron-renderer',
     devtool: 'source-map',
-    module: { rules: [{
-      test: /\.ts(x?)$/,
-      include: /client/,
-      use: [{ loader: 'ts-loader' }]
-    }] },
+    module: {
+      rules: [{
+        test: /\.ts(x?)$/,
+        include: /client/,
+        use: [{ loader: 'ts-loader' }]
+      },
+      {
+        test: /\.s?[ac]ss$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader"
+        ],
+      }]
+    },
+    resolve: {
+      modules: [__dirname, "client", "node_modules"],
+      extensions: ["*", ".ts", ".tsx", ".js", ".jsx"]
+    },
     output: {
       path: __dirname + '/dist',
-      filename: 'react.js'
+      filename: 'index.js'
     },
     plugins: [
       new HtmlWebpackPlugin({
