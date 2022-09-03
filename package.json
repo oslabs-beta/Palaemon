@@ -5,7 +5,8 @@
   "main": "electron.js",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "start": "npm run build && electron ./dist/electron.js"
+    "start": "npm run build && electron ./dist/electron.js",
+    "pubsub": "npm run ./server/pubsub.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/oslabs-beta/Palaemon#readme",
   "devDependencies": {
+    "@google-cloud/pubsub": "^3.1.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "css-loader": "^6.7.1",

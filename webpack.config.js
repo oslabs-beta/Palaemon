@@ -29,6 +29,11 @@ module.exports = [
         use: [{ loader: 'ts-loader' }]
       },
       {
+        test: /\.ts(x?)$/,
+        include: /server/,
+        use: [{ loader: 'ts-loader' }]
+      },
+      {
         test: /\.s?[ac]ss$/,
         use: [
           "style-loader",
