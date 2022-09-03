@@ -12,7 +12,11 @@
     "jsx": "react-jsx",
     "sourceMap": true,
     "outDir": "./dist",
-    "strict": true ,
+    "strict": true,
     "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
   }
+  // "exclude": [e]
 }
