@@ -25,3 +25,11 @@ I have no idea how authentication is working for accessing subscriptions. Potent
 We should find a way to make this modular, and not based on a fixed subscription name. Have a way for the user to input their project info, and pull up subscriptions based on it. (google-cloud/pubsub also has sample code to create a new subscription, delete subscription etc).
 
 We need to parse the data that is coming in, save it (database?) and display it. 
+
+
+## How to Connect to Google Kubernetes Engine
+
+1. Install gcloud CLI on your local machine : https://cloud.google.com/sdk/docs/install
+2. Initialize the gcloud CLI : https://cloud.google.com/sdk/docs/initializing
+3. Connect your gcloud CLI to your GKE cluster here : https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl
+4. Follow the steps here to deploy the Prometheus UI, and you can forward the prometheus UI to local port 9090 : https://cloud.google.com/stackdriver/docs/managed-prometheus/query
