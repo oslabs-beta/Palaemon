@@ -40,7 +40,12 @@ module.exports = [
           "css-loader",
           "sass-loader"
         ],
-      }]
+      },
+      {
+        test: /\.png/,
+        type: 'asset/resource'
+      }
+    ]
     },
     resolve: {
       modules: [__dirname, "client", "node_modules"],

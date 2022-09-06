@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import ClusterChart from './ClusterChart';
+import Events from './Events';
 
 import "../stylesheets/style.scss"
 
@@ -8,7 +10,8 @@ const App = (): JSX.Element => {
     <>
       <div id='navbar'>
         The navigation bar
-        <img id="logo" src="../assets/logo.png" alt="" />
+        <img id="logo" src="../client/assets/logo.png" alt="" />
+        
         <h1>Palaemon</h1>
       </div>
 
@@ -17,7 +20,8 @@ const App = (): JSX.Element => {
         <div id='left-side'>
           left side
           <div id='cluster-chart'>
-            cluster chart
+            <ClusterChart />
+            {/* cluster chart */}
           </div>
           <div id='graph'>
             graph
@@ -25,6 +29,7 @@ const App = (): JSX.Element => {
         </div>
         
         <div id='right-side'>
+          <Events />
           right side
         </div>
       </div>
