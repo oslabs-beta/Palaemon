@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = [
   {
     mode: 'development',
-    entry: './client/electron.ts',
+    entry: './electron/main.ts',
     target: 'electron-main',
     module: {
       rules: [{
@@ -14,7 +14,7 @@ module.exports = [
     },
     output: {
       path: __dirname + '/dist',
-      filename: 'electron.js'
+      filename: 'main.js'
     }
   },
   {
