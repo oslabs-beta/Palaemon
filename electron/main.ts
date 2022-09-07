@@ -1,7 +1,10 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
+const fetch: any = (...args: any) =>
+  import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
+
 import { setStartAndEndTime } from './utils';
 import path from 'path';
 
@@ -21,30 +24,30 @@ const PORT: string | number = process.env.PORT || 8080;
 let mainWindow: any = null;
 
 const loadMainWindow = () => {
- mainWindow = new BrowserWindow({
-      width : 1200,
-      height: 800,
-      webPreferences: {
-          preload: path.join(__dirname + 'preload.js'),
-          nodeIntegration: true,
-          contextIsolation: false,
-          devTools: isDev, //whether to enable DevTools
-          // preload: path.join(__dirname, "preload.js")
-      }
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname + './preload.ts'),
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: isDev, //whether to enable DevTools
+      // preload: path.join(__dirname, "preload.js")
+    },
   });
 
   // depending on whether this is dev mode or production mode
   // if dev mode, open port 8080 to share server
   // if production mode, open directly from build file in /dist folder
-  if(isDev){
+  if (isDev) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
-    console.log(`Main Window loaded PORT ${PORT}`)
-  } 
-  else{
-    mainWindow.loadFile(path.join(__dirname, "../client/index.html"));
+    console.log(`Main Window loaded PORT ${PORT}`);
+  } else {
+    mainWindow.loadFile(path.join(__dirname, '../client/index.html'));
     console.log('Main Window loaded file index.html');
-  } 
-}
+  }
+};
+
 app.on('ready', loadMainWindow);
 // invoke preload? to load up all the data..? maybe
 
@@ -52,6 +55,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
 // K8S API //
 
 // get nodes in cluster
@@ -66,6 +70,7 @@ ipcMain.handle('getNodes', async () => {
 });
 
 // get deployments in cluster
+
 ipcMain.handle('getDeployments', async () => {
   try {
     const data = k8sApiApps.listDeploymentForAllNamespaces();

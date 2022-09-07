@@ -1,7 +1,7 @@
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
-  const now: Date = new Date();
-  const copyNow: Date = new Date(now.getTime());
+  const now = new Date();
+  const copyNow = new Date(now.getTime());
   copyNow.setHours(copyNow.getHours() - 24);
 
   const startTime = copyNow.toISOString();
