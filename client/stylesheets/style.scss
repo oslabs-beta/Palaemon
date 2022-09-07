@@ -1,5 +1,19 @@
-.puny {
-  color: #ba55d3;
+$ugly-sewage-green: #00695c;
+$p-light-color: #439889;
+$p-dark-color: #003d33;
+
+$secondary-color: #b2dfdb;
+$s-light-color: #e5ffff;
+$s-dark-color: #82ada9;
+
+html {
+  height: 100vh;
+  // prevents the window from over-scrolling and bouncing beyond the 100% screen size
+  overflow: hidden;
+}
+
+body, #root, #app-container {
+  height: 100%;
 }
 
 body {
@@ -7,22 +21,103 @@ body {
 }
 
 * {
-  border: 1px black solid;
+  // border: 1px black solid;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 #logo {
-  width: 200px;
+  width: 100px;
 }
 
 
-#root {
+#app-container {
+  height: 100vh;
   padding: 0px;
+  display: flex;
+  flex-direction: column;
 }
 
 #contents {
+  flex-grow: 1;
   display: flex;
-  div {
-    width: 50%;
+  justify-content: space-between;
+  & > div {
+    width: 50vw;
+    height: 100%;
   }
 }
+
+#tagline{
+  display: block;
+  margin: 0;
+  text-align: right;
+  background-color: $ugly-sewage-green;
+  font-weight: 100;
+  font-size: 1rem;
+  font-style: italic;
+  color: whitesmoke;
+  padding-right: 12px;
+}
+
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background-color: $ugly-sewage-green;
+  img{
+    display: block;
+  }
+  h1{
+    display: block;
+    height: max-content;
+    color: whitesmoke;
+    padding-right: 12px;
+    font-size: 2rem;;
+  }
+}
+
+footer{
+  font-size: 0.75rem;
+  text-align: center;
+  color: $ugly-sewage-green;
+  padding: 4px 0;
+}
+
+// Right side event styling
+#container-event{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  & > * {
+    padding: 12px;
+    margin: 8px;
+  }
+}
+
+#container-event-logs {
+  flex-grow: 1;
+  overflow-y: auto;
+  // I thiiink flex-grow maxes out the height, but a fixed height is needed to make
+  // overflow-y scrolling feature working. I don't know why. 
+  height: 100px;
+}
+
+#container-select {
+  display: flex;
+  justify-content: flex-start;
+  gap: 24px;
+
+  & > select {
+    width: 140px;
+    font-size: 1.1rem;
+    border: 1px solid black;
+    border-radius: 0.25em;
+    padding: 0.25rem 0.5rem;
+
+    &:active{
+      border: 2px solid $p-light-color;
+    }
+  }
+}
+

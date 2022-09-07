@@ -7,16 +7,14 @@ import "../stylesheets/style.scss"
 
 const App = (): JSX.Element => {
   return (
-    <>
+    <div id='app-container'>
       <div id='navbar'>
-        <img id="logo" src="./assets/logo.png" alt="" />
-        The navigation bar
-        
+        <img id="logo" src="./assets/logo.png" alt="" />        
         <h1>Palaemon</h1>
       </div>
 
+      <h3 id='tagline'>A gentle, euthanization tool for OOM kubernetes pods</h3>
       <div id='contents'>
-      <h2>A gentle, euthanization tool for OOM kubernetes pods</h2>
         <div id='left-side'>
           left side
           <div id='cluster-chart'>
@@ -30,12 +28,11 @@ const App = (): JSX.Element => {
         
         <div id='right-side'>
           <Events />
-          right side
         </div>
       </div>
 
-      <div className='puny'>Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!</div>
-    </>
+      <footer className='puny'>Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!</footer>
+    </div>
   )
 }
 
