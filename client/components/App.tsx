@@ -9,8 +9,8 @@ const App = (): JSX.Element => {
   return (
     <>
       <div id='navbar'>
+        <img id="logo" src="./assets/logo.png" alt="" />
         The navigation bar
-        <img id="logo" src="../client/assets/logo.png" alt="" />
         
         <h1>Palaemon</h1>
       </div>
