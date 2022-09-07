@@ -1,0 +1,45 @@
+// ADD THIS FILE TO GIT IGNORE FOR LAUNCH!!
+
+GET MEMORY USAGE BY PODS. WORKS
+  sum(container_memory_working_set_bytes{namespace="default"}) by by (pod)
+  QUERY EQUIVALENT
+const query = `${promURL}query_range?query=sum(container_memory_working_set_bytes${namespaceStr}) 
+by (pod)&start=${startDateTime}&end=${endDateTime}&step=${"1m"}`
+
+http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) 
+by (pod)&start=1662500157637&end=1662503958134&step=6h
+
+// PROMQL Response returns a data object below with result array
+// Result array holds individual pod's metrics
+// Values is an array of arrays that holds the time in milliseconds of the requests (first element) and the value of the query (second element)
+
+
+{
+  "status": "success",
+  "data": {
+      "resultType": "matrix",
+      "result": [
+          {
+              "metric": {
+                  "pod": "nodejs-guestbook-backend-c9b7887f9-npzrr"
+              },
+              "values": [
+                  [
+                      1662461863.033,
+                      "73625600"
+                  ],
+                  [
+                      1662483463.033,
+                      "73273344"
+                  ],
+                  [
+                      1662505063.033,
+                      "73986048"
+                  ]
+              ]
+          }
+      ]
+}
+
+multiply the number on top 1662345234512341234.033 by 1000 (miliseconds) to get the actual date
+
