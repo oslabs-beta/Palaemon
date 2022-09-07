@@ -4,76 +4,81 @@ const path = require('path');
 
 module.exports = [
   {
+    externals: [
+      {
+        'utf-8-validate': 'commonjs utf-8-validate',
+        bufferutil: 'commonjs bufferutil',
+      },
+    ],
     mode: 'development',
     entry: './electron/main.ts',
     target: 'electron-main',
     module: {
-      rules: [{
-        test: /\.ts(x?)$/,
-        exclude: /node-modules/,
-        use: 'ts-loader'
-      }]
+      rules: [
+        {
+          test: /\.ts(x?)$/,
+          exclude: /node-modules/,
+          use: 'ts-loader',
+        },
+      ],
     },
     output: {
-      path: path.resolve(__dirname,'./dist/electron'),
+      path: path.resolve(__dirname, './dist/electron'),
       filename: 'main.js',
-      clean: true
-    }
+      clean: true,
+    },
   },
   {
     mode: 'development',
     entry: './client/index.tsx',
     devtool: 'inline-source-map',
     module: {
-      rules: [{
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        use: 'ts-loader'
-      },
-      {
-        test: /\.s?[ac]ss$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader"
-        ],
-      },
-      {
-        test: /\.png/,
-        type: 'asset/resource'
-      }
-    ]
+      rules: [
+        {
+          test: /\.ts(x?)$/,
+          exclude: /node_modules/,
+          use: 'ts-loader',
+        },
+        {
+          test: /\.s?[ac]ss$/,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
+        },
+        {
+          test: /\.png/,
+          type: 'asset/resource',
+        },
+      ],
     },
     resolve: {
-      modules: [__dirname, "client", "node_modules"],
-      extensions: ["*", ".ts", ".tsx", ".js", ".jsx"]
+      // modules: [__dirname, 'client', 'node_modules'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     output: {
       path: path.resolve(__dirname, './dist/client'),
       filename: 'index.js',
-      clean: true
+      clean: true,
     },
     devServer: {
-      host: "localhost",
+      host: 'localhost',
       port: 8080,
       hot: true,
       static: {
         directory: path.resolve(__dirname, './client/assets'),
-        publicPath: '/assets'
-      }
+        publicPath: '/assets',
+      },
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: '/client/index.html',
+        template: 'client/index.html',
       }),
       new CopyWebpackPlugin({
         patterns: [
           {
             from: path.resolve(__dirname, 'client/assets'),
-            to: 'assets/'
-          }
-        ]
-      })
-    ]
-  }
+            to: 'assets/',
+          },
+        ],
+      }),
+    ],
+  },
 ];

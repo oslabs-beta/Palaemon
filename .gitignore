@@ -103,5 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# PromQL queries
+QUERIES.TXT
+
+test.js
 
 package-lock.json
