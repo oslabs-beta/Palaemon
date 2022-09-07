@@ -13,21 +13,38 @@ const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
 const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
 
+const isDev: boolean = process.env.NODE_ENV === 'development';
+const PORT: string | number = process.env.PORT || 8080;
+
+// this is to allow the BrowserWindow object to be referrable globally
+// however, BrowserWindow cannot be created before app is 'ready'
+let mainWindow: any = null;
+
 const loadMainWindow = () => {
-  const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      preload: path.join(__dirname + 'preload.js'),
-      nodeIntegration: true,
-    },
+ mainWindow = new BrowserWindow({
+      width : 1200,
+      height: 800,
+      webPreferences: {
+          preload: path.join(__dirname + 'preload.js'),
+          nodeIntegration: true,
+          contextIsolation: false,
+          devTools: isDev, //whether to enable DevTools
+          // preload: path.join(__dirname, "preload.js")
+      }
   });
 
-  mainWindow.loadFile(path.join(__dirname, './index.html'));
-  // mainWindow.loadURL('http://localhost:8080/');
-  // mainWindow.on('ready-to-show', () => mainWindow.show());
-};
-
+  // depending on whether this is dev mode or production mode
+  // if dev mode, open port 8080 to share server
+  // if production mode, open directly from build file in /dist folder
+  if(isDev){
+    mainWindow.loadURL(`http://localhost:${PORT}`);
+    console.log(`Main Window loaded PORT ${PORT}`)
+  } 
+  else{
+    mainWindow.loadFile(path.join(__dirname, "../client/index.html"));
+    console.log('Main Window loaded file index.html');
+  } 
+}
 app.on('ready', loadMainWindow);
 // invoke preload? to load up all the data..? maybe
 
@@ -35,14 +52,6 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
-});
-
-// app.on('activate', () => {
-//   if (BrowserWindow.getAllWindows().length === 0) {
-//     loadMainWindow();
-//   }
-// });
-
 // K8S API //
 
 // get nodes in cluster

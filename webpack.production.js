@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = [
   {
-    mode: 'development',
+    mode: 'production',
     entry: './electron/main.ts',
     target: 'electron-main',
     module: {
@@ -15,15 +15,15 @@ module.exports = [
       }]
     },
     output: {
-      path: path.resolve(__dirname,'./dist/electron'),
+      path: path.resolve(__dirname,'dist/electron'),
       filename: 'main.js',
       clean: true
     }
   },
   {
-    mode: 'development',
+    mode: 'production',
     entry: './client/index.tsx',
-    devtool: 'inline-source-map',
+    devtool: false,
     module: {
       rules: [{
         test: /\.ts(x?)$/,
@@ -45,22 +45,13 @@ module.exports = [
     ]
     },
     resolve: {
-      // modules: [__dirname, 'client', 'node_modules'],
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      modules: [__dirname, "client", "node_modules"],
+      extensions: ["*", ".ts", ".tsx", ".js", ".jsx"]
     },
     output: {
-      path: path.resolve(__dirname, './dist/client'),
+      path: path.resolve(__dirname, 'dist/client'),
       filename: 'index.js',
       clean: true
-    },
-    devServer: {
-      host: "localhost",
-      port: 8080,
-      hot: true,
-      static: {
-        directory: path.resolve(__dirname, './client/assets'),
-        publicPath: '/assets'
-      }
     },
     plugins: [
       new HtmlWebpackPlugin({

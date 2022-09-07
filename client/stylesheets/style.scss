@@ -1,3 +1,28 @@
 .puny {
-  color: mediumorchid;
+  color: #ba55d3;
+}
+
+body {
+  margin: 0px;
+}
+
+* {
+  border: 1px black solid;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#logo {
+  width: 200px;
+}
+
+
+#root {
+  padding: 0px;
+}
+
+#contents {
+  display: flex;
+  div {
+    width: 50%;
+  }
 }
