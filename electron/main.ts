@@ -14,9 +14,10 @@ kc.loadFromDefault();
 const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api);
 const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
-const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
+const PROM_URL = 'http://127.0.0.1:9090/api/v1';
 
-const isDev: boolean = process.env.NODE_ENV === 'development';
+// const isDev: boolean = process.env.NODE_ENV === 'development';
+const isDev: boolean = false;
 const PORT: string | number = process.env.PORT || 8080;
 
 // this is to allow the BrowserWindow object to be referrable globally
@@ -31,7 +32,7 @@ const loadMainWindow = () => {
       preload: path.join(__dirname + '/preload.js'), // loads from /dist/electron/preload.js
       nodeIntegration: true,
       contextIsolation: true,
-      devTools: isDev, //whether to enable DevTools
+      devTools: true, //whether to enable DevTools
       // preload: path.join(__dirname, "preload.js")
     },
   });
@@ -64,8 +65,9 @@ ipcMain.handle('getNodes', async () => {
   const namespace = 'default';
   try {
     const data = await k8sApiCore.listNode(namespace);
-    console.log('heres namespace data', data)
-    return data;
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    console.log(formattedData);
+    return formattedData;
   } catch (error) {
     return console.log(`Error in getNodes function: ERROR: ${error}`);
   }
@@ -75,7 +77,9 @@ ipcMain.handle('getNodes', async () => {
 
 ipcMain.handle('getDeployments', async () => {
   try {
-    const data = k8sApiApps.listDeploymentForAllNamespaces();
+    const data = await k8sApiApps.listDeploymentForAllNamespaces();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
   } catch (error) {
     console.log(`Error in getDeployments function: ERROR: ${error}`);
   }
@@ -84,7 +88,9 @@ ipcMain.handle('getDeployments', async () => {
 // get services in cluster
 ipcMain.handle('getServices', async () => {
   try {
-    const data = k8sApiCore.listServiceForAllNamespaces();
+    const data = await k8sApiCore.listServiceForAllNamespaces();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
   } catch (error) {
     console.log(`Error in getServices function: ERROR: ${error}`);
   }
@@ -94,6 +100,8 @@ ipcMain.handle('getServices', async () => {
 ipcMain.handle('getPods', async () => {
   try {
     const data = await k8sApiCore.listPodForAllNamespaces();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
   } catch (error) {
     console.log(`Error in getPods function: ERROR: ${error}`);
   }
@@ -103,6 +111,8 @@ ipcMain.handle('getPods', async () => {
 ipcMain.handle('getNamespaces', async () => {
   try {
     const data = await k8sApiCore.listNamespace();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
   } catch (error) {
     console.log(`Error in getNamespaces function: ERROR: ${error}`);
   }
@@ -112,15 +122,22 @@ ipcMain.handle('getNamespaces', async () => {
 // get events
 ipcMain.handle('getEvents', async () => {
   try {
-    const data = await cp.execSync('kubectl get events --all-namespaces', {encoding: 'utf-8'});
+    const response: any = await cp.execSync(
+      'kubectl get events --all-namespaces',
+      {
+        encoding: 'utf-8',
+      }
+    );
+    const data = response.split('\n');
     // divides each event into subarrs
-    const trimmed: any = data.map((el:any) => el.split(/[ ]{2,}/));    // added any type here.. made split happy? whats the data we get back
+    const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
     // lowercase the headers of events
-    const eventHeaders = trimmed[0].map((header:any) => header.toLowerCase()); // any type because we can
+    const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
     // remove headers from trimmed arr
     trimmed.shift();
 
-    const formattedEvents = trimmed.map((event:any) => { // any type because we can
+    const formattedEvents = trimmed.map((event: any) => {
+      // any type because we can
       return {
         namespace: event[0],
         lastSeen: event[1],
@@ -130,11 +147,44 @@ ipcMain.handle('getEvents', async () => {
         object: event[5],
       };
     });
-    
-    return { formattedEvents, eventHeaders };
 
+    return { formattedEvents, eventHeaders };
   } catch (error) {
     return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
+  }
+});
+
+// test logs //
+ipcMain.handle('getLogs', async () => {
+  try {
+    // change nodejs-guestbook.... to pod's name for minikube
+    const response: any = await cp.execSync(
+      'kubectl logs prometheus-prometheus-node-exporter-skrc5',
+      { encoding: 'utf-8' }
+    );
+    const data = response.split('\n');
+    // divides each event into subarrs
+    console.log('THIS IS LOGS DATA IN MAIN.JS', data);
+    const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
+    // lowercase the headers of events
+    const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
+    // remove headers from trimmed arr
+    trimmed.shift();
+    console.log('TRIMMED LOGS', trimmed);
+    const formattedEvents = trimmed.map((event: any) => {
+      // any type because we can
+      return {
+        namespace: event[0],
+        lastSeen: event[1],
+        severity: event[2],
+        reason: event[3],
+        message: event[4],
+        object: event[5],
+      };
+    });
+    return { formattedEvents, eventHeaders };
+  } catch (error) {
+    return console.log(`Error in getLogs function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }
 });
 
@@ -153,9 +203,28 @@ ipcMain.handle('getMemoryUsageByPods', async (event: any) => {
 });
 
 // get alerts
-ipcMain.handle('getAlerts', async () => {
+ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
-    const response = await fetch(`${PROM_URL}/rules`);
+    const data: any = await fetch(`${PROM_URL}/rules`);
+    const alerts: any = await data.json();
+    const formattedData: object[] = [];
+    alerts.data.groups.forEach((group: any) => {
+      group.rules.forEach((rule: any) => {
+        if (rule.state) {
+          const alert: any = {
+            group: group.name,
+            state: rule.state,
+            name: rule.name,
+            severity: rule.labels.severity,
+            description: rule.annotations.description,
+            summary: rule.annotations.summary,
+            alerts: rule.alerts,
+          };
+          formattedData.push(alert);
+        }
+      });
+    });
+    return formattedData;
   } catch (error) {
     console.log(`Error in getAlerts function: ERROR: ${error}`);
   }

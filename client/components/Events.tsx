@@ -1,22 +1,38 @@
-import * as React from "react";
-import { EventProps } from "../Types";
-import BasicSelect from "../components/EventSelectButton";
+import * as React from 'react';
+import { EventProps } from '../Types';
+import BasicSelect from '../components/EventSelectButton';
 
 const Events = (props: EventProps): JSX.Element => {
   const handleOnClick = async () => {
     const events = await window.api.getEvents();
-    
-    const stupidStuff = await window.api.getNodes();
+    // console.log(window);
+    // const stupiderStuff = await window.api.getLogs();
+    // console.log('type of StupiderStuff: ', typeof stupiderStuff);
+    // console.log('this is what stupiderStuff is: ', stupiderStuff);
+    // console.log('type of StupiderStuff: ', typeof events);
+    // console.log('this is what stupiderStuff is: ', events);
+    // const stupidStuff = await window.api.getNodes();
 
-    
     // when in doubt, console.log it out.
-    console.log('I AM EVENTS HAHA ', events);
-    console.log('------------------------------------------------------------');
-    console.log('------------------------------------------------------------');
-    console.log('I AM NODES HHAAHA ', stupidStuff);
-    const eventLogBox = document.getElementById("container-event-logs");
-    if(eventLogBox) eventLogBox.innerText = events;
-    else console.log('eventLogBox is not being grabbed by getElementById');
+    // console.log('I AM EVENTS HAHA ', events);
+    // console.log('------------------------------------------------------------');
+    // console.log('------------------------------------------------------------');
+    // console.log('I AM NODES HHAAHA ', stupidStuff);
+    const eventLogBox = document.getElementById('container-event-logs');
+    if (eventLogBox) {
+      // eventLogBox.innerText = stupiderStuff.eventHeaders[0];
+      // eventLogBox.innerText = JSON.stringify(stupiderStuff);
+      eventLogBox.innerText = JSON.stringify(events);
+    }
+    // else console.log('eventLogBox is not being grabbed by getElementById');
+  };
+
+  const handleOnClickAlerts = async () => {
+    const alerts = await window.api.getAlerts();
+    const eventLogBox = document.getElementById('container-event-logs');
+    if (eventLogBox) {
+      eventLogBox.innerText = JSON.stringify(alerts);
+    }
   };
 
   return (
@@ -27,7 +43,7 @@ const Events = (props: EventProps): JSX.Element => {
           className="event-selector"
           id="selector-severity"
           name="severity"
-          defaultValue={"default"}
+          defaultValue={'default'}
         >
           <option value="default">Default</option>
           <option value="info">Info</option>
@@ -38,7 +54,12 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
-        <button type="button" onClick={handleOnClick}>CLICK ME!</button>
+        <button type="button" onClick={handleOnClick}>
+          CLICK ME FOR EVENTS!
+        </button>
+        <button type="button" onClick={handleOnClickAlerts}>
+          CLICK ME FOR ALERTS!
+        </button>
       </nav>
       <div id="container-event-logs" className="container events"></div>
     </div>
