@@ -27,7 +27,7 @@ const Graph = (props: GraphProps): JSX.Element => {
   var ctx = document.getElementById("myChart") as HTMLCanvasElement;
 
   const datasetData = [];
-  const colorArray = ["red", "blue", "green", "black", "purple", "cyan", "yellow", "orange"];
+  const colorArray = ["red", "blue", "green", "black", "purple", "cyan", "yellow", "orange", "#003d33"];
   
   const xLabels: string[] = props.data[0][Object.keys(props.data[0])[0]].times;
   
@@ -89,7 +89,6 @@ const Graph = (props: GraphProps): JSX.Element => {
   // console.log('THIS IS final DATA OBJECT ', data)
   return (
     <>
-      {/* <canvas id="myChart" width="400" height="400"></canvas> */}
       <Line options={options} data={data} />
     </>
   );

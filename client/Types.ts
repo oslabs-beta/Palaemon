@@ -28,6 +28,34 @@ export type ClusterChartCardProps = {
   click: (input: ModalCard) => void; // function to create the modal
 };
 
+export type EventCardProps = {
+  key: string;
+  eventObj: EventObject;
+};
+
+export type EventObject = {
+  namespace: string;
+  lastSeen: string;
+  severity: string;
+  reason: string;
+  message: string;
+  object: string;
+};
+
+export type AlertCardProps = {
+  key: string;
+  alertObj: AlertObject;
+};
+
+export type AlertObject = {
+  group: any;
+  state: any;
+  name: any;
+  severity: any;
+  description: any;
+  summary: any;
+  alerts: any;
+};
 export type ModalCard = {
   name: string;
   usage: number;

@@ -7,8 +7,7 @@
     "build": "webpack --config ./webpack.config.js",
     "build:production": "webpack --config ./webpack.production.js",
     "dev": "webpack serve --config ./webpack.config.js",
-    "start": "concurrently \"npm run build && npm run dev\" \"electron ./dist/electron/main.js\"",
-    "dostuff": "electron ./dist/electron/main.js",
+    "start": "concurrently \"npm run build && npm run dev\" \"wait-on http://localhost:8080 && electron ./dist/electron/main.js\"",
     "start2": "electron ./dist/electron/main.js",
     "start:dev": "concurrently \"npm run dev\" \"electron http://localhost:8080\"",
     "start:production": "npm run build:production && electron ./dist/electron/main.js"
@@ -25,10 +24,7 @@
   },
   "homepage": "https://github.com/oslabs-beta/Palaemon#readme",
   "devDependencies": {
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
     "@kubernetes/client-node": "^0.17.0",
-    "@mui/material": "^5.10.4",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "chart.js": "^3.9.1",
@@ -50,6 +46,7 @@
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.1",
     "typescript": "^4.8.2",
+    "wait-on": "^6.0.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.10.1"
