@@ -13,6 +13,7 @@ const WINDOW_API = {
   getPods: async () => ipcRenderer.invoke('getPods'),
   getEvents: async () => ipcRenderer.invoke('getEvents'),
   getMemoryUsageByPods: async () => ipcRenderer.invoke('getMemoryUsageByPods'),
+  getLogs: async () => ipcRenderer.invoke('getLogs')
 };
 
 // exposes WINDOW_API methods to the frontend under "window.api" object

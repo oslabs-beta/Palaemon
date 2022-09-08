@@ -16,7 +16,7 @@ export type ClusterChartProps = {
   Nodes: SvgInfo;
   Pods: SvgInfo;
   Deployments: SvgInfo;
-  click: (input: string) => void;
+  click: (input: ModalCard) => void;
 };
 
 export type ClusterChartCardProps = {
@@ -25,7 +25,22 @@ export type ClusterChartCardProps = {
   usage: number[];
   request: number[];
   limit: number[];
-  click: (input: string) => void; // function to create the modal
+  click: (input: ModalCard) => void; // function to create the modal
 };
 
-// const a: test = undefined
+export type ModalCard = {
+  name: string;
+  usage: number;
+  request: number;
+  limit: number;
+};
+
+export type GraphProps = {
+  data: 
+    {
+      [podName:  string]: {
+        times: string[];
+        values: number[];
+      };
+    }[];
+};
