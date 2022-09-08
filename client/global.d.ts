@@ -12,7 +12,7 @@ declare global {
       getNodes: () => Promise<any>;
       getLogs: () => Promise<any>;
       getDeployments: () => Promise<any>;
-      getMemoryUsageByPod: () => Promise<any>;
+      getMemoryUsageByPods: () => Promise<any>;
       getServices: () => Promise<any>;
       getPods: () => Promise<any>;
       getNamespaces: () => Promise<any>;

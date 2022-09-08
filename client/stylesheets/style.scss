@@ -2,6 +2,8 @@ $ugly-sewage-green: #00695c;
 $p-light-color: #439889;
 $p-dark-color: #003d33;
 
+$font-color: #00120f;
+
 $secondary-color: #b2dfdb;
 $s-light-color: #e5ffff;
 $s-dark-color: #82ada9;
@@ -32,12 +34,14 @@ body {
 }
 
 .cluster-chart-card {
-  background-color: #82ada9;
-  box-shadow: 0px 0px 8px 0px #000000;
-margin: 10px 10px;
-display: flex;
-align-items: center;
-flex-wrap: wrap;
+  background-color: $secondary-color;
+  box-shadow: 0px 1px 4px 0px $p-dark-color;
+  margin: 10px 10px;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-weight: bold;
 
   .cluster-chart-names {
     display: inline-block;
@@ -50,9 +54,8 @@ flex-wrap: wrap;
   }
 
   svg:hover {
-    filter: drop-shadow(0px 0px 4px black);
+    filter: drop-shadow(0px 1px 4px 0px $p-dark-color);
   }
-
 }
 
 #app-container {
@@ -73,10 +76,10 @@ flex-wrap: wrap;
   }
 }
 
-#left-side{
+#left-side {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 #tagline {
@@ -108,7 +111,7 @@ flex-wrap: wrap;
   }
 }
 
-footer  {
+footer {
   font-size: 0.75rem;
   text-align: center;
   color: $ugly-sewage-green;
@@ -116,12 +119,12 @@ footer  {
 }
 
 // Right side event styling
-#container-event  {
+#container-event {
   display: flex;
   flex-direction: column;
   height: 100%;
 
-  &>* {
+  & > * {
     padding: 12px;
     margin: 8px;
   }
@@ -134,11 +137,12 @@ footer  {
   // I thiiink flex-grow maxes out the height, but a fixed height is needed to make
   // overflow-y scrolling feature working. I don't know why.
   height: 100px;
+  color: $font-color;
 
   .event-card {
-    border: 1px solid $p-dark-color;
     margin-bottom: 1rem;
     padding: 1rem 1.5rem;
+    box-shadow: 0px 1px 4px 0px $p-dark-color;
 
     &-header {
       display: flex;
@@ -152,7 +156,7 @@ footer  {
   justify-content: flex-start;
   gap: 24px;
 
-  &>select {
+  & > select {
     width: 140px;
     font-size: 1.1rem;
     border: 1px solid black;
