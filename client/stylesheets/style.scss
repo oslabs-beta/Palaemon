@@ -31,6 +31,30 @@ body {
   width: 100px;
 }
 
+.cluster-chart-card {
+  background-color: #82ada9;
+  box-shadow: 0px 0px 8px 0px #000000;
+margin: 10px 10px;
+display: flex;
+align-items: center;
+flex-wrap: wrap;
+
+  .cluster-chart-names {
+    display: inline-block;
+    width: 100px;
+  }
+
+  svg {
+    margin: 0px 5px;
+    // border: black 2px solid;
+  }
+
+  svg:hover {
+    filter: drop-shadow(0px 0px 4px black);
+  }
+
+}
+
 #app-container {
   height: 100vh;
   padding: 0px;
@@ -84,7 +108,7 @@ body {
   }
 }
 
-footer {
+footer  {
   font-size: 0.75rem;
   text-align: center;
   color: $ugly-sewage-green;
@@ -92,12 +116,12 @@ footer {
 }
 
 // Right side event styling
-#container-event {
+#container-event  {
   display: flex;
   flex-direction: column;
   height: 100%;
 
-  & > * {
+  &>* {
     padding: 12px;
     margin: 8px;
   }
@@ -128,7 +152,7 @@ footer {
   justify-content: flex-start;
   gap: 24px;
 
-  & > select {
+  &>select {
     width: 140px;
     font-size: 1.1rem;
     border: 1px solid black;

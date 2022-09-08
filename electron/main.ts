@@ -1,13 +1,15 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
-import fetch from 'node-fetch';
-// const fetch: any = (...args: any) =>
-//   import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
+// import fetch from 'node-fetch';
+const fetch: any = (...args: any) =>
+  import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
 
 import setStartAndEndTime from './utils';
 import path from 'path';
 
+// metrics modules
+import { formatMatrix } from './metricsData/formatMatrix'
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -186,21 +188,117 @@ ipcMain.handle('getLogs', async () => {
     return console.log(`Error in getLogs function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }
 });
+// test logs //
+
+// need to look into this
+// ipcMain.handle('getLogs', async () => {
+//   try {
+//     const data = await cp.execSync('kubectl logs nodejs-guestbook-frontend-74f496b5cd-fc2r4', {encoding: 'utf-8'});
+//     // divides each event into subarrs
+//     console.log('THIS IS LOGS DATA IN MAIN.JS', data)
+
+//     const parsed = data.toJSON();
+
+//     const arrData = parsed.split()
+//     const trimmed: any = data.map((el:any) => el.split(/[ ]{2,}/));    // added any type here.. made split happy? whats the data we get back
+//     // lowercase the headers of events
+//     const eventHeaders = trimmed[0].map((header:any) => header.toLowerCase()); // any type because we can
+//     // remove headers from trimmed arr
+//     trimmed.shift();
+
+//     const formattedEvents = trimmed.map((event:any) => { // any type because we can
+//       return {
+//         namespace: event[0],
+//         lastSeen: event[1],
+//         severity: event[2],
+//         reason: event[3],
+//         message: event[4],
+//         object: event[5],
+//       };
+//     });
+    
+//     return { formattedEvents, eventHeaders };
+
+//   } catch (error) {
+//     return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
+//   }
+// });
 
 // PROMETHEUS API //
 // get memory metrics
-ipcMain.handle('getMemoryUsageByPods', async (event: any) => {
+ipcMain.handle('getMemoryUsageByPods', async () => {
+  const { startTime, endTime } = setStartAndEndTime();
+  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
+  const interval = '15s';
   try {
-    const { startTime, endTime } = setStartAndEndTime();
-    const interval = '1m';
+    // startTime and endTime look like this 
+
+    // data interval
+
+    // promQL query to api/v1 endpoint
     const query = `${PROM_URL}query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
-    const data = await fetch(query);
-    // NEED TO MANIPULATE RETURNED DATA TO CORRECT FORMAT
+    // fetch request
+    const res = await fetch(query);
+    const data = await res.json();
+    
+    // data.data.result returns matrix
+    return formatMatrix(data.data)
+    
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
+    return {err: error}
   }
 });
 
+// get container resource limit
+ipcMain.handle('getResourceLimits', async () => {
+  const { startTime, endTime } = setStartAndEndTime();
+  const interval = '1m'
+  try {
+    const query = `${PROM_URL}query_range?query=kube_pod_container_resource_limits{resource="memory",namespace="default"}&start=${startTime}&end=${endTime}`
+    const res = await fetch(query);
+    const data = await (res.json());
+    return formatMatrix(data.data, 'bytes')
+  } catch (err) {
+    return {err: err}
+  }
+
+})
+  // query kube_pod_container_resource_limits
+
+
+// get CPU Usage by pods
+// ipcMain.handle('getCPUUsageByPods', async () => {
+//   const { startTime, endTime } = setStartAndEndTime();
+//   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
+  
+//   // data step interval
+//   const interval = '30m';
+//   try {
+
+//     // promQL query to api/v1 endpoint
+//     const query = `${PROM_URL}query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+//     // fetch request
+//     const res = await fetch(query)
+//     .then((data: any) => data.json())
+//     .then((output: any) => {
+//       console.log('THIS IS DATA ', output.data.result)
+//       return formatMatrix(output.data.result, 'bytes')
+//     })
+//     .catch((error: any) => {
+//       console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
+//       return {err: error}
+//     });
+//     return;
+//     // data.data.result returns matrix
+//     // console.log('this is data ', data.result)
+//     // return formatMatrix(data.data.result)
+
+//   } catch (error) {
+//     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
+//     return {err: error}
+//   }
+// });
 // get alerts
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
