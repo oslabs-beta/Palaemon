@@ -12,7 +12,9 @@ html {
   overflow: hidden;
 }
 
-body, #root, #app-container {
+body,
+#root,
+#app-container {
   height: 100%;
 }
 
@@ -29,7 +31,6 @@ body {
   width: 100px;
 }
 
-
 #app-container {
   height: 100vh;
   padding: 0px;
@@ -41,13 +42,20 @@ body {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
-  & > div {
+  & #left-side,
+  #right-side {
     width: 50vw;
     height: 100%;
   }
 }
 
-#tagline{
+#left-side{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#tagline {
   display: block;
   margin: 0;
   text-align: right;
@@ -64,19 +72,19 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   background-color: $ugly-sewage-green;
-  img{
+  img {
     display: block;
   }
-  h1{
+  h1 {
     display: block;
     height: max-content;
     color: whitesmoke;
     padding-right: 12px;
-    font-size: 2rem;;
+    font-size: 2rem;
   }
 }
 
-footer{
+footer {
   font-size: 0.75rem;
   text-align: center;
   color: $ugly-sewage-green;
@@ -84,7 +92,7 @@ footer{
 }
 
 // Right side event styling
-#container-event{
+#container-event {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -100,8 +108,19 @@ footer{
   overflow-y: auto;
   overflow-x: hidden;
   // I thiiink flex-grow maxes out the height, but a fixed height is needed to make
-  // overflow-y scrolling feature working. I don't know why. 
+  // overflow-y scrolling feature working. I don't know why.
   height: 100px;
+
+  .event-card {
+    border: 1px solid $p-dark-color;
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem;
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 }
 
 #container-select {
@@ -116,13 +135,14 @@ footer{
     border-radius: 0.25em;
     padding: 0.25rem 0.5rem;
 
-    &:hover, &:focus-visible{
+    &:hover,
+    &:focus-visible {
       outline: 2px solid $p-light-color;
     }
 
-    & > option:hover, option:checked{
+    & > option:hover,
+    option:checked {
       box-shadow: 0 0 10px 100px $s-light-color inset !important;
     }
   }
 }
-

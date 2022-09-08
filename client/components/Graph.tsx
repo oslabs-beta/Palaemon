@@ -78,7 +78,6 @@ const Graph = (): JSX.Element => {
 
   return (
     <>
-      <canvas id="myChart" width="400" height="400"></canvas>
       <Line options={options} data={data} />
     </>
   );

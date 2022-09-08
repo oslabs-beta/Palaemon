@@ -14,7 +14,40 @@
 // const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api);
 // const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
-// // GET ALERTS
+// DESCRIBE POD FOR DIAGNOSTIC REPORT
+// const getPodDesc = async () => {
+//   const pods = await k8sApiCore.listNamespacedPod('default');
+//   const formattedData: any = pods.body.items.map(pod => pod?.metadata?.name);
+//   console.log(formattedData);
+
+//   const data = formattedData.map(pod => {
+//     // const response: any = cp.execSync(
+//     //   `kubectl get pods -n default ${pod} -o jsonpath="Name: {.metadata.name}\nCurrent Status: {.status.phase}\nPrevious State: {.status.containerStatuses[*].lastState}\nRestart Count: {.status.containerStatuses[*].restartCount}"`,
+//     //   {
+//     //     encoding: 'utf-8',
+//     //   }
+//     // );
+//     const response: any = cp.execSync(
+//       `kubectl get pods -n default ${pod} -o jsonpath="Previous State: {.status.containerStatuses[*].lastState}"`,
+//       {
+//         encoding: 'utf-8',
+//       }
+//     );
+//     console.log(response);
+//     const formattedDesc = response.split('\n');
+//     console.log(formattedDesc);
+
+//     const formattedObj = {};
+//     // return formattedDesc;
+//     return formattedObj;
+//   });
+
+//   console.log(data);
+// };
+
+// console.log(getPodDesc());
+
+// // // GET ALERTS
 // const getAlerts = async () => {
 //   const PROM_URL = 'http://127.0.0.1:9090/api/v1';
 //   const data: any = await fetch(`${PROM_URL}/rules`);
@@ -55,7 +88,7 @@
 //   }
 // };
 
-// console.log(getPods());
+// // console.log(getPods());
 
 // // GET SERVICES
 // const getSvcs = async () => {

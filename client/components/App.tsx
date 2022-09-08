@@ -45,21 +45,19 @@ const App = (): JSX.Element => {
       <h3 id="tagline">A gentle, euthanization tool for OOM kubernetes pods</h3>
       <div id="contents">
         <div id="left-side">
-          {`PODS: ${JSON.stringify(pods)}`}
-          <br />
-          {`NODES: ${JSON.stringify(nodes)}`}
-          <br />
-          {`NS: ${JSON.stringify(ns)}`}
-          <br />
-          {`DEPLOYS: ${JSON.stringify(deploys)}`}
-          <br />
-          {`SERVICES: ${JSON.stringify(svc)}`}
           <div id="cluster-chart">
-            {/* <ClusterChart /> */}
-            {/* cluster chart */}
+            {`PODS: ${JSON.stringify(pods)}`}
+            <br />
+            {`NODES: ${JSON.stringify(nodes)}`}
+            <br />
+            {`NS: ${JSON.stringify(ns)}`}
+            <br />
+            {`DEPLOYS: ${JSON.stringify(deploys)}`}
+            <br />
+            {`SERVICES: ${JSON.stringify(svc)}`}
           </div>
           <div id="graph">
-            <Graph />
+              <Graph />
           </div>
         </div>
 

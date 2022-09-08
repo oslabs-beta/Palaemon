@@ -1,11 +1,26 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect, EffectCallback } from 'react';
 import EventCard from './EventsCards';
+import AlertCard from './AlertsCards';
 import { EventProps, EventCardProps, EventObject } from '../Types';
 import { EvalSourceMapDevToolPlugin } from 'webpack';
+import { Alert } from 'react-bootstrap';
 
 const Events = (props: EventProps): JSX.Element => {
-
+  const [isEvents, setIsEvents] = useState(true);
   const [events, setEvents]: any = useState([]);
+  const [alerts, setAlerts]: any = useState([]);
+  const [logType, setLogType]: any = useState('events');
+
+  const handleLogTypeChange = (e: any) => {
+    const logTypeStr = e.target.value;
+    setLogType(logTypeStr);
+    console.log(
+      'handleLogTypeChange is working and current logType state is ',
+      logType,
+      ' and e.target.value is ',
+      e.target.value
+    );
+  };
 
   const handleOnClick = async () => {
     const eventsData = await window.api.getEvents();
@@ -13,11 +28,14 @@ const Events = (props: EventProps): JSX.Element => {
     // each obj in array has the following keys: namespace, lastSeen, severity, reason, message, object
     const formattedEvents: EventObject[] = eventsData.formattedEvents;
     const eventCards: JSX.Element[] = [];
-    for(let i = 0; i < formattedEvents.length; i++){
-      eventCards.push(<EventCard key={'event#'+i} eventObj={formattedEvents[i]}/>)
+    for (let i = 0; i < formattedEvents.length; i++) {
+      eventCards.push(
+        <EventCard key={'event#' + i} eventObj={formattedEvents[i]} />
+      );
     }
 
     setEvents(eventCards);
+    setIsEvents(true);
 
     // console.log(window);
     // const stupiderStuff = await window.api.getLogs();
@@ -40,17 +58,47 @@ const Events = (props: EventProps): JSX.Element => {
     // }
     // else console.log('eventLogBox is not being grabbed by getElementById');
   };
-
+  // Promise<asd>
+  // when logType changes, re-display the logs
   useEffect(() => {
-
-  });
+    const createLogs = async () => {
+      if (logType === 'events') {
+        const eventsData = await window.api.getEvents();
+        // events is an object with prop "formatttedEvents", which is an array of objects
+        // each obj in array has the following keys: namespace, lastSeen, severity, reason, message, object
+        const formattedEvents: EventObject[] = eventsData.formattedEvents;
+        const eventCards: JSX.Element[] = [];
+        for (let i = 0; i < formattedEvents.length; i++) {
+          eventCards.push(
+            <EventCard key={'event#' + i} eventObj={formattedEvents[i]} />
+          );
+        }
+        setEvents(eventCards);
+      } else if (logType === 'alerts') {
+        const alertsData = await window.api.getAlerts();
+        const alertCards: JSX.Element[] = [];
+        for (let i = 0; i < alerts.length; i++) {
+          alertCards.push(
+            <AlertCard key={'alert#' + i} alertObj={alertsData[i]} />
+          );
+        }
+        setAlerts(alertCards);
+      }
+    };
+    createLogs();
+  }, [logType]);
 
   const handleOnClickAlerts = async () => {
     const alerts = await window.api.getAlerts();
-    const eventLogBox = document.getElementById('container-event-logs');
-    if (eventLogBox) {
-      eventLogBox.innerText = JSON.stringify(alerts);
+    console.log('ALERTS', alerts);
+    // const eventLogBox = document.getElementById('container-event-logs');
+    const alertCards: JSX.Element[] = [];
+    for (let i = 0; i < alerts.length; i++) {
+      alertCards.push(<AlertCard key={'event#' + i} alertObj={alerts[i]} />);
     }
+
+    setAlerts(alertCards);
+    setIsEvents(false);
   };
 
   return (
@@ -61,6 +109,7 @@ const Events = (props: EventProps): JSX.Element => {
           id="selector-log-type"
           name="log-type"
           defaultValue={'event'}
+          onChange={e => handleLogTypeChange(e)}
         >
           <option value="events">Events</option>
           <option value="alerts">Alerts</option>
@@ -81,14 +130,14 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="debug">Debug</option>
         </select>
         <button type="button" onClick={handleOnClick}>
-          CLICK ME FOR EVENTS!
+          Show Events
         </button>
         <button type="button" onClick={handleOnClickAlerts}>
-          CLICK ME FOR ALERTS!
+          Show Alerts
         </button>
       </nav>
       <div id="container-event-logs" className="container events">
-        {events}
+        {logType === 'events' ? events : alerts}
       </div>
     </div>
   );
