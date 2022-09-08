@@ -10,6 +10,8 @@ declare global {
     api: {
       getEvents: () => Promise<any>;
       getNodes: () => Promise<any>;
+      getLogs: () => Promise<any>;
+      getMemoryUsageByPods: () => Promise<any>;
     };
   }
 }

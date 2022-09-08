@@ -8,6 +8,7 @@
     "build:production": "webpack --config ./webpack.production.js",
     "dev": "webpack serve --config ./webpack.config.js",
     "start": "concurrently \"npm run build && npm run dev\" \"electron ./dist/electron/main.js\"",
+    "dostuff": "electron ./dist/electron/main.js",
     "start2": "electron ./dist/electron/main.js",
     "start:dev": "concurrently \"npm run dev\" \"electron http://localhost:8080\"",
     "start:production": "npm run build:production && electron ./dist/electron/main.js"

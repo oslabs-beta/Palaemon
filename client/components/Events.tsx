@@ -1,28 +1,33 @@
 import * as React from "react";
 import { EventProps } from "../Types";
-import BasicSelect from "../components/EventSelectButton";
+import { useState, useEffect } from 'react'
+// import BasicSelect from "../components/EventSelectButton";
 
 const Events = (props: EventProps): JSX.Element => {
-  const handleOnClick = async () => {
-    const events = await window.api.getEvents();
-    
-    const stupidStuff = await window.api.getNodes();
 
+  const handleOnClick = async () => {
+    // const events = await window.api.getEvents();
     
-    // when in doubt, console.log it out.
-    console.log('I AM EVENTS HAHA ', events);
-    console.log('------------------------------------------------------------');
-    console.log('------------------------------------------------------------');
-    console.log('I AM NODES HHAAHA ', stupidStuff);
-    const eventLogBox = document.getElementById("container-event-logs");
-    if(eventLogBox) eventLogBox.innerText = events;
-    else console.log('eventLogBox is not being grabbed by getElementById');
+    // const stupidStuff = await window.api.getNodes();
+    console.log('I AM WINDOW ',window)
+    // const stupiderStuff = await window.api.getLogs();
+    const data = await window.api.getMemoryUsageByPods()
+
+    // console.log('------------------------------------------------------------');
+    console.log('SUCCESS FETCH, HERE IS DATA: ', data)
+    // console.log('I AM LOGS HAHAHAHAHA ', stupiderStuff);
+    // useEffect(() => {
+    //   setMemUsage(data)
+    // })
+    // const eventLogBox = document.getElementById("container-event-logs");
+    // if(eventLogBox) eventLogBox.innerText = events;
+    // else console.log('eventLogBox is not being grabbed by getElementById');
   };
 
   return (
     <div id="container-event" className="container events right-side">
       <nav id="container-select" className="container events">
-        <BasicSelect />
+        {/* <BasicSelect /> */}
         <select
           className="event-selector"
           id="selector-severity"

@@ -2,7 +2,7 @@
 export const setStartAndEndTime = () => {
   const now = new Date();
   const copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 24);
+  copyNow.setHours(copyNow.getHours() - 0.2);
 
   const startTime = copyNow.toISOString();
   const endTime = new Date().toISOString();
@@ -13,5 +13,12 @@ export const setStartAndEndTime = () => {
   };
 };
 
-// // module.exports = setStartAndEndTime;
+
+// console logs to test date format
+const tester = setStartAndEndTime();
+console.log((tester.endTime))
+
+const time = 1662461863.033 * 1000;
+console.log(new Date(time));
+// module.exports = setStartAndEndTime;
 // export default setStartAndEndTime;
