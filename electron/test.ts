@@ -1,3 +1,11 @@
+import * as cp from 'child_process';
+
+
+const response = cp.execSync('kubectl get events --all-namespaces', {encoding: 'utf-8'});
+
+
+
+
 const test = new Date();
 const testCopy = new Date(test.getTime());
 console.log(testCopy);
@@ -70,6 +78,9 @@ console.log('END', new Date().toISOString());
 //       ]
 //   }
 // }
+
+// const hi1: bigint = BigInt(10);
+// const hi2: bigint = 100000n
 
 const time = 1662461863.033 * 1000;
 console.log(new Date(time));

@@ -1,9 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
-// import fetch from 'node-fetch';
-const fetch: any = (...args: any) =>
-  import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
+import fetch from 'node-fetch';
+// const fetch: any = (...args: any) =>
+//   import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
 
 import { setStartAndEndTime } from './utils';
 import path from 'path';
@@ -28,9 +28,9 @@ const loadMainWindow = () => {
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname + './preload.ts'),
+      preload: path.join(__dirname + '/preload.js'), // loads from /dist/electron/preload.js
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       devTools: isDev, //whether to enable DevTools
       // preload: path.join(__dirname, "preload.js")
     },
@@ -63,9 +63,11 @@ ipcMain.handle('getNodes', async () => {
   // dynamically get this from frontend later
   const namespace = 'default';
   try {
-    const data = k8sApiCore.listNode(namespace);
+    const data = await k8sApiCore.listNode(namespace);
+    console.log('heres namespace data', data)
+    return data;
   } catch (error) {
-    console.log(`Error in getNodes function: ERROR: ${error}`);
+    return console.log(`Error in getNodes function: ERROR: ${error}`);
   }
 });
 
@@ -108,13 +110,31 @@ ipcMain.handle('getNamespaces', async () => {
 
 // COMMAND LINE //
 // get events
-ipcMain.handle('getEvents', () => {
+ipcMain.handle('getEvents', async () => {
   try {
-    const response = cp.execSync('kubectl get events --all-namespaces', {
-      encoding: 'utf-8',
+    const data = await cp.execSync('kubectl get events --all-namespaces', {encoding: 'utf-8'});
+    // divides each event into subarrs
+    const trimmed: any = data.map((el:any) => el.split(/[ ]{2,}/));    // added any type here.. made split happy? whats the data we get back
+    // lowercase the headers of events
+    const eventHeaders = trimmed[0].map((header:any) => header.toLowerCase()); // any type because we can
+    // remove headers from trimmed arr
+    trimmed.shift();
+
+    const formattedEvents = trimmed.map((event:any) => { // any type because we can
+      return {
+        namespace: event[0],
+        lastSeen: event[1],
+        severity: event[2],
+        reason: event[3],
+        message: event[4],
+        object: event[5],
+      };
     });
+    
+    return { formattedEvents, eventHeaders };
+
   } catch (error) {
-    console.log(`Error in getEvents function: ERROR: ${error}`);
+    return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }
 });
 
