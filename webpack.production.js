@@ -17,11 +17,6 @@ module.exports = [
       ],
     },
     resolve: {
-      // modules: [__dirname, 'client', 'node_modules'],
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    },
-    resolve: {
-      // modules: [__dirname, 'client', 'node_modules'],
       extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     output: {
