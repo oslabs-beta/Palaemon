@@ -115,8 +115,12 @@ footer{
     border-radius: 0.25em;
     padding: 0.25rem 0.5rem;
 
-    &:active{
-      border: 2px solid $p-light-color;
+    &:hover, &:focus-visible{
+      outline: 2px solid $p-light-color;
+    }
+
+    & > option:hover, option:checked{
+      box-shadow: 0 0 10px 100px $s-light-color inset !important;
     }
   }
 }

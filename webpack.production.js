@@ -14,11 +14,43 @@ module.exports = [
         use: 'ts-loader'
       }]
     },
+    resolve: {
+      // modules: [__dirname, 'client', 'node_modules'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
     output: {
       path: path.resolve(__dirname,'dist/electron'),
       filename: 'main.js',
       clean: true
-    }
+    },
+    externals: [
+      {
+        'utf-8-validate': 'commonjs utf-8-validate',
+        bufferutil: 'commonjs bufferutil',
+      },
+    ],
+  },
+  {
+    mode: 'production',
+    entry: './electron/preload.ts',
+    target: 'electron-preload',
+    module: {
+      rules: [
+        {
+          test: /\.ts(x?)$/,
+          exclude: /node-modules/,
+          use: 'ts-loader',
+        },
+      ],
+    },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    output: {
+      path: path.resolve(__dirname, './dist/electron'),
+      filename: 'preload.js',
+      clean: true,
+    },
   },
   {
     mode: 'production',

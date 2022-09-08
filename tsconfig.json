@@ -2,21 +2,16 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": [
-      "dom",
-      "es2015",
-      "es2016",
-      "es2017"
-    ],
+    "lib": ["dom", "es2015", "es2016", "es2017"],
     "allowJs": true,
     "jsx": "react-jsx",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "strictNullChecks": true,
-  }
-  // "exclude": [e]
+    "strictNullChecks": true
+  },
+  "exclude": ["node_modules"]
 }
