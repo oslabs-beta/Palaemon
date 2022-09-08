@@ -8,18 +8,24 @@ module.exports = [
     entry: './electron/main.ts',
     target: 'electron-main',
     module: {
-      rules: [{
-        test: /\.ts(x?)$/,
-        exclude: /node-modules/,
-        use: 'ts-loader'
-      }]
+      rules: [
+        {
+          test: /\.ts(x?)$/,
+          exclude: /node-modules/,
+          use: 'ts-loader',
+        },
+      ],
+    },
+    resolve: {
+      // modules: [__dirname, 'client', 'node_modules'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     resolve: {
       // modules: [__dirname, 'client', 'node_modules'],
       extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     output: {
-      path: path.resolve(__dirname,'dist/electron'),
+      path: path.resolve(__dirname, 'dist/electron'),
       filename: 'main.js',
       clean: true
     },
@@ -57,33 +63,30 @@ module.exports = [
     entry: './client/index.tsx',
     devtool: false,
     module: {
-      rules: [{
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        use: 'ts-loader'
-      },
-      {
-        test: /\.s?[ac]ss$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader"
-        ],
-      },
-      {
-        test: /\.png/,
-        type: 'asset/resource'
-      }
-    ]
+      rules: [
+        {
+          test: /\.ts(x?)$/,
+          exclude: /node_modules/,
+          use: 'ts-loader',
+        },
+        {
+          test: /\.s?[ac]ss$/,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
+        },
+        {
+          test: /\.png/,
+          type: 'asset/resource',
+        },
+      ],
     },
     resolve: {
-      modules: [__dirname, "client", "node_modules"],
-      extensions: ["*", ".ts", ".tsx", ".js", ".jsx"]
+      modules: [__dirname, 'client', 'node_modules'],
+      extensions: ['*', '.ts', '.tsx', '.js', '.jsx'],
     },
     output: {
       path: path.resolve(__dirname, 'dist/client'),
       filename: 'index.js',
-      clean: true
+      clean: true,
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -93,10 +96,10 @@ module.exports = [
         patterns: [
           {
             from: path.resolve(__dirname, 'client/assets'),
-            to: 'assets/'
-          }
-        ]
-      })
-    ]
-  }
+            to: 'assets/',
+          },
+        ],
+      }),
+    ],
+  },
 ];

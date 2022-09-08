@@ -1,17 +1,18 @@
+"use strict";
+exports.__esModule = true;
+exports.setStartAndEndTime = void 0;
 // utilized for start and end times when querying for metrics
-export const setStartAndEndTime = () => {
-  const now = new Date();
-  const copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 24);
-
-  const startTime = copyNow.toISOString();
-  const endTime = new Date().toISOString();
-
-  return {
-    startTime,
-    endTime,
-  };
+var setStartAndEndTime = function () {
+    var now = new Date();
+    var copyNow = new Date(now.getTime());
+    copyNow.setHours(copyNow.getHours() - 24);
+    var startTime = copyNow.toISOString();
+    var endTime = new Date().toISOString();
+    return {
+        startTime: startTime,
+        endTime: endTime
+    };
 };
-
+exports.setStartAndEndTime = setStartAndEndTime;
 // // module.exports = setStartAndEndTime;
 // export default setStartAndEndTime;

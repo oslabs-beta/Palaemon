@@ -24,10 +24,7 @@
   },
   "homepage": "https://github.com/oslabs-beta/Palaemon#readme",
   "devDependencies": {
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
     "@kubernetes/client-node": "^0.17.0",
-    "@mui/material": "^5.10.4",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "chart.js": "^3.9.1",
