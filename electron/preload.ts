@@ -11,6 +11,7 @@ const WINDOW_API = {
   getDeployments: async () => ipcRenderer.invoke('getDeployments'),
   getServices: async () => ipcRenderer.invoke('getServices'),
   getPods: async () => ipcRenderer.invoke('getPods'),
+  getLogs: async () => ipcRenderer.invoke('getLogs'),
   getEvents: async () => ipcRenderer.invoke('getEvents'),
   getMemoryUsageByPods: async () => ipcRenderer.invoke('getMemoryUsageByPods'),
 };

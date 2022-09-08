@@ -18,7 +18,7 @@ const App = (): JSX.Element => {
         <div id='left-side'>
           left side
           <div id='cluster-chart'>
-            <ClusterChart />
+            {/* <ClusterChart /> */}
             {/* cluster chart */}
           </div>
           <div id='graph'>

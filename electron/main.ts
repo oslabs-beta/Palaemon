@@ -108,13 +108,61 @@ ipcMain.handle('getNamespaces', async () => {
 
 // COMMAND LINE //
 // get events
-ipcMain.handle('getEvents', () => {
+ipcMain.handle('getEvents', async () => {
   try {
-    const response = cp.execSync('kubectl get events --all-namespaces', {
-      encoding: 'utf-8',
+    const data = await cp.execSync('kubectl get events --all-namespaces', {encoding: 'utf-8'});
+    // divides each event into subarrs
+    const trimmed: any = data.map((el:any) => el.split(/[ ]{2,}/));    // added any type here.. made split happy? whats the data we get back
+    // lowercase the headers of events
+    const eventHeaders = trimmed[0].map((header:any) => header.toLowerCase()); // any type because we can
+    // remove headers from trimmed arr
+    trimmed.shift();
+
+    const formattedEvents = trimmed.map((event:any) => { // any type because we can
+      return {
+        namespace: event[0],
+        lastSeen: event[1],
+        severity: event[2],
+        reason: event[3],
+        message: event[4],
+        object: event[5],
+      };
     });
+    
+    return { formattedEvents, eventHeaders };
+
   } catch (error) {
-    console.log(`Error in getEvents function: ERROR: ${error}`);
+    return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
+  }
+});
+// test logs //
+
+ipcMain.handle('getLogs', async () => {
+  try {
+    const data = await cp.execSync('kubectl logs nodejs-guestbook-frontend-74f496b5cd-fc2r4', {encoding: 'utf-8'});
+    // divides each event into subarrs
+    console.log('THIS IS LOGS DATA ', data)
+    const trimmed: any = data.map((el:any) => el.split(/[ ]{2,}/));    // added any type here.. made split happy? whats the data we get back
+    // lowercase the headers of events
+    const eventHeaders = trimmed[0].map((header:any) => header.toLowerCase()); // any type because we can
+    // remove headers from trimmed arr
+    trimmed.shift();
+
+    const formattedEvents = trimmed.map((event:any) => { // any type because we can
+      return {
+        namespace: event[0],
+        lastSeen: event[1],
+        severity: event[2],
+        reason: event[3],
+        message: event[4],
+        object: event[5],
+      };
+    });
+    
+    return { formattedEvents, eventHeaders };
+
+  } catch (error) {
+    return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }
 });
 
