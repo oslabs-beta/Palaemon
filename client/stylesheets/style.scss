@@ -98,6 +98,7 @@ footer{
 #container-event-logs {
   flex-grow: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   // I thiiink flex-grow maxes out the height, but a fixed height is needed to make
   // overflow-y scrolling feature working. I don't know why. 
   height: 100px;

@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 // const fetch: any = (...args: any) =>
 //   import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
 
-import { setStartAndEndTime } from './utils';
+import setStartAndEndTime from './utils';
 import path from 'path';
 
 // K8S API BOILERPLATE
