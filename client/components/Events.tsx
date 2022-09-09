@@ -1,14 +1,9 @@
 import { useState, useEffect, EffectCallback } from 'react';
-import EventCard from './EventsCards';
-import AlertCard from './AlertsCards';
-import { EventProps, EventCardProps, EventObject } from '../Types';
-import { EvalSourceMapDevToolPlugin } from 'webpack';
-import { Alert } from 'react-bootstrap';
+import LogCard from './LogCard'
+import { EventProps, EventObject } from '../Types';
 
 const Events = (props: EventProps): JSX.Element => {
-  const [isEvents, setIsEvents] = useState(true);
-  const [events, setEvents]: any = useState([]);
-  const [alerts, setAlerts]: any = useState([]);
+  const [logs, setLogs]: any = useState([]);
   const [logType, setLogType]: any = useState('events');
 
   const handleLogTypeChange = (e: any) => {
@@ -22,84 +17,35 @@ const Events = (props: EventProps): JSX.Element => {
     );
   };
 
-  const handleOnClick = async () => {
-    const eventsData = await window.api.getEvents();
-    // events is an object with prop "formatttedEvents", which is an array of objects
-    // each obj in array has the following keys: namespace, lastSeen, severity, reason, message, object
-    const formattedEvents: EventObject[] = eventsData.formattedEvents;
-    const eventCards: JSX.Element[] = [];
-    for (let i = 0; i < formattedEvents.length; i++) {
-      eventCards.push(
-        <EventCard key={'event#' + i} eventObj={formattedEvents[i]} />
-      );
-    }
-
-    setEvents(eventCards);
-    setIsEvents(true);
-
-    // console.log(window);
-    // const stupiderStuff = await window.api.getLogs();
-    // console.log('type of StupiderStuff: ', typeof stupiderStuff);
-    // console.log('this is what stupiderStuff is: ', stupiderStuff);
-    // console.log('type of StupiderStuff: ', typeof events);
-    // console.log('this is what stupiderStuff is: ', events);
-    // const stupidStuff = await window.api.getNodes();
-
-    // when in doubt, console.log it out.
-    // console.log('I AM EVENTS HAHA ', events);
-    // console.log('------------------------------------------------------------');
-    // console.log('------------------------------------------------------------');
-    // console.log('I AM NODES HHAAHA ', stupidStuff);
-    // const eventLogBox = document.getElementById('container-event-logs');
-    // if (eventLogBox) {
-    //   // eventLogBox.innerText = stupiderStuff.eventHeaders[0];
-    //   // eventLogBox.innerText = JSON.stringify(stupiderStuff);
-    //   // eventLogBox.appendChild(eventCards);
-    // }
-    // else console.log('eventLogBox is not being grabbed by getElementById');
-  };
-  // Promise<asd>
-  // when logType changes, re-display the logs
   useEffect(() => {
+
+    // populate and set logCards according to what type of logs is requested. 
+    // this is a helper function as typescript was not playing nicely with useEffect as an async function
     const createLogs = async () => {
+      const logCards: JSX.Element[] = [];
+      let logsData;
       if (logType === 'events') {
-        const eventsData = await window.api.getEvents();
         // events is an object with prop "formatttedEvents", which is an array of objects
         // each obj in array has the following keys: namespace, lastSeen, severity, reason, message, object
-        const formattedEvents: EventObject[] = eventsData.formattedEvents;
-        const eventCards: JSX.Element[] = [];
-        for (let i = 0; i < formattedEvents.length; i++) {
-          eventCards.push(
-            <EventCard key={'event#' + i} eventObj={formattedEvents[i]} />
-          );
-        }
-        setEvents(eventCards);
-      } else if (logType === 'alerts') {
-        const alertsData = await window.api.getAlerts();
-        const alertCards: JSX.Element[] = [];
-        for (let i = 0; i < alerts.length; i++) {
-          alertCards.push(
-            <AlertCard key={'alert#' + i} alertObj={alertsData[i]} />
-          );
-        }
-        setAlerts(alertCards);
+        logsData = await window.api.getEvents();
       }
+      else if (logType === 'alerts') {
+        logsData = await window.api.getAlerts();
+      }
+      for (let i = 0; i < logsData.length; i++) {
+        logCards.push(
+          <LogCard key={`${logType}#${i}`} 
+                   eventObj={logType === 'events' ? logsData[i] : undefined} 
+                   alertObj={logType === 'alerts' ? logsData[i] : undefined} 
+                   logType={logType} />
+        );
+      }
+      setLogs(logCards);
     };
+
     createLogs();
+
   }, [logType]);
-
-  const handleOnClickAlerts = async () => {
-    const alerts = await window.api.getAlerts();
-    console.log('ALERTS', alerts);
-    // const eventLogBox = document.getElementById('container-event-logs');
-    const alertCards: JSX.Element[] = [];
-    for (let i = 0; i < alerts.length; i++) {
-      alertCards.push(<AlertCard key={'event#' + i} alertObj={alerts[i]} />);
-    }
-
-    setAlerts(alertCards);
-    setIsEvents(false);
-  };
 
   return (
     <div id="container-event" className="container events right-side">
@@ -129,15 +75,9 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
-        <button type="button" onClick={handleOnClick}>
-          Show Events
-        </button>
-        <button type="button" onClick={handleOnClickAlerts}>
-          Show Alerts
-        </button>
       </nav>
       <div id="container-event-logs" className="container events">
-        {logType === 'events' ? events : alerts}
+        {logs}
       </div>
     </div>
   );

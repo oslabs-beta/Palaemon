@@ -149,7 +149,7 @@ ipcMain.handle('getEvents', async () => {
       };
     });
 
-    return { formattedEvents, eventHeaders };
+    return formattedEvents;
   } catch (error) {
     return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }
