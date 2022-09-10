@@ -41,9 +41,11 @@ export type ClusterChartCardProps = {
   click: (input: ModalCard) => void; // function to create the modal
 };
 
-export type EventCardProps = {
+export interface LogCardProps {
   key: string;
-  eventObj: EventObject;
+  eventObj?: EventObject;
+  alertObj?: AlertObject;
+  logType: string;
 };
 
 export type EventObject = {
@@ -55,11 +57,6 @@ export type EventObject = {
   object: string;
 };
 
-export type AlertCardProps = {
-  key: string;
-  alertObj: AlertObject;
-};
-
 export type AlertObject = {
   group: any;
   state: any;
@@ -69,6 +66,7 @@ export type AlertObject = {
   summary: any;
   alerts: any;
 };
+
 export type ModalCard = {
   name: string;
   usage: number;
@@ -77,11 +75,10 @@ export type ModalCard = {
 };
 
 export type GraphProps = {
-  data: 
-    {
-      [podName:  string]: {
-        times: string[];
-        values: number[];
-      };
-    }[];
+  data: {
+    [podName: string]: {
+      times: string[];
+      values: number[];
+    };
+  }[];
 };

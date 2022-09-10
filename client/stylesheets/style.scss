@@ -31,11 +31,13 @@ body {
 
 #logo {
   width: 100px;
+  margin: 8px;
 }
 
 .cluster-chart-card {
-  background-color: $secondary-color;
+  background-color: $s-light-color;
   box-shadow: 0px 1px 4px 0px $p-dark-color;
+  border-radius: 0.5rem;
   margin: 10px 10px;
   padding: 0.4rem;
   display: flex;
@@ -54,7 +56,7 @@ body {
   }
 
   svg:hover {
-    filter: drop-shadow(0px 1px 4px 0px $p-dark-color);
+    filter: drop-shadow(2px 2px 3px $p-dark-color);
   }
 }
 
@@ -80,6 +82,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+
+  & > * {
+    margin: 8px;
+    padding: 12px;
+  }
 }
 
 #tagline {
@@ -123,7 +130,8 @@ footer {
   display: flex;
   flex-direction: column;
   height: 100%;
-
+  background-color: $secondary-color;
+  
   & > * {
     padding: 12px;
     margin: 8px;
@@ -138,15 +146,23 @@ footer {
   // overflow-y scrolling feature working. I don't know why.
   height: 100px;
   color: $font-color;
-
+  background-color: whitesmoke;
+  border: 4px solid $s-dark-color;
+  margin: 0px 20px 16px 20px;
+  
   .event-card {
     margin-bottom: 1rem;
     padding: 1rem 1.5rem;
     box-shadow: 0px 1px 4px 0px $p-dark-color;
+    background-color: white;
 
     &-header {
       display: flex;
       justify-content: space-between;
+    }
+
+    p {
+      margin: 0.5rem 0;
     }
   }
 }
