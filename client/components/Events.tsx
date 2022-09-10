@@ -1,10 +1,13 @@
 import { useState, useEffect, EffectCallback } from 'react';
-import LogCard from './LogCard'
+import LogCard from './LogCard';
 import { EventProps, EventObject } from '../Types';
+import { filter } from '../../webpack.config';
+import { capitalize } from '../../electron/utils';
 
 const Events = (props: EventProps): JSX.Element => {
   const [logs, setLogs]: any = useState([]);
   const [logType, setLogType]: any = useState('events');
+  const [severityType, setSeverityType]: any = useState('Default');
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
@@ -17,9 +20,13 @@ const Events = (props: EventProps): JSX.Element => {
     );
   };
 
-  useEffect(() => {
+  const handleSeverityChange = (e: any) => {
+    const severity = capitalize(e.target.value);
+    setSeverityType(severity);
+  };
 
-    // populate and set logCards according to what type of logs is requested. 
+  useEffect(() => {
+    // populate and set logCards according to what type of logs is requested.
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
     const createLogs = async () => {
       const logCards: JSX.Element[] = [];
@@ -28,24 +35,40 @@ const Events = (props: EventProps): JSX.Element => {
         // events is an object with prop "formatttedEvents", which is an array of objects
         // each obj in array has the following keys: namespace, lastSeen, severity, reason, message, object
         logsData = await window.api.getEvents();
-      }
-      else if (logType === 'alerts') {
+      } else if (logType === 'alerts') {
         logsData = await window.api.getAlerts();
       }
+
       for (let i = 0; i < logsData.length; i++) {
         logCards.push(
-          <LogCard key={`${logType}#${i}`} 
-                   eventObj={logType === 'events' ? logsData[i] : undefined} 
-                   alertObj={logType === 'alerts' ? logsData[i] : undefined} 
-                   logType={logType} />
+          <LogCard
+            key={`${logType}#${i}`}
+            eventObj={logType === 'events' ? logsData[i] : undefined}
+            alertObj={logType === 'alerts' ? logsData[i] : undefined}
+            logType={logType}
+          />
         );
       }
-      setLogs(logCards);
+
+      if (severityType !== 'Default') {
+        const filteredLogs = logCards.filter((log: any) => {
+          if (
+            logType === 'events' &&
+            log.props.eventObj.severity === severityType
+          )
+            return log;
+          else if (
+            logType === 'alerts' &&
+            log.props.alertObj.severity === severityType
+          )
+            return log;
+        });
+        setLogs(filteredLogs);
+      } else setLogs(logCards);
     };
 
     createLogs();
-
-  }, [logType]);
+  }, [logType, severityType]);
 
   return (
     <div id="container-event" className="container events right-side">
@@ -64,7 +87,8 @@ const Events = (props: EventProps): JSX.Element => {
           className="event-selector"
           id="selector-severity"
           name="severity"
-          defaultValue={'default'}
+          defaultValue={'Default'}
+          onChange={e => handleSeverityChange(e)}
         >
           <option value="default">Default</option>
           <option value="info">Info</option>
@@ -77,7 +101,7 @@ const Events = (props: EventProps): JSX.Element => {
         </select>
       </nav>
       <div id="container-event-logs" className="container events">
-        {logs}
+        {logs.length ? logs : <p>No data</p>}
       </div>
     </div>
   );
