@@ -17,6 +17,7 @@ declare global {
       getPods: () => Promise<any>;
       getNamespaces: () => Promise<any>;
       getAlerts: () => Promise<any>;
+      getAllInfo: () => Promise<any>;
     };
   }
 }

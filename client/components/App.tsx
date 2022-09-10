@@ -15,7 +15,7 @@ const App = (): JSX.Element => {
   // const [ns, setNs]: any = useState([]);
   // const [svc, setSvcs]: any = useState([]);
   // console.log('APP', window);
-  const [test, setTest] = useState(['test']);
+  const [portOpen, setPortOpen]: any = useState(false);
 
 const fakedata2: SvgInfo = {
   name: 'string',
@@ -40,40 +40,47 @@ const fakedata: SvgInfo[] = [fakedata2, fakedata2]
 
   const [graphState, setGraphState] = useState([
     {
-      tempPod: {
+      Port9090isClosed: {
         times: ['a', 'b', 'c'],
         values: [1, 2, 3],
       },
     },
     {
-      tempPod: {
+      Port9090isClosed: {
         times: ['a', 'b', 'c'],
         values: [3, 2, 1],
       },
     },
   ]);
 
+fetch('http://localhost:9090/')
+.then((response) => {
+  console.log('status code', response.status)
+  if(response.status === 200) {
+    setPortOpen(true)
+  } else {
+
+  }
+})
+
   useEffect(() => {
     doMeBabyOneMoreTime();
-    // const doMe = setTimeout(doMeBabyOneMoreTime, 1000)
-  }, test);
+  }, [portOpen]);
 
   const doMeBabyOneMoreTime = () => {
-    // useEffect(() => {
-    // console.log('I AM RUNNING BABY');
-    window.api
-      .getMemoryUsageByPods()
-      .then((output: any) => {
-        // console.log('type ', Array.isArray(output));
-        // console.log('the Output ', output);
-        setGraphState(output);
-      })
-      .catch((err: any) => {
-        return { err: err };
-      });
-    setTimeout(doMeBabyOneMoreTime, 1000);
-    // clearInterval(doMe)
-    // }, test);
+    if(portOpen){
+      window.api
+        .getMemoryUsageByPods()
+        .then((output: any) => {
+          // console.log('type ', Array.isArray(output));
+          // console.log('the Output ', output);
+          if (!output.err) setGraphState(output);
+        })
+        .catch((err: any) => {
+          return { err: err };
+        });
+      setTimeout(doMeBabyOneMoreTime, 1000);
+    }
   };
 
     const renderData = async () => {
