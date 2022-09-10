@@ -66,8 +66,9 @@ ipcMain.handle('getNodes', async () => {
   const namespace = 'default';
   try {
     const data = await k8sApiCore.listNode(namespace);
+    // console.log('THIS IS RAWWW DATA ', data);
     const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    console.log(formattedData);
+    // console.log('THIS IS FORMATTED DATA ', formattedData);
     return formattedData;
   } catch (error) {
     return console.log(`Error in getNodes function: ERROR: ${error}`);
@@ -97,27 +98,45 @@ ipcMain.handle('getServices', async () => {
   }
 });
 
+ipcMain.handle('getLimits', async () => {
+  const date = new Date()
+  try{
+    const query = `${PROM_URL}query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`
+    const data = await fetch(query)
+    const jsonData = await data.json();
+    return jsonData.data.result.values[0][1];
+    // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
+  }
+  catch (error) {
+    return {err: error}
+  }
+})
 // get pods in cluster
 ipcMain.handle('getPods', async () => {
   try {
+    // const data = await k8sApiCore.listPodForAllNamespaces();
     const data = await k8sApiCore.listPodForAllNamespaces();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
+    // console.log('THIS OS BODY.ITEMS ', data.body.items);
+    const podNames: (string | undefined)[] = data.body.items.map(pod => pod?.metadata?.name);
+    const node: (string | undefined)[] = data.body.items.map(pod => pod?.spec?.nodeName);
+    const namespace: (string | undefined)[] = data.body.items.map(pod => pod?.metadata?.namespace);
+    // console.log('THIS IS FORMATTED PODDS ', formattedData);
+    return {podNames, node, namespace};
   } catch (error) {
-    console.log(`Error in getPods function: ERROR: ${error}`);
+    return console.log(`Error in getPods function: ERROR: ${error}`);
   }
 });
 
 // get namespaces in cluster
-ipcMain.handle('getNamespaces', async () => {
-  try {
-    const data = await k8sApiCore.listNamespace();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
-  } catch (error) {
-    console.log(`Error in getNamespaces function: ERROR: ${error}`);
-  }
-});
+// ipcMain.handle('getNamespaces', async () => {
+//   try {
+//     const data = await k8sApiCore.listNamespace();
+//     const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+//     return formattedData;
+//   } catch (error) {
+//     console.log(`Error in getNamespaces function: ERROR: ${error}`);
+//   }
+// });
 
 // COMMAND LINE //
 // get events

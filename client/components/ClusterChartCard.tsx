@@ -5,6 +5,7 @@ import { ClusterChartCardProps, ModalCard } from '../Types';
 const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
 
     const openDetailsModal = (e: any, data: ModalCard): void => {
+        // console.log(data);
         const top = e.pageY;
         const left = e.pageX;
         props.click(data);
@@ -20,9 +21,9 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
 
     let index: number = 0;
 
-    for (let i = 0; i < props.usage.length; i++) {
-        let usage: number = props.usage[i] - props.request[i];
-        let limit: number = props.limit[i] - props.request[i];
+    for (let i = 0; i < props.data.length; i++) {
+        let usage: number = props.data[i].usage - props.data[i].request;
+        let limit: number = props.data[i].limit - props.data[i].request;
         if (usage < 0) index = 0;
         else if (usage < 0.2 * limit) index = 1;
         else if (usage < 0.4 * limit) index = 2;
@@ -30,12 +31,14 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
         else if (usage < 0.8 * limit) index = 4;
         else index = 5;
         squares.push(
-            <svg onClick={(e: any) => openDetailsModal(e, {
-                name: props.name[i],
-                usage: props.usage[i],
-                request: props.request[i],
-                limit: props.limit[i]
-            })}
+            <svg 
+            // onClick={(e: any) => openDetailsModal(e, {
+            //     name: props.name[i],
+            //     usage: props.usage[i],
+            //     request: props.request[i],
+            //     limit: props.limit[i]
+            //     // console.log('click')
+            // })}
                 width={30} height={30} key={i + 1000} >
                 <rect className='health-bar' width="30" height="30" rx="10" fill={colors[index]} />
             </svg>
