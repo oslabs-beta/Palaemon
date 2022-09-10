@@ -10,43 +10,34 @@ import { ClusterChartProps, SvgInfo } from '../Types';
 
 const App = (): JSX.Element => {
   const [pods, setPods]: any = useState([]);
-  const [nodes, setNodes]: any = useState([]);
-  const [deploys, setDeploys]: any = useState([]);
-  const [ns, setNs]: any = useState([]);
-  const [svc, setSvcs]: any = useState([]);
+  const [nodes, setNodes]: any = useState(['node1']);
+  // const [deploys, setDeploys]: any = useState([]);
+  // const [ns, setNs]: any = useState([]);
+  // const [svc, setSvcs]: any = useState([]);
   // console.log('APP', window);
   const [test, setTest] = useState(['test']);
-  const fakeData1: SvgInfo = {
-    name: ['cluster-1'],
-    usage: [5],
-    request: [10],
-    limit: [230],
-  };
-  const fakeData2: SvgInfo = {
-    name: ['node1', 'node2'],
-    usage: [1.2, 1.7],
-    request: [1, 1],
-    limit: [2, 2],
-  };
-  const fakeData3: SvgInfo = {
-    name: ['pod1', 'pod2', 'pod3'],
-    usage: [0.5, 1, 1.5, 2, 1.2, 0.3, 1, 1.8],
-    request: [1, 1, 1, 1, 1, 1, 1, 1],
-    limit: [2, 2, 2, 2, 2, 2, 2, 2],
-  };
-  const fakeData4: SvgInfo = {
-    name: ['deployment1', 'deployment2', 'deployment3'],
-    usage: [0.5, 1.2, 1.8],
-    request: [1, 1, 1],
-    limit: [2, 2, 2],
-  };
+
+const fakedata2: SvgInfo = {
+  name: 'string',
+  usage: 1,
+  request: 0.9,
+  limit: 2,
+  parent: 'string',
+  namespace: 'string',
+}
+
+const fakedata: SvgInfo[] = [fakedata2, fakedata2]
+
+
   const gke: ClusterChartProps = {
-    Clusters: { ...fakeData1 },
-    Nodes: { ...fakeData2 },
-    Pods: { ...fakeData3 },
-    Deployments: { ...fakeData4 },
+    Clusters: fakedata,
+    Nodes: fakedata,
+    Pods: fakedata,
+    Deployments: fakedata,
     click: string => console.log(string),
   };
+
+
   const [graphState, setGraphState] = useState([
     {
       tempPod: {
@@ -85,18 +76,19 @@ const App = (): JSX.Element => {
     // }, test);
   };
 
-  const renderData = async () => {
+    const renderData = async () => {
     const podsData = await window.api.getPods();
-    const nodesData = await window.api.getNodes();
-    const deploysData = await window.api.getDeployments();
-    const svcData = await window.api.getServices();
-    const nsData = await window.api.getNamespaces();
+    const nodesData = await window.api.getNodes(); // an array of all the nodes
+  //   const deploysData = await window.api.getDeployments();
+  //   const svcData = await window.api.getServices();
+  //   const nsData = await window.api.getNamespaces();
 
     setPods([...podsData]);
+    console.log(podsData);
     setNodes([...nodesData]);
-    setDeploys([...deploysData]);
-    setNs([...nsData]);
-    setSvcs([...svcData]);
+  //   setDeploys([...deploysData]);
+  //   setNs([...nsData]);
+  //   setSvcs([...svcData]);
   };
 
   useEffect(() => {
