@@ -1,3 +1,4 @@
+import { SvgInfo, SvgInfoObj } from "../client/Types";
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
   var now = new Date();
@@ -61,3 +62,30 @@ export const formatAlerts = (data: any): {}[] => {
 export function capitalize(data: string) {
   return data[0].toUpperCase() + data.slice(1);
 }
+
+export function parseMem(entry:string) {
+  // if dealing with memory (ki, mb, mi, etc.)
+  
+  return parseInt(entry.slice(0, entry.length-2))
+}
+
+// export function grabData(obj: any) {
+//   const output: SvgInfo = new SvgInfoObj();
+
+//   if (obj.status?.allocatable !== undefined) {
+//     const memUsage: number = parseMem(obj.status.allocatable.memory);
+//     output.usage = memUsage;
+//   }
+//   if (obj.status?.capacity !== undefined) {
+//     const memLimit: number = parseMem(obj.status.capacity.memory);
+//     output.limit = memLimit;
+//   }
+//   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
+//   if (obj?.metadata?.name) output.name = obj.metadata.name;
+//   return output;
+
+// }
+
+// this.request = 1;
+// this.parent = '';
+// this.namespace = '';
