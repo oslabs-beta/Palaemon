@@ -1,15 +1,20 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
-// import fetch from 'node-fetch';
 const fetch: any = (...args: any) =>
   import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
 
-import setStartAndEndTime from './utils';
+import {
+  setStartAndEndTime,
+  formatClusterData,
+  formatEvents,
+  formatAlerts,
+} from './utils';
 import path from 'path';
 
 // metrics modules
-import { formatMatrix } from './metricsData/formatMatrix'
+import { formatMatrix } from './metricsData/formatMatrix';
+import { V1SubjectRulesReviewStatus } from '@kubernetes/client-node';
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -17,7 +22,7 @@ const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api);
 const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
 const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
-// 
+//
 // const isDev: boolean = process.env.NODE_ENV === 'development';
 const isDev: boolean = false;
 const PORT: string | number = process.env.PORT || 8080;
@@ -34,7 +39,7 @@ const loadMainWindow = () => {
       nodeIntegration: true,
       // contextIsolation: false,
       devTools: true, //whether to enable DevTools
-      preload: path.join(__dirname, "preload.js")
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
@@ -61,59 +66,52 @@ app.on('window-all-closed', () => {
 // K8S API //
 
 // get nodes in cluster
-ipcMain.handle('getNodes', async () => {
+ipcMain.handle('getNodes', async (): Promise<any> => {
   // dynamically get this from frontend later
   const namespace = 'default';
   try {
     const data = await k8sApiCore.listNode(namespace);
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    console.log(formattedData);
-    return formattedData;
+    return formatClusterData(data);
   } catch (error) {
     return console.log(`Error in getNodes function: ERROR: ${error}`);
   }
 });
 
 // get deployments in cluster
-
-ipcMain.handle('getDeployments', async () => {
+ipcMain.handle('getDeployments', async (): Promise<any> => {
   try {
     const data = await k8sApiApps.listDeploymentForAllNamespaces();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
+    return formatClusterData(data);
   } catch (error) {
     console.log(`Error in getDeployments function: ERROR: ${error}`);
   }
 });
 
 // get services in cluster
-ipcMain.handle('getServices', async () => {
+ipcMain.handle('getServices', async (): Promise<any> => {
   try {
     const data = await k8sApiCore.listServiceForAllNamespaces();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
+    return formatClusterData(data);
   } catch (error) {
     console.log(`Error in getServices function: ERROR: ${error}`);
   }
 });
 
 // get pods in cluster
-ipcMain.handle('getPods', async () => {
+ipcMain.handle('getPods', async (): Promise<any> => {
   try {
     const data = await k8sApiCore.listPodForAllNamespaces();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
+    return formatClusterData(data);
   } catch (error) {
     console.log(`Error in getPods function: ERROR: ${error}`);
   }
 });
 
 // get namespaces in cluster
-ipcMain.handle('getNamespaces', async () => {
+ipcMain.handle('getNamespaces', async (): Promise<any> => {
   try {
     const data = await k8sApiCore.listNamespace();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
+    return formatClusterData(data);
   } catch (error) {
     console.log(`Error in getNamespaces function: ERROR: ${error}`);
   }
@@ -123,33 +121,39 @@ ipcMain.handle('getNamespaces', async () => {
 // get events
 ipcMain.handle('getEvents', async () => {
   try {
-    const response: any = await cp.execSync(
-      'kubectl get events --all-namespaces',
-      {
+    const response: string = cp
+      .execSync('kubectl get events --all-namespaces', {
         encoding: 'utf-8',
-      }
-    );
-    const data = response.split('\n');
-    // divides each event into subarrs
-    const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
-    // lowercase the headers of events
-    const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
-    // remove headers from trimmed arr
-    trimmed.shift();
+      })
+      .toString();
+    return formatEvents(response);
+    // const response: any = await cp.execSync(
+    //   'kubectl get events --all-namespaces',
+    //   {
+    //     encoding: 'utf-8',
+    //   }
+    // );
+    // const data = response.split('\n');
+    // // divides each event into subarrs
+    // const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
+    // // lowercase the headers of events
+    // const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
+    // // remove headers from trimmed arr
+    // trimmed.shift();
 
-    const formattedEvents = trimmed.map((event: any) => {
-      // any type because we can
-      return {
-        namespace: event[0],
-        lastSeen: event[1],
-        severity: event[2],
-        reason: event[3],
-        message: event[4],
-        object: event[5],
-      };
-    });
+    // const formattedEvents = trimmed.map((event: any) => {
+    //   // any type because we can
+    //   return {
+    //     namespace: event[0],
+    //     lastSeen: event[1],
+    //     severity: event[2],
+    //     reason: event[3],
+    //     message: event[4],
+    //     object: event[5],
+    //   };
+    // });
 
-    return { formattedEvents, eventHeaders };
+    // return formattedEvents;
   } catch (error) {
     return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }
@@ -216,7 +220,7 @@ ipcMain.handle('getLogs', async () => {
 //         object: event[5],
 //       };
 //     });
-    
+
 //     return { formattedEvents, eventHeaders };
 
 //   } catch (error) {
@@ -231,7 +235,7 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
   const interval = '15s';
   try {
-    // startTime and endTime look like this 
+    // startTime and endTime look like this
 
     // data interval
 
@@ -240,38 +244,35 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
-    
+
     // data.data.result returns matrix
-    return formatMatrix(data.data)
-    
+    return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
-    return {err: error}
+    return { err: error };
   }
 });
 
 // get container resource limit
 ipcMain.handle('getResourceLimits', async () => {
   const { startTime, endTime } = setStartAndEndTime();
-  const interval = '1m'
+  const interval = '1m';
   try {
-    const query = `${PROM_URL}query_range?query=kube_pod_container_resource_limits{resource="memory",namespace="default"}&start=${startTime}&end=${endTime}`
+    const query = `${PROM_URL}query_range?query=kube_pod_container_resource_limits{resource="memory",namespace="default"}&start=${startTime}&end=${endTime}`;
     const res = await fetch(query);
-    const data = await (res.json());
-    return formatMatrix(data.data, 'bytes')
+    const data = await res.json();
+    return formatMatrix(data.data, 'bytes');
   } catch (err) {
-    return {err: err}
+    return { err: err };
   }
-
-})
-  // query kube_pod_container_resource_limits
-
+});
+// query kube_pod_container_resource_limits
 
 // get CPU Usage by pods
 // ipcMain.handle('getCPUUsageByPods', async () => {
 //   const { startTime, endTime } = setStartAndEndTime();
 //   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
-  
+
 //   // data step interval
 //   const interval = '30m';
 //   try {
@@ -299,29 +300,13 @@ ipcMain.handle('getResourceLimits', async () => {
 //     return {err: error}
 //   }
 // });
+
 // get alerts
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
     const data: any = await fetch(`${PROM_URL}/rules`);
     const alerts: any = await data.json();
-    const formattedData: object[] = [];
-    alerts.data.groups.forEach((group: any) => {
-      group.rules.forEach((rule: any) => {
-        if (rule.state) {
-          const alert: any = {
-            group: group.name,
-            state: rule.state,
-            name: rule.name,
-            severity: rule.labels.severity,
-            description: rule.annotations.description,
-            summary: rule.annotations.summary,
-            alerts: rule.alerts,
-          };
-          formattedData.push(alert);
-        }
-      });
-    });
-    return formattedData;
+    return formatAlerts(alerts);
   } catch (error) {
     console.log(`Error in getAlerts function: ERROR: ${error}`);
   }
