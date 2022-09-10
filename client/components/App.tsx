@@ -69,12 +69,12 @@ const App = (): JSX.Element => {
 
   const doMeBabyOneMoreTime = () => {
     // useEffect(() => {
-    console.log('I AM RUNNING BABY');
+    // console.log('I AM RUNNING BABY');
     window.api
       .getMemoryUsageByPods()
       .then((output: any) => {
-        console.log('type ', Array.isArray(output));
-        console.log('the Output ', output);
+        // console.log('type ', Array.isArray(output));
+        // console.log('the Output ', output);
         setGraphState(output);
       })
       .catch((err: any) => {
@@ -107,7 +107,7 @@ const App = (): JSX.Element => {
     <div id="app-container">
       <div id="navbar">
         <img id="logo" src="./assets/logo.png" alt="" />
-        <h1>Palaemon</h1>
+        <h1>PALAEMON</h1>
       </div>
 
       {/* <h3 id="tagline">A gentle, euthanization tool for OOM kubernetes pods</h3> */}
