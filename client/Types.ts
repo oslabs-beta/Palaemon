@@ -6,29 +6,38 @@ export type ClusterChart = {};
 
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
-  name: string // name of pod, node, or cluster, or deployment?
-  usage: number // the current memory usage
-  request: number // the current request memory of a pod -- 0 for nodes
-  limit: number // current memory limit of a pod -- max memory for nodes
-  parent: string // the node name of a pod, or the cluster name of a node?
+  name: string // name of pod, node, or cluster, or deployment
+  usage: number // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
+  request: number // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
+  limit: number // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
+  parent: string // pod: node name -- node: cluster name
   namespace: string // the namespace of a pod, or n/a for node
 };
 
-export type ClusterChartProps = {
+// export type ClusterChartProps = {
+//   Clusters: SvgInfo[];
+//   Nodes: SvgInfo[];
+//   Pods: SvgInfo[];
+//   Deployments: SvgInfo[];
+//   click: (input: ModalCard) => void;
+// };
+
+export interface ClusterChartProps extends Lulu {
+  // click: (input: ModalCard) => void;
+};
+
+export type Lulu = {
   Clusters: SvgInfo[];
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
   Deployments: SvgInfo[];
-  click: (input: ModalCard) => void;
+  click?: (input: ModalCard) => void;
 };
+
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
   data: SvgInfo[]
-  // name: string[]; // name of each individual square
-  // usage: number[];
-  // request: number[];
-  // limit: number[];
   click: (input: ModalCard) => void; // function to create the modal
 };
 

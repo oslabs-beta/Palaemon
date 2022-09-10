@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { ClusterChartCardProps, ModalCard } from '../Types';
+import { ClusterChartCardProps, SvgInfo } from '../Types';
 
 
 const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
 
-    const openDetailsModal = (e: any, data: ModalCard): void => {
+    const openDetailsModal = (e: any, data: SvgInfo): void => {
         // console.log(data);
         const top = e.pageY;
         const left = e.pageX;
         props.click(data);
         // openModal(type, { top, left }, id);
     };
-
-
-
 
 
     const squares: JSX.Element[] = [];
@@ -32,13 +29,7 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
         else index = 5;
         squares.push(
             <svg 
-            // onClick={(e: any) => openDetailsModal(e, {
-            //     name: props.name[i],
-            //     usage: props.usage[i],
-            //     request: props.request[i],
-            //     limit: props.limit[i]
-            //     // console.log('click')
-            // })}
+            onClick={(e: any) => openDetailsModal(e, props.data[i])}
                 width={30} height={30} key={i + 1000} >
                 <rect className='health-bar' width="30" height="30" rx="10" fill={colors[index]} />
             </svg>
