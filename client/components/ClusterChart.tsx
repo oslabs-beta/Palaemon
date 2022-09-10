@@ -1,7 +1,5 @@
 import * as React from "react";
-import { forEach } from "../../webpack.production";
-import { forEach } from "../../webpack.production";
-import { ClusterChartProps, SvgInfo, SvgInfo } from "../Types";
+import { ClusterChartProps, SvgInfo } from "../Types";
 import ClusterChartCard from "./ClusterChartCard";
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {
