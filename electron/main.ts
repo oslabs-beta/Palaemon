@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
+import path from 'path';
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
 const fetch: any = (...args: any) =>
@@ -10,11 +11,10 @@ import {
   formatEvents,
   formatAlerts,
 } from './utils';
-import path from 'path';
 
 // metrics modules
 import { formatMatrix } from './metricsData/formatMatrix';
-import { V1SubjectRulesReviewStatus } from '@kubernetes/client-node';
+
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -22,7 +22,7 @@ const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api);
 const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
 const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
-//
+
 // const isDev: boolean = process.env.NODE_ENV === 'development';
 const isDev: boolean = false;
 const PORT: string | number = process.env.PORT || 8080;
@@ -63,6 +63,7 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
 // K8S API //
 
 // get nodes in cluster
@@ -150,33 +151,6 @@ ipcMain.handle('getEvents', async () => {
       })
       .toString();
     return formatEvents(response);
-    // const response: any = await cp.execSync(
-    //   'kubectl get events --all-namespaces',
-    //   {
-    //     encoding: 'utf-8',
-    //   }
-    // );
-    // const data = response.split('\n');
-    // // divides each event into subarrs
-    // const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
-    // // lowercase the headers of events
-    // const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
-    // // remove headers from trimmed arr
-    // trimmed.shift();
-
-    // const formattedEvents = trimmed.map((event: any) => {
-    //   // any type because we can
-    //   return {
-    //     namespace: event[0],
-    //     lastSeen: event[1],
-    //     severity: event[2],
-    //     reason: event[3],
-    //     message: event[4],
-    //     object: event[5],
-    //   };
-    // });
-
-    // return formattedEvents;
   } catch (error) {
     return console.log(`Error in getEvents function: ERROR: ${error}`); // add return statement to make async () => on line 112 happy
   }

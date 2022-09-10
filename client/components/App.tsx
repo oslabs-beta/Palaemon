@@ -99,7 +99,7 @@ const fakedata: SvgInfo[] = [fakedata2, fakedata2]
     <div id="app-container">
       <div id="navbar">
         <img id="logo" src="./assets/logo.png" alt="" />
-        <h1>Palaemon</h1>
+        <h1>PALAEMON</h1>
       </div>
 
       {/* <h3 id="tagline">A gentle, euthanization tool for OOM kubernetes pods</h3> */}

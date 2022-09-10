@@ -31,7 +31,7 @@ export const formatEvents = (data: any): {}[] => {
       object: event[5],
     };
   });
-  return formattedEvents;
+  return formattedEvents.slice(1, -1);
 };
 
 export const formatAlerts = (data: any): {}[] => {
@@ -39,6 +39,9 @@ export const formatAlerts = (data: any): {}[] => {
   data.data.groups.forEach((group: any) => {
     group.rules.forEach((rule: any) => {
       if (rule.state) {
+        rule.labels.severity = capitalize(rule.labels.severity);
+        rule.state = capitalize(rule.state);
+
         const alert: {} = {
           group: group.name,
           state: rule.state,
@@ -54,3 +57,7 @@ export const formatAlerts = (data: any): {}[] => {
   });
   return formattedAlerts;
 };
+
+export function capitalize(data: string) {
+  return data[0].toUpperCase() + data.slice(1);
+}
