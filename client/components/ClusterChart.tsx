@@ -1,6 +1,7 @@
 import * as React from "react";
 import { forEach } from "../../webpack.production";
-import { ClusterChartProps, SvgInfo } from "../Types";
+import { forEach } from "../../webpack.production";
+import { ClusterChartProps, SvgInfo, SvgInfo } from "../Types";
 import ClusterChartCard from "./ClusterChartCard";
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {
@@ -29,7 +30,8 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
 
 
   const names: ["Clusters", "Nodes", "Pods", "Deployments"] = ["Clusters", "Nodes", "Pods", "Deployments"];
-  // const names: string[] = ["Clusters", "Nodes", "Pods", "Deployments",'a'];
+  // const names: ["Clusters", "Nodes", "Pods", "Deployments"] = ["Clusters", "Nodes", "Pods", "Deployments"];
+  // const names: string[] = ["Clusters", "Nodes", "Pods", "Deployments",'a','a'];
   const clusterCards: JSX.Element[] = [];
   if (props.click)
     for (let i = 0; i < 4; i++) {
