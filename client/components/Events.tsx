@@ -2,8 +2,6 @@ import { useState, useEffect, EffectCallback } from 'react';
 import EventCard from './EventsCards';
 import AlertCard from './AlertsCards';
 import { EventProps, EventCardProps, EventObject } from '../Types';
-import { EvalSourceMapDevToolPlugin } from 'webpack';
-import { Alert } from 'react-bootstrap';
 
 const Events = (props: EventProps): JSX.Element => {
   const [isEvents, setIsEvents] = useState(true);
@@ -43,7 +41,7 @@ const Events = (props: EventProps): JSX.Element => {
     // console.log('this is what stupiderStuff is: ', stupiderStuff);
     // console.log('type of StupiderStuff: ', typeof events);
     // console.log('this is what stupiderStuff is: ', events);
-    // const stupidStuff = await window.api.getNodes();
+    const stupidStuff = await window.api.getNodes();
 
     // when in doubt, console.log it out.
     // console.log('I AM EVENTS HAHA ', events);
