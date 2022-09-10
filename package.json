@@ -7,9 +7,7 @@
     "build": "webpack --config ./webpack.config.js",
     "build:production": "webpack --config ./webpack.production.js",
     "dev": "webpack serve --config ./webpack.config.js",
-    "start": "concurrently \"npm run build && npm run dev\" \"wait-on http://localhost:8080 && electron ./dist/electron/main.js\"",
-    "start2": "electron ./dist/electron/main.js",
-    "start:dev": "concurrently \"npm run dev\" \"electron http://localhost:8080\"",
+    "start": "npm run build && electron ./dist/electron/main.js",
     "start:production": "npm run build:production && electron ./dist/electron/main.js"
   },
   "repository": {
@@ -34,6 +32,8 @@
     "css-loader": "^6.7.1",
     "electron": "^20.1.0",
     "electron-devtools-installer": "^3.2.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "electron-reloader": "^1.2.3",
     "html-webpack-plugin": "^5.5.0",
     "image-webpack-loader": "^8.1.0",
     "node-fetch": "^3.2.10",

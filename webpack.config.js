@@ -62,15 +62,15 @@ module.exports = [
       filename: 'index.js',
       clean: true,
     },
-    devServer: {
-      host: 'localhost',
-      port: 8080,
-      hot: true,
-      static: {
-        directory: path.resolve(__dirname, './client/assets'),
-        publicPath: '/assets',
-      },
-    },
+    // devServer: {
+    //   host: 'localhost',
+    //   port: 8080,
+    //   hot: true,
+    //   static: {
+    //     directory: path.resolve(__dirname, './client/assets'),
+    //     publicPath: '/assets',
+    //   },
+    // },
     plugins: [
       new HtmlWebpackPlugin({
         template: 'client/index.html',
