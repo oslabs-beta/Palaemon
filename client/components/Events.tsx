@@ -3,7 +3,6 @@ import EventCard from './EventsCards';
 import AlertCard from './AlertsCards';
 import { EventProps, EventCardProps, EventObject } from '../Types';
 import { EvalSourceMapDevToolPlugin } from 'webpack';
-import { Alert } from 'react-bootstrap';
 
 const Events = (props: EventProps): JSX.Element => {
   const [isEvents, setIsEvents] = useState(true);

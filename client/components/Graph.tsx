@@ -1,5 +1,5 @@
-import * as React from "react";
-import { GraphProps } from "../Types";
+import * as React from 'react';
+import { GraphProps } from '../Types';
 
 import {
   Chart as ChartJS,
@@ -10,8 +10,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -24,13 +24,23 @@ ChartJS.register(
 );
 
 const Graph = (props: GraphProps): JSX.Element => {
-  var ctx = document.getElementById("myChart") as HTMLCanvasElement;
+  var ctx = document.getElementById('myChart') as HTMLCanvasElement;
 
   const datasetData = [];
-  const colorArray = ["red", "blue", "green", "black", "purple", "cyan", "yellow", "orange", "#003d33"];
-  
+  const colorArray = [
+    'red',
+    'blue',
+    'green',
+    'black',
+    'purple',
+    'cyan',
+    'yellow',
+    'orange',
+    '#003d33',
+  ];
+
   const xLabels: string[] = props.data[0][Object.keys(props.data[0])[0]].times;
-  
+
   for (let i = 0; i < props.data.length; i++) {
     const podName: string = Object.keys(props.data[i])[0];
     datasetData.push({
@@ -44,11 +54,11 @@ const Graph = (props: GraphProps): JSX.Element => {
   const options: any = {
     responsive: true,
     pointRadius: 0,
-    indexAxis: "x",
+    indexAxis: 'x',
     plugins: {
       legend: {
         // display: buttonClicked,
-        position: "bottom" as const,
+        position: 'bottom' as const,
       },
       datalabels: {
         // hide datalabels for all datasets
@@ -64,18 +74,18 @@ const Graph = (props: GraphProps): JSX.Element => {
       // }],
       x: {
         grid: {
-          color: "rgb(240, 240, 240)",
+          color: 'rgb(240, 240, 240)',
         },
         ticks: {
-          color: "#797676",
+          color: '#797676',
         },
       },
       y: {
         grid: {
-          color: "rgb(240, 240, 240)",
+          color: 'rgb(240, 240, 240)',
         },
         ticks: {
-          color: "#797676",
+          color: '#797676',
         },
       },
     },

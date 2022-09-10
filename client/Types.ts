@@ -64,11 +64,10 @@ export type ModalCard = {
 };
 
 export type GraphProps = {
-  data: 
-    {
-      [podName:  string]: {
-        times: string[];
-        values: number[];
-      };
-    }[];
+  data: {
+    [podName: string]: {
+      times: string[];
+      values: number[];
+    };
+  }[];
 };

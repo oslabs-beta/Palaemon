@@ -9,11 +9,11 @@ import '../stylesheets/style.scss';
 import { ClusterChartProps, SvgInfo } from '../Types';
 
 const App = (): JSX.Element => {
-  // const [pods, setPods]: any = useState([]);
-  // const [nodes, setNodes]: any = useState([]);
-  // const [deploys, setDeploys]: any = useState([]);
-  // const [ns, setNs]: any = useState([]);
-  // const [svc, setSvcs]: any = useState([]);
+  const [pods, setPods]: any = useState([]);
+  const [nodes, setNodes]: any = useState([]);
+  const [deploys, setDeploys]: any = useState([]);
+  const [ns, setNs]: any = useState([]);
+  const [svc, setSvcs]: any = useState([]);
   // console.log('APP', window);
   const [test, setTest] = useState(['test']);
   const fakeData1: SvgInfo = {
@@ -30,7 +30,7 @@ const App = (): JSX.Element => {
   };
   const fakeData3: SvgInfo = {
     name: ['pod1', 'pod2', 'pod3'],
-    usage: [0.5, 1, 1.5, 2, 1.2, .3, 1, 1.8],
+    usage: [0.5, 1, 1.5, 2, 1.2, 0.3, 1, 1.8],
     request: [1, 1, 1, 1, 1, 1, 1, 1],
     limit: [2, 2, 2, 2, 2, 2, 2, 2],
   };
@@ -85,23 +85,23 @@ const App = (): JSX.Element => {
     // }, test);
   };
 
-  //   const renderData = async () => {
-  //   const podsData = await window.api.getPods();
-  //   const nodesData = await window.api.getNodes();
-  //   const deploysData = await window.api.getDeployments();
-  //   const svcData = await window.api.getServices();
-  //   const nsData = await window.api.getNamespaces();
+  const renderData = async () => {
+    const podsData = await window.api.getPods();
+    const nodesData = await window.api.getNodes();
+    const deploysData = await window.api.getDeployments();
+    const svcData = await window.api.getServices();
+    const nsData = await window.api.getNamespaces();
 
-  //   setPods([...podsData]);
-  //   setNodes([...nodesData]);
-  //   setDeploys([...deploysData]);
-  //   setNs([...nsData]);
-  //   setSvcs([...svcData]);
-  // };
+    setPods([...podsData]);
+    setNodes([...nodesData]);
+    setDeploys([...deploysData]);
+    setNs([...nsData]);
+    setSvcs([...svcData]);
+  };
 
-  // useEffect(() => {
-  //   renderData();
-  // }, []);
+  useEffect(() => {
+    renderData();
+  }, []);
 
   return (
     <div id="app-container">
