@@ -26,14 +26,6 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
   return (
     <div id="cluster-chart">
       {clusterCards}
-      {/* {modalState.open &&
-          <Modal
-            type={this.state.modalState.type}
-            position={this.state.modalState.position}
-            id={this.state.modalState.id}
-            closeModal={this.closeModal}
-          />
-        } */}
     </div>
     )
 };
