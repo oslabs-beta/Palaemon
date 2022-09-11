@@ -22,27 +22,28 @@ const App = (): JSX.Element => {
     open: false
   }
 
+  // Ways to clean up the modal:
+  // the modal is split into two states. the modalState could probably accept the JSX component as a key value
   const [modalState, setModalState] = React.useState(modalStateInit)
+  const [theModal, setTheModal] = React.useState(<p>help</p>)
 
-  let modalCard: JSX.Element = <></>
 
   const openModal = (e: any, data: SvgInfo) => {
- 
+
     const position = {
-      top: e.pageY.toString(),
-      left: e.pageX.toString()
+      top: e.pageY.toString() + "px",
+      left: e.pageX.toString() + "px"
     }
-    const propData: ModalProps = { ...data, position: position }
+    const propData: ModalProps = { ...data, position: position, close: closeModal }
     console.log('modal opened', propData)
 
-    console.log('modalcard element before invoked', modalCard)
-    modalCard = <DetailsModal {...propData} key={50}/>
+
+    setTheModal(<DetailsModal {...propData} key={50} />)
 
     setModalState({
       open: true
     }
     );
-    console.log('modalcard element', modalCard)
   }
 
   const closeModal = (): void => {
@@ -56,7 +57,7 @@ const App = (): JSX.Element => {
     name: 'string',
     usage: 1,
     request: 0.9,
-    limit: 2,
+    limit: Math.random()+1,
     parent: 'string',
     namespace: 'string',
   }
@@ -69,7 +70,8 @@ const App = (): JSX.Element => {
     Nodes: fakedata,
     Pods: fakedata,
     Deployments: fakedata,
-    click: openModal
+    click: openModal,
+    close: closeModal
   };
   // click: string => console.log('clickfunc', string),
 
@@ -155,6 +157,7 @@ const App = (): JSX.Element => {
               Pods={gke.Pods}
               Deployments={gke.Deployments}
               click={gke.click}
+              close={gke.close}
             />
             {/* cluster chart */}
           </div>
@@ -167,10 +170,12 @@ const App = (): JSX.Element => {
           <Events />
         </div>
       </div>
-      {modalState && modalCard}
-      {modalState && <p>help why</p>}
-      {!modalState && <p>help why</p>}
-      {modalCard}
+      {/* <DetailsModal /> */}
+      {modalState.open && theModal}
+      {/* {modalState.open && <p>help why1</p>}
+      {!modalState.open && <p>help why2</p>}
+      {theModal} */}
+      <h1 onClick={closeModal} >close the modal</h1>
       <footer className="puny">
         Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!
       </footer>

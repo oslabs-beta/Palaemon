@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { SvgInfo } from '../Types';
-// import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
-// import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ModalProps } from '../Types';
 
 const DetailsModal = (props: ModalProps) => {
 
-    const { name, usage, request, limit, parent, namespace, position } = props;
-    console.log('detail modal rendering soon')
+    const { name, usage, request, limit, parent, namespace, position, close } = props;
+    // console.log('detail modal rendering soon')
 
     return (
         <div className="modal" style={position}>
             <div className="modalHeading">
                 {/* <h4 className="modalName">{details.name || details.title || 'Unknown'}</h4> */}
                 {/* <FAIcon icon={faTimes} onClick={closeModal} /> */}
+                <h1 id='modalhead' onClick={close} >X</h1>
             </div>
             <ul className="modalList">
                 <li className="modalDetail">Name: {name}</li>

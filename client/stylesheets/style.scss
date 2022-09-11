@@ -61,6 +61,37 @@ body {
   }
 }
 
+
+.modal {
+
+	animation-name: opac;
+	animation-fill-mode: both;
+	animation-duration: .5s;
+
+  position: absolute;
+  top: 100;
+  background-color: #82ada9;
+  .modalHeading{
+    position: relative;
+    // right: 0px;
+    top: 100px;
+// display: flex;
+// justify-content: flex-end;
+    // #modalhead{
+  
+    // }
+  }
+}
+
+@keyframes opac {
+  from{
+    opacity:0
+  } 
+  to {
+    opacity:1
+  }
+}
+
 #app-container {
   height: 100vh;
   padding: 0px;

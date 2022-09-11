@@ -17,6 +17,7 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
           title={names[i]}
           data={props[names[i]]}
           click={props.click}
+          close={props.close}
           key={10 + i}
         />
       );

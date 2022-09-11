@@ -35,9 +35,9 @@ const isDev: boolean = process.env.NODE_ENV === 'development';
 // however, BrowserWindow cannot be created before app is 'ready'
 let mainWindow: any = null;
 
-try{
-  require('electron-reloader')(module);
-} catch {};
+// try{
+//   require('electron-reloader')(module);
+// } catch {};
 
 // this is the function to open windows
 const loadMainWindow = () => {
@@ -324,9 +324,9 @@ ipcMain.handle("getMemoryUsageByPods", async () => {
     const data = await res.json();
 
     // data.data.result returns matrix
-    console.log('IS ELECTRONMON THE ANSWER TO OUR PRAYERS???!!!');
-    console.log('I THINK IT\'S WORKING???!!!');
-    console.log('OHMYGOODNESSIT\'SWORKING??AHHHHHH!!!');
+    // console.log('IS ELECTRONMON THE ANSWER TO OUR PRAYERS???!!!');
+    // console.log('I THINK IT\'S WORKING???!!!');
+    // console.log('OHMYGOODNESSIT\'SWORKING??AHHHHHH!!!');
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
