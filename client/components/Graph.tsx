@@ -1,6 +1,7 @@
-import * as React from 'react';
 import { GraphProps } from '../Types';
+import { Line } from 'react-chartjs-2';
 
+// I dont know why, but you need all this ChartJS stuff to make the react-chartjs-2 to work
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +12,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +24,6 @@ ChartJS.register(
 );
 
 const Graph = (props: GraphProps): JSX.Element => {
-  var ctx = document.getElementById('myChart') as HTMLCanvasElement;
 
   const datasetData = [];
   const colorArray = [
@@ -60,18 +59,19 @@ const Graph = (props: GraphProps): JSX.Element => {
         // display: buttonClicked,
         position: 'bottom' as const,
       },
-      datalabels: {
-        // hide datalabels for all datasets
-        display: false,
+      title: {
+        display: true,
+        text: 'Current Memory Usage by Pods'
       },
+      // tooltip: {
+      //   mode: 'label'
+      // }
+      // datalabels: {
+      //   // hide datalabels for all datasets
+      //   display: true,
+      // },
     },
     scales: {
-      // yAxes: [{
-      //   scaleLabel: {
-      //     display: true,
-      //     labelString: 'probability'
-      //   }
-      // }],
       x: {
         grid: {
           color: 'rgb(240, 240, 240)',
@@ -79,6 +79,10 @@ const Graph = (props: GraphProps): JSX.Element => {
         ticks: {
           color: '#797676',
         },
+        title: {
+          display: true,
+          text: new Date().toDateString()
+        }
       },
       y: {
         grid: {
@@ -87,11 +91,17 @@ const Graph = (props: GraphProps): JSX.Element => {
         ticks: {
           color: '#797676',
         },
+        title: {
+          display: true,
+          text: 'Mibibytes'
+        }
       },
     },
   };
-  // const labels = ["January", "February", "March", "April", "May", "June"];
 
+  // options.scales['x'].title='title1'
+  // const labels = ["January", "February", "March", "April", "May", "June"];
+// console.log('chartjs', ChartJS.defaults.plugins.tooltip)
   const data = {
     labels: xLabels,
     datasets: datasetData,

@@ -57,7 +57,7 @@ const App = (): JSX.Element => {
     name: 'string',
     usage: 1,
     request: 0.9,
-    limit: Math.random()+1,
+    limit: Math.random() + 1,
     parent: 'string',
     namespace: 'string',
   }
@@ -159,22 +159,16 @@ const App = (): JSX.Element => {
               click={gke.click}
               close={gke.close}
             />
-            {/* cluster chart */}
           </div>
           <div id="graph">
             <Graph data={graphState} />
           </div>
         </div>
-
         <div id="right-side">
           <Events />
         </div>
       </div>
-      {/* <DetailsModal /> */}
       {modalState.open && theModal}
-      {/* {modalState.open && <p>help why1</p>}
-      {!modalState.open && <p>help why2</p>}
-      {theModal} */}
       <h1 onClick={closeModal} >close the modal</h1>
       <footer className="puny">
         Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!
