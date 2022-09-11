@@ -1,5 +1,6 @@
 import { app, session, BrowserWindow, ipcMain } from "electron";
 import path from "path";
+import { watch } from 'fs';
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 import * as k8s from "@kubernetes/client-node";
@@ -18,6 +19,7 @@ import {
 // metrics modules
 import { formatMatrix } from "./metricsData/formatMatrix";
 import { SvgInfo, SvgInfoObj } from "../client/Types";
+import { electron } from "webpack";
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -32,6 +34,10 @@ const isDev: boolean = process.env.NODE_ENV === 'development';
 // this is to allow the BrowserWindow object to be referrable globally
 // however, BrowserWindow cannot be created before app is 'ready'
 let mainWindow: any = null;
+
+try{
+  require('electron-reloader')(module);
+} catch {};
 
 // this is the function to open windows
 const loadMainWindow = () => {
@@ -61,6 +67,19 @@ app.on("ready", async () => {
     //  .catch((err: Error) => {console.log('There was an Error: ', err)})
   }
 });
+
+// app.whenReady().then(() => {
+//   watch('./dist/client/', (eventType, filename) => {
+//     console.log(eventType, ' occured in ', filename);
+//     mainWindow.reload();
+//   });
+  
+//   watch('./dist/electron/', (eventType, filename) => {
+//     console.log(eventType, ' occured in ', filename);
+//     app.relaunch();
+//     app.exit(0);
+//   })
+// });
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -305,7 +324,9 @@ ipcMain.handle("getMemoryUsageByPods", async () => {
     const data = await res.json();
 
     // data.data.result returns matrix
-    console.log('Divs need keys too!');
+    console.log('IS ELECTRONMON THE ANSWER TO OUR PRAYERS???!!!');
+    console.log('I THINK IT\'S WORKING???!!!');
+    console.log('OHMYGOODNESSIT\'SWORKING??AHHHHHH!!!');
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
