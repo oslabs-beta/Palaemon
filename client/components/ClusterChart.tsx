@@ -1,5 +1,4 @@
-import * as React from "react";
-import { ClusterChartProps, SvgInfo } from "../Types";
+import { ClusterChartProps } from "../Types";
 import ClusterChartCard from "./ClusterChartCard";
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {

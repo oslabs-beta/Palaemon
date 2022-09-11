@@ -39,14 +39,6 @@ export interface ModalProps extends SvgInfo {
   close: () => void;
 }
 
-// export type ClusterChartProps = {
-//   Clusters: SvgInfo[];
-//   Nodes: SvgInfo[];
-//   Pods: SvgInfo[];
-//   Deployments: SvgInfo[];
-//   click: (input: ModalCard) => void;
-// };
-
 export interface ClusterChartProps extends Lulu {
   close: () => void;
 };
@@ -92,12 +84,12 @@ export type AlertObject = {
   alerts: any;
 };
 
-export type ModalCard = {
-  name: string;
-  usage: number;
-  request: number;
-  limit: number;
-};
+// export type ModalCard = {
+//   name: string;
+//   usage: number;
+//   request: number;
+//   limit: number;
+// };
 
 export type GraphProps = {
   data: {
