@@ -2,12 +2,11 @@
   "name": "palaemon",
   "version": "1.0.0",
   "description": "- A gentle, euthanization and diagnosis tool for out-of-memory (OOM) kubernetes pods.  - Palaemon is a Greek, childe sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of shrimp.",
-  "main": "electron.js",
   "scripts": {
-    "build": "webpack --config ./webpack.config.js",
+    "build": "webpack --watch --config ./webpack.config.js",
     "build:production": "webpack --config ./webpack.production.js",
-    "dev": "webpack serve --config ./webpack.config.js",
-    "start": "npm run build && electron ./dist/electron/main.js",
+    "dev": "concurrently \"webpack --watch --config ./webpack.config.js\" \"electron --watch ./dist/electron/main.js\"",
+    "start": "electron ./dist/electron/main.js",
     "start:production": "npm run build:production && electron ./dist/electron/main.js"
   },
   "repository": {
@@ -32,8 +31,6 @@
     "css-loader": "^6.7.1",
     "electron": "^20.1.0",
     "electron-devtools-installer": "^3.2.0",
-    "electron-reload": "^2.0.0-alpha.1",
-    "electron-reloader": "^1.2.3",
     "html-webpack-plugin": "^5.5.0",
     "image-webpack-loader": "^8.1.0",
     "node-fetch": "^3.2.10",

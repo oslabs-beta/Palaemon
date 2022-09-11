@@ -305,6 +305,7 @@ ipcMain.handle("getMemoryUsageByPods", async () => {
     const data = await res.json();
 
     // data.data.result returns matrix
+    console.log('Divs need keys too!');
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
