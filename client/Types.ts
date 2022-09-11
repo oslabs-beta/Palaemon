@@ -62,7 +62,6 @@ export type ClusterChartCardProps = {
 };
 
 export interface LogCardProps {
-  key: string;
   eventObj?: EventObject;
   alertObj?: AlertObject;
   logType: string;

@@ -49,7 +49,7 @@ const Events = (props: EventProps): JSX.Element => {
       for (let i = 0; i < logsData.length; i++) {
         logCards.push(
           <LogCard
-            key={`${logType}#${i}`}
+            key={i+200}
             eventObj={logType === 'events' ? logsData[i] : undefined}
             alertObj={logType === 'alerts' ? logsData[i] : undefined}
             logType={logType}

@@ -1,6 +1,7 @@
 import { app, session, BrowserWindow, ipcMain } from "electron";
 import path from "path";
-import os from "os";
+import { watch } from 'fs';
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 import * as k8s from "@kubernetes/client-node";
 import * as cp from "child_process";
@@ -18,6 +19,7 @@ import {
 // metrics modules
 import { formatMatrix } from "./metricsData/formatMatrix";
 import { SvgInfo, SvgInfoObj } from "../client/Types";
+import { electron } from "webpack";
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -33,45 +35,51 @@ const isDev: boolean = process.env.NODE_ENV === 'development';
 // however, BrowserWindow cannot be created before app is 'ready'
 let mainWindow: any = null;
 
+try{
+  require('electron-reloader')(module);
+} catch {};
+
+// this is the function to open windows
 const loadMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      // contextIsolation: false,
       devTools: isDev, //whether to enable DevTools
       preload: path.join(__dirname, "preload.js"),
     },
   });
-
-  // depending on whether this is dev mode or production mode
-  // if dev mode, open port 8080 to share server
-  // if production mode, open directly from build file in /dist folder
-  // if (isDev) {
-  //   mainWindow.loadURL(`http://localhost:${PORT}`);
-  //   console.log(`Main Window loaded PORT ${PORT}`);
-  // } else {
-  //   mainWindow.loadFile(path.join(__dirname, '../client/index.html'));
-  //   console.log('Main Window loaded file index.html');
-  // }
-
-  // above code has skeleton for runnin
+  
   mainWindow.loadFile(path.join(__dirname, "../client/index.html"));
   console.log("Main Window loaded file index.html");
 };
 
-
-app.on("ready", loadMainWindow);
-// invoke preload? to load up all the data..? maybe
-
-// adding react dev tools on load
-const REACT_DEV_TOOL_HASHSTRING: string = 'fmkadmapgofadopljbjfkapdkoienihi';
-// the following should be different for different os
-const REACT_DEV_TOOL_PATH_MAC_OS: string = path.resolve(os.homedir(), '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.9.0_0');
-app.whenReady().then(async () => {
-  await session.defaultSession.loadExtension(REACT_DEV_TOOL_PATH_MAC_OS);
+app.on("ready", async () => {
+  if(isDev){
+    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
+    installExtension(
+      extensions,
+      {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
+    ).then((name:string) => {console.log(`Added Extension: ${name}`)})
+     .then(loadMainWindow)
+    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
+  }
 });
+
+// app.whenReady().then(() => {
+//   watch('./dist/client/', (eventType, filename) => {
+//     console.log(eventType, ' occured in ', filename);
+//     mainWindow.reload();
+//   });
+  
+//   watch('./dist/electron/', (eventType, filename) => {
+//     console.log(eventType, ' occured in ', filename);
+//     app.relaunch();
+//     app.exit(0);
+//   })
+// });
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -111,7 +119,7 @@ ipcMain.handle("getAllInfo", async () : Promise<any> => {
       return output;
     }); // end of nodeData
     const getPods = await k8sApiCore.listPodForAllNamespaces();
-    console.log('i am a pod ', getPods.body.items[0])
+    // console.log('i am a pod ', getPods.body.items[0])
     
     const podData = getPods.body.items.map(pod => {
       const output: SvgInfo = new SvgInfoObj();
@@ -316,6 +324,9 @@ ipcMain.handle("getMemoryUsageByPods", async () => {
     const data = await res.json();
 
     // data.data.result returns matrix
+    console.log('IS ELECTRONMON THE ANSWER TO OUR PRAYERS???!!!');
+    console.log('I THINK IT\'S WORKING???!!!');
+    console.log('OHMYGOODNESSIT\'SWORKING??AHHHHHH!!!');
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
