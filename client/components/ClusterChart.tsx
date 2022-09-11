@@ -4,27 +4,6 @@ import ClusterChartCard from "./ClusterChartCard";
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {
 
-  const modalStateInit = {
-    open: false,
-    position: { top: 0, left: 0 },
-  }
-
-  const [modalState, setModalState] = React.useState(modalStateInit)
-
-  const openModal = (position: { top: number, left: number }): void => {
-    setModalState({
-      open: true,
-      position: position
-    }
-    );
-  }
-
-  const closeModal = (): void => {
-    setModalState({
-      open: false,
-      position: { top: 0, left: 0 }
-    })
-  }
 
 
   const names: ["Clusters", "Nodes", "Pods", "Deployments"] = ["Clusters", "Nodes", "Pods", "Deployments"];

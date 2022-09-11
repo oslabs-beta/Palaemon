@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import ClusterChart from './ClusterChart';
 import Events from './Events';
 import Graph from './Graph';
+import DetailsModal from './Modal';
 
 import '../stylesheets/style.scss';
-import { ClusterChartProps, SvgInfo } from '../Types';
+import { ClusterChartProps, SvgInfo, ModalProps } from '../Types';
 
 const App = (): JSX.Element => {
   const [pods, setPods]: any = useState([]);
@@ -17,16 +18,50 @@ const App = (): JSX.Element => {
   // console.log('APP', window);
   const [portOpen, setPortOpen]: any = useState(false);
 
-const fakedata2: SvgInfo = {
-  name: 'string',
-  usage: 1,
-  request: 0.9,
-  limit: 2,
-  parent: 'string',
-  namespace: 'string',
-}
+  const modalStateInit = {
+    open: false
+  }
 
-const fakedata: SvgInfo[] = [fakedata2, fakedata2]
+  const [modalState, setModalState] = React.useState(modalStateInit)
+
+  let modalCard: JSX.Element = <></>
+
+  const openModal = (e: any, data: SvgInfo) => {
+ 
+    const position = {
+      top: e.pageY.toString(),
+      left: e.pageX.toString()
+    }
+    const propData: ModalProps = { ...data, position: position }
+    console.log('modal opened', propData)
+
+    console.log('modalcard element before invoked', modalCard)
+    modalCard = <DetailsModal {...propData} key={50}/>
+
+    setModalState({
+      open: true
+    }
+    );
+    console.log('modalcard element', modalCard)
+  }
+
+  const closeModal = (): void => {
+    setModalState({
+      open: false
+    })
+  }
+
+
+  const fakedata2: SvgInfo = {
+    name: 'string',
+    usage: 1,
+    request: 0.9,
+    limit: 2,
+    parent: 'string',
+    namespace: 'string',
+  }
+
+  const fakedata: SvgInfo[] = [fakedata2, fakedata2]
 
 
   const gke: ClusterChartProps = {
@@ -34,8 +69,9 @@ const fakedata: SvgInfo[] = [fakedata2, fakedata2]
     Nodes: fakedata,
     Pods: fakedata,
     Deployments: fakedata,
-    click: string => console.log(string),
+    click: openModal
   };
+  // click: string => console.log('clickfunc', string),
 
 
   const [graphState, setGraphState] = useState([
@@ -52,23 +88,23 @@ const fakedata: SvgInfo[] = [fakedata2, fakedata2]
       },
     },
   ]);
+  if (!portOpen)
+    fetch('http://localhost:9090/')
+      .then((response) => {
+        console.log('status code', response.status)
+        if (response.status === 200) {
+          setPortOpen(true)
+        } else {
 
-fetch('http://localhost:9090/')
-.then((response) => {
-  console.log('status code', response.status)
-  if(response.status === 200) {
-    setPortOpen(true)
-  } else {
-
-  }
-})
+        }
+      })
 
   useEffect(() => {
     doMeBabyOneMoreTime();
   }, [portOpen]);
 
   const doMeBabyOneMoreTime = () => {
-    if(portOpen){
+    if (portOpen) {
       window.api
         .getMemoryUsageByPods()
         .then((output: any) => {
@@ -83,19 +119,19 @@ fetch('http://localhost:9090/')
     }
   };
 
-    const renderData = async () => {
+  const renderData = async () => {
     const podsData = await window.api.getPods();
     const nodesData = await window.api.getNodes(); // an array of all the nodes
-  //   const deploysData = await window.api.getDeployments();
-  //   const svcData = await window.api.getServices();
-  //   const nsData = await window.api.getNamespaces();
+    //   const deploysData = await window.api.getDeployments();
+    //   const svcData = await window.api.getServices();
+    //   const nsData = await window.api.getNamespaces();
 
     setPods([...podsData]);
     console.log(podsData);
     setNodes([...nodesData]);
-  //   setDeploys([...deploysData]);
-  //   setNs([...nsData]);
-  //   setSvcs([...svcData]);
+    //   setDeploys([...deploysData]);
+    //   setNs([...nsData]);
+    //   setSvcs([...svcData]);
   };
 
   useEffect(() => {
@@ -131,7 +167,10 @@ fetch('http://localhost:9090/')
           <Events />
         </div>
       </div>
-
+      {modalState && modalCard}
+      {modalState && <p>help why</p>}
+      {!modalState && <p>help why</p>}
+      {modalCard}
       <footer className="puny">
         Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!
       </footer>

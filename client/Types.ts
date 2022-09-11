@@ -34,6 +34,10 @@ export class SvgInfoObj implements SvgInfo {
   namespace: string; 
 }
 
+export interface ModalProps extends SvgInfo {
+  position: {left: string, top: string}
+}
+
 // export type ClusterChartProps = {
 //   Clusters: SvgInfo[];
 //   Nodes: SvgInfo[];
@@ -51,14 +55,14 @@ export type Lulu = {
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
   Deployments: SvgInfo[];
-  click?: (input: ModalCard) => void;
+  click?: (e: any, input: SvgInfo) => void;
 };
 
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
   data: SvgInfo[]
-  click: (input: ModalCard) => void; // function to create the modal
+  click: (e: any, input: SvgInfo) => void;
 };
 
 export interface LogCardProps {
