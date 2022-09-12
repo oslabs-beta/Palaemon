@@ -47,6 +47,7 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
       // console.log(el[0])
       // time value
       return new Date(el[0] * 1000).toLocaleTimeString('en-US', dateOptions);
+      // return new Date(el[0] * 1000).toISOString();
     });
     //this is bytes/units - convert bytes to GB when unit type is bytes
     output[podName].values = obj.values.map((el: [number, number]) =>

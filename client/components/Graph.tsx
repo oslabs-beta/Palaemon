@@ -1,5 +1,6 @@
-import { GraphProps } from '../Types';
+import { GraphData } from '../Types';
 import { Line } from 'react-chartjs-2';
+import { useState, useEffect } from 'react';
 
 // I dont know why, but you need all this ChartJS stuff to make the react-chartjs-2 to work
 import {
@@ -23,7 +24,54 @@ ChartJS.register(
   Legend
 );
 
-const Graph = (props: GraphProps): JSX.Element => {
+const Graph = (): JSX.Element => {
+  const [portOpen, setPortOpen] = useState(false);
+  const [graphState, setGraphState] = useState<GraphData>(
+    [
+      {
+        Port9090isClosed: {
+          times: ['a', 'b', 'c'],
+          values: [1, 2, 3],
+        },
+      },
+      {
+        Port9090isClosed: {
+          times: ['a', 'b', 'c'],
+          values: [3, 2, 1],
+        },
+      },
+    ]
+  )
+
+  if (!portOpen)
+  fetch('http://localhost:9090/')
+    .then((response) => {
+      console.log('status code', response.status)
+      if (response.status === 200) {
+        setPortOpen(true)
+      } else {
+
+      }
+    })
+
+  useEffect(() => {
+    doMeBabyOneMoreTime();
+  }, [portOpen]);
+
+  const doMeBabyOneMoreTime = () => {
+    if (portOpen) {
+      window.api
+        .getMemoryUsageByPods()
+        .then((output: any) => {
+          if (!output.err) setGraphState(output);
+          console.log('itworks')
+        })
+        .catch((err: any) => {
+          return { err: err };
+        });
+      setTimeout(doMeBabyOneMoreTime, 1000);
+    }
+  };
 
   const datasetData = [];
   const colorArray = [
@@ -38,15 +86,17 @@ const Graph = (props: GraphProps): JSX.Element => {
     '#003d33',
   ];
 
-  const xLabels: string[] = props.data[0][Object.keys(props.data[0])[0]].times;
+  // let keyname: keyof typeof graphState[0] = Object.keys(graphState[0])[0]
 
-  for (let i = 0; i < props.data.length; i++) {
-    const podName: string = Object.keys(props.data[i])[0];
+  const xLabels: string[] = graphState[0][Object.keys(graphState[0])[0]].times;
+
+  for (let i = 0; i < graphState.length; i++) {
+    const podName: string = Object.keys(graphState[i])[0];
     datasetData.push({
       label: podName,
       backgroundColor: colorArray[i],
       borderColor: colorArray[i],
-      data: props.data[i][podName].values,
+      data: graphState[i][podName].values,
     });
   }
 
@@ -100,7 +150,7 @@ const Graph = (props: GraphProps): JSX.Element => {
   };
 
 
-// console.log('chartjs', ChartJS.defaults.plugins.tooltip)
+  // console.log('chartjs', ChartJS.defaults.plugins.tooltip)
   const data = {
     labels: xLabels,
     datasets: datasetData,

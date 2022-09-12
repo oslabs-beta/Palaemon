@@ -25,6 +25,7 @@
     "@types/node-fetch": "^2.6.2",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "ajv": "^7.2.4",
     "chart.js": "^3.9.1",
     "child_process": "^1.0.2",
     "concurrently": "^7.3.0",
@@ -40,6 +41,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "sass": "^1.54.8",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
@@ -56,8 +58,5 @@
       "!client/**/*",
       "!electron/**/*"
     ]
-  },
-  "dependencies": {
-    "module-replace-webpack-plugin": "^0.0.12"
   }
 }
