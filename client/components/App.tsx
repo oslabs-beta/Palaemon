@@ -4,7 +4,6 @@ import Events from './Events';
 import Graph from './Graph';
 import DetailsModal from './Modal';
 
-import '../stylesheets/style.scss';
 import { ClusterChartProps, SvgInfo, ModalProps } from '../Types';
 
 const App = (): JSX.Element => {
@@ -63,16 +62,11 @@ const App = (): JSX.Element => {
   const renderData = async () => {
     const podsData = await window.api.getPods();
     const nodesData = await window.api.getNodes(); // an array of all the nodes
-    //   const deploysData = await window.api.getDeployments();
-    //   const svcData = await window.api.getServices();
-    //   const nsData = await window.api.getNamespaces();
+
 
     setPods([...podsData]);
     console.log(podsData);
     setNodes([...nodesData]);
-    //   setDeploys([...deploysData]);
-    //   setNs([...nsData]);
-    //   setSvcs([...svcData]);
   };
 
   useEffect(() => {
