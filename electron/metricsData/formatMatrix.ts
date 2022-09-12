@@ -22,10 +22,7 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
   const arr: any = [];
   // console.log('matrix THIS IS ', matrix)
 
-  // podName: {
-  // times: Array
-  // values: array
-  // }
+
   const dateOptions: any = {
     // dateStyle: "full",
     timeStyle: "short"
@@ -42,15 +39,16 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
       values: [],
     };
 
-    // output[podName].times = obj.values.map((el: [number, string]) => convertUnixToISOString(el[0]));
+
     output[podName].times = obj.values.map((el: [number, number]) => {
-      // console.log(el[0])
+
       // time value
       return new Date(el[0] * 1000).toLocaleTimeString('en-US', dateOptions);
-      // return new Date(el[0] * 1000).toISOString();
+
     });
     //this is bytes/units - convert bytes to GB when unit type is bytes
     output[podName].values = obj.values.map((el: [number, number]) =>
+      // do i need to remove a 0 here??? -pat
       Number(el[1] / 10000000)
     );
 
