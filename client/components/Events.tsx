@@ -28,10 +28,11 @@ const Events = (props: EventProps): JSX.Element => {
   useEffect(() => {
     // populate and set logCards according to what type of logs is requested.
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
-    window.api.getAllInfo();
-
     // window.api.getPods();
     const createLogs = async () => {
+      const testig: any = await window.api.getAllInfo();
+      console.log('AM I A PROMISE?, ', testig)
+
       const logCards: JSX.Element[] = [];
       let logsData;
       if (logType === 'events') {
@@ -45,7 +46,7 @@ const Events = (props: EventProps): JSX.Element => {
       for (let i = 0; i < logsData.length; i++) {
         logCards.push(
           <LogCard
-            key={`${logType}#${i}`}
+            key={i+200}
             eventObj={logType === 'events' ? logsData[i] : undefined}
             alertObj={logType === 'alerts' ? logsData[i] : undefined}
             logType={logType}

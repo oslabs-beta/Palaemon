@@ -30,6 +30,7 @@ module.exports = [
       {
         "utf-8-validate": "commonjs utf-8-validate",
         bufferutil: "commonjs bufferutil",
+        fsevents: "require('fsevents')",
       },
     ],
   },

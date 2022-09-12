@@ -1,4 +1,8 @@
 import { SvgInfo, SvgInfoObj } from "../client/Types";
+const fetch: any = (...args: any) =>
+  import("node-fetch").then(({ default: fetch }: any) => fetch(...args));
+
+// import fetch from 'node-fetch'
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
   var now = new Date();
@@ -93,33 +97,84 @@ export function parseNode(obj: any) {
 
 }
 
-export function parsePod(obj: any) {
+export async function parsePod(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
 
   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
   if (obj?.metadata?.name) output.name = obj.metadata.name;
-  (() => {
-    const date = new Date();
+  // (async (): Promise<any> => {
+    const {startTime, endTime} = setStartAndEndTime()
+    const podName = obj.metadata.name
+    try {
+      const query1 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
+      const query2 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
+      const data1 = await fetch(query1);
+      // console.log('THIS IS DATA ONE UNO ', data1)
+      const jsonData1: any = await data1.json();
+      // console.log(' HERE IS JASON DATA ONE', jsonData1.data.result)
+      const data2 = await fetch(query2);
+      const jsonData2: any = await data2.json();
+      if (jsonData1.data.result[0]) {
+        output.limit = jsonData1.data.result[0].values[0][1];
+        console.log('OUTPUT LIMITS', output.limit)
+      }
 
-    const query1 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits&start=${date}&end=${date}&step=24h`;
-    const query2 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`
-    // const data1 = fetch(query1).then((res) => res.json()).then((result) => output.limit = result.data.result.values[0][1])
-    fetch(query1).then((res) => res.json()).then((result) => output.limit = result.data.result.values[0][1])
-    // const jsonData1 = await data1.json();
-    // console.log('LIMIT RESOURCE ',jsonData1)
-    // const data2 = await fetch(query2);
-    // const jsonData2 = await data2.json();
-    // console.log('REQUEST RESOURCE ', jsonData2)
-    // output.limit = jsonData1.data.result.values[0][1];
-    // output.request = jsonData2.data.result.values[0][1];
-    // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
-    output.parent = obj.spec.nodeName;
-    output.namespace = obj.metadata.namespace;
-    return;
-    })();
-    console.log('I AM OUTPUT', output)
-    return output;
+      if (jsonData2.data.result[0]) {
+        // console.log('I AM ENTERING CONDITIONAL')
+        // output.limit = jsonData1.data.result[0].values[0][1];
+        // console.log('OUTPUT LIMITS', output.limit)
+        output.request = jsonData2.data.result[0].values[0][1];
+        // return console.log('THIS IS REQUEST LIMITS ', output.request)
+      }
 
+      output.parent = obj.spec.nodeName;
+      output.namespace = obj.metadata.namespace;
+    
+      // console.log('output sent back to main ', output)
+      return output;
+    } catch (error) {
+      return { err: error };
+    }
 }
 
+
+// export function parsePod(obj: any) {
+
+//       const podName = obj.metadata.name
+//       const {startTime, endTime} = setStartAndEndTime()
+//       const query1 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
+//       // const query2 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
+//       console.log('im starting to parse the pods!!')
+//       const testset = fetch(query1)
+//       .then((res: any) => res.json())
+//       .then((data: any) => {
+//         console.log('I have fetched correctly')
+//         // console.log('THIS IS DATA!!!', data)
+//         if (data.data.result.length >= 1) {
+
+//         const output: SvgInfo = new SvgInfoObj();
+
+//         // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
+//         if (obj?.metadata?.name) output.name = obj.metadata.name;
+//         // (async (): Promise<any> => {
+//           console.log('ENTERING CONDITIONAL')
+//           output.limit = data.data.result[0].values[0][1];
+//           // console.log('OUTPUT LIMITS', output.limit)
+//           output.parent = obj.spec.nodeName;
+//           output.namespace = obj.metadata.namespace;
+//         // these returns dont do anything
+//           console.log('I am the output of fetch: ', output)
+//           return output
+//         }
+//         return console.log('oh god i didnt return the right thing');
+//         // these returns dont do anything
+//       }).catch((err:any) => {err:err})
+
+//       //if we return output out here.. it sends output template to main.ts
+//   // return output;
+//   // return testset
+// }
 // this.usage = 1;
+
+// this.request = 1;
+// this.limit = 1;

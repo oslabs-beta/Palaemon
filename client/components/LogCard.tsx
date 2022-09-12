@@ -20,13 +20,14 @@ const LogCard = (props: LogCardProps): JSX.Element => {
   const header: JSX.Element[] = [];
   const body: JSX.Element[] = [];
   // need to make sure order is perserved in objects!!!
+  let k = 500;
   for (const x in headerObj){
     const label:string = x[0].toUpperCase() + x.slice(1) +':';
-    header.push(<div><p><strong>{label}</strong> {headerObj[x]}</p></div>);
+    header.push(<div key={k++}><p><strong>{label}</strong> {headerObj[x]}</p></div>);
   }
   for (const x in bodyObj){
     const label:string = x[0].toUpperCase() + x.slice(1) +':';
-    body.push(<div><p><strong>{label}</strong> {bodyObj[x]}</p></div>);
+    body.push(<div key={k++}><p><strong>{label}</strong> {bodyObj[x]}</p></div>);
   }
   
   return (

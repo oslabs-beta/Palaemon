@@ -1,17 +1,6 @@
-import * as React from 'react';
-import { ClusterChartCardProps, SvgInfo } from '../Types';
-
+import { ClusterChartCardProps } from '../Types';
 
 const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
-
-    const openDetailsModal = (e: any, data: SvgInfo): void => {
-        // console.log(data);
-        const top = e.pageY;
-        const left = e.pageX;
-        props.click(data);
-        // openModal(type, { top, left }, id);
-    };
-
 
     const squares: JSX.Element[] = [];
     const colors: string[] = ['#69B34C', '#ACB334', '#FAB733', '#FF8E15', '#FF4E11', '#FF0D0D']
@@ -29,7 +18,7 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
         else index = 5;
         squares.push(
             <svg 
-            onClick={(e: any) => openDetailsModal(e, props.data[i])}
+            onClick={(e: any) => props.click(e, props.data[i])}
                 width={30} height={30} key={i + 1000} >
                 <rect className='health-bar' width="30" height="30" rx="10" fill={colors[index]} />
             </svg>

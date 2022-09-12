@@ -88,18 +88,22 @@ ipcMain.handle("getAllInfo", async () : Promise<any> => {
   // nodes
   const namespace = "default";
   try {
-    const getNodes = await k8sApiCore.listNode(namespace);
-    const nodeData = getNodes.body.items.map((node) => {
-      return parseNode(node)
-    }); // end of nodeData
+    // const getNodes = await k8sApiCore.listNode(namespace);
+    // const nodeData = getNodes.body.items.map((node) => {
+    //   return parseNode(node)
+    // }); // end of nodeData
 
-    const getPods = await k8sApiCore.listPodForAllNamespaces();
-    
-    const podData = getPods.body.items.map(pod => {
-      return parsePod(pod)
+    const getPods = await k8sApiCore.listNamespacedPod(namespace);
+    // console.log('THIS IS GETPODSS DATA: ', getPods.body.items[0])
+    const podData = await getPods.body.items.map(async (pod) => {
+      const haha = await parsePod(pod)
+      console.log('THIS IS HAHA', haha)
+      // console.log('THIS IS A POD', pod)
+      return haha
     })
-    // console.log('I AM NODE DATA ', nodeData)
-    console.log('I AM POD DATA ', podData)
+    // console.log('I AM NODE DATA asdf', nodeData)
+    
+    console.log('I AM POD DATASDASDASDASDDAD ', podData)
     return podData;
   } catch (error) {
     return { err: error };
@@ -163,7 +167,7 @@ ipcMain.handle("getPods", async (): Promise<any> => {
     const namespace: (string | undefined)[] = data.body.items.map(
       (pod) => pod?.metadata?.namespace
     );
-    console.log('I AM INEVITABLE: ', data.body.items[0])
+    // console.log('I AM INEVITABLSDFSDFSDFSDFS: ', data.body.items[0])
     return { podNames, node, namespace };
   } catch (error) {
     return console.log(`Error in getPods function: ERROR: ${error}`);
