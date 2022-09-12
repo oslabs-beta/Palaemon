@@ -1,0 +1,11 @@
+9.12.22
+
+Issue with sending promise<pending> to frontend for data visualization. Imported object interface to utils.ts, where we used an async
+function to fetch data via 2 PromQL queries. The data was being fetched inside of utils; however, when reaching the main.ts forEach function,
+the await attached to the forEach method was not resolving.
+
+We swapped the forEach method for a for loop, but also discovered that this can be done via promise.all. This is because Promise.all will resolve
+an array of promises<pending>, whereas an await without promise.all is expecting a SINGULAR promise.
+
+LOOK AT TYPES OF DATA THAT IS BEING RETURNED.
+

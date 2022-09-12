@@ -1,8 +1,8 @@
 import { SvgInfo, SvgInfoObj } from "../client/Types";
+
 const fetch: any = (...args: any) =>
   import("node-fetch").then(({ default: fetch }: any) => fetch(...args));
 
-// import fetch from 'node-fetch'
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
   var now = new Date();
@@ -69,9 +69,10 @@ export function capitalize(data: string) {
 
 export function parseMem(entry:string) {
   // if dealing with memory (ki, mb, mi, etc.)
-  
+
   return parseInt(entry.slice(0, entry.length-2))
 }
+
 
 export function parseNode(obj: any) {
       // for each node from query we spit back this object
@@ -115,7 +116,7 @@ export async function parsePod(obj: any) {
       const data2 = await fetch(query2);
       const jsonData2: any = await data2.json();
       if (jsonData1.data.result[0]) {
-        output.limit = jsonData1.data.result[0].values[0][1];
+        output.limit = parseInt(jsonData1.data.result[0].values[0][1]);
         console.log('OUTPUT LIMITS', output.limit)
       }
 
@@ -123,7 +124,7 @@ export async function parsePod(obj: any) {
         // console.log('I AM ENTERING CONDITIONAL')
         // output.limit = jsonData1.data.result[0].values[0][1];
         // console.log('OUTPUT LIMITS', output.limit)
-        output.request = jsonData2.data.result[0].values[0][1];
+        output.request = parseInt(jsonData2.data.result[0].values[0][1]);
         // return console.log('THIS IS REQUEST LIMITS ', output.request)
       }
 
