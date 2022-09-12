@@ -45,10 +45,11 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
     // output[podName].times = obj.values.map((el: [number, string]) => convertUnixToISOString(el[0]));
     output[podName].times = obj.values.map((el: [number, number]) => {
       // console.log(el[0])
+      // time value
       return new Date(el[0] * 1000).toLocaleTimeString('en-US', dateOptions);
       // return new Date(el[0] * 1000).toISOString();
     });
-    //convert bytes to GB when unit type is bytes
+    //this is bytes/units - convert bytes to GB when unit type is bytes
     output[podName].values = obj.values.map((el: [number, number]) =>
       Number(el[1] / 10000000)
     );

@@ -1,7 +1,6 @@
 import { app, session, BrowserWindow, ipcMain } from "electron";
 import path from "path";
-import { watch } from 'fs';
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import os from "os";
 
 import * as k8s from "@kubernetes/client-node";
 import * as cp from "child_process";
@@ -13,13 +12,13 @@ import {
   formatClusterData,
   formatEvents,
   formatAlerts,
-  parseMem
+  parseNode,
+  parsePod
 } from "./utils";
 
 // metrics modules
 import { formatMatrix } from "./metricsData/formatMatrix";
 import { SvgInfo, SvgInfoObj } from "../client/Types";
-import { electron } from "webpack";
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -35,51 +34,45 @@ const isDev: boolean = process.env.NODE_ENV === 'development';
 // however, BrowserWindow cannot be created before app is 'ready'
 let mainWindow: any = null;
 
-// try{
-//   require('electron-reloader')(module);
-// } catch {};
-
-// this is the function to open windows
 const loadMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      // contextIsolation: false,
       devTools: isDev, //whether to enable DevTools
       preload: path.join(__dirname, "preload.js"),
     },
   });
-  
+
+  // depending on whether this is dev mode or production mode
+  // if dev mode, open port 8080 to share server
+  // if production mode, open directly from build file in /dist folder
+  // if (isDev) {
+  //   mainWindow.loadURL(`http://localhost:${PORT}`);
+  //   console.log(`Main Window loaded PORT ${PORT}`);
+  // } else {
+  //   mainWindow.loadFile(path.join(__dirname, '../client/index.html'));
+  //   console.log('Main Window loaded file index.html');
+  // }
+
+  // above code has skeleton for runnin
   mainWindow.loadFile(path.join(__dirname, "../client/index.html"));
   console.log("Main Window loaded file index.html");
 };
 
-app.on("ready", async () => {
-  if(isDev){
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
-    installExtension(
-      extensions,
-      {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
-    ).then((name:string) => {console.log(`Added Extension: ${name}`)})
-     .then(loadMainWindow)
-    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
-  }
-});
 
-// app.whenReady().then(() => {
-//   watch('./dist/client/', (eventType, filename) => {
-//     console.log(eventType, ' occured in ', filename);
-//     mainWindow.reload();
-//   });
-  
-//   watch('./dist/electron/', (eventType, filename) => {
-//     console.log(eventType, ' occured in ', filename);
-//     app.relaunch();
-//     app.exit(0);
-//   })
-// });
+app.on("ready", loadMainWindow);
+// invoke preload? to load up all the data..? maybe
+
+// adding react dev tools on load
+const REACT_DEV_TOOL_HASHSTRING: string = 'fmkadmapgofadopljbjfkapdkoienihi';
+// the following should be different for different os
+const REACT_DEV_TOOL_PATH_MAC_OS: string = path.resolve(os.homedir(), '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.9.0_0');
+app.whenReady().then(async () => {
+  await session.defaultSession.loadExtension(REACT_DEV_TOOL_PATH_MAC_OS);
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -97,37 +90,15 @@ ipcMain.handle("getAllInfo", async () : Promise<any> => {
   try {
     const getNodes = await k8sApiCore.listNode(namespace);
     const nodeData = getNodes.body.items.map((node) => {
-      // for each node from query we spit back this object
-
-      // using Type Assertion to create an empty object for the typed variable
-      // this could potentially create inconsistencies.
-      // const output: SvgInfo = {} as SvgInfo;
-
-      // best practice might be to create a new class object with default values and set
-      const output: SvgInfo = new SvgInfoObj();
-
-      if (node.status?.allocatable !== undefined) {
-        const memUsage: number = parseMem(node.status.allocatable.memory);
-        output.usage = memUsage;
-      }
-      if (node.status?.capacity !== undefined) {
-        const memLimit: number = parseMem(node.status.capacity.memory);
-        output.limit = memLimit;
-      }
-      // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
-      if (node?.metadata?.name) output.name = node.metadata.name;
-      return output;
+      return parseNode(node)
     }); // end of nodeData
-    const getPods = await k8sApiCore.listPodForAllNamespaces();
-    // console.log('i am a pod ', getPods.body.items[0])
-    
-    const podData = getPods.body.items.map(pod => {
-      const output: SvgInfo = new SvgInfoObj();
 
-      
-    })
+    const getPods = await k8sApiCore.listNamespacedPod(namespace);
+    const podData = await Promise.all(getPods.body.items.map((pod) => parsePod(pod)))
 
-    return nodeData;
+  // console.log('THIS IS NODE DATA', nodeData)
+  // console.log('THIS IS POD DATA', podData)
+  return podData
   } catch (error) {
     return { err: error };
   }
@@ -158,7 +129,7 @@ ipcMain.handle("getDeployments", async (): Promise<any> => {
     const formattedData: any = data.body.items.map(
       (pod) => pod?.metadata?.name
     );
-    console.log("THIS IS DATA ", formattedData);
+    // console.log("THIS IS DATA ", formattedData);
     return formattedData;
   } catch (error) {
     console.log(`Error in getDeployments function: ERROR: ${error}`);
@@ -190,7 +161,7 @@ ipcMain.handle("getPods", async (): Promise<any> => {
     const namespace: (string | undefined)[] = data.body.items.map(
       (pod) => pod?.metadata?.namespace
     );
-    // console.log('THIS IS FORMATTED PODDS ', formattedData);
+    // console.log('I AM INEVITABLSDFSDFSDFSDFS: ', data.body.items[0])
     return { podNames, node, namespace };
   } catch (error) {
     return console.log(`Error in getPods function: ERROR: ${error}`);
@@ -233,13 +204,14 @@ ipcMain.handle("getLogs", async () => {
     );
     const data = response.split("\n");
     // divides each event into subarrs
-    console.log("THIS IS LOGS DATA IN MAIN.JS", data);
+    // console.log("THIS IS LOGS DATA IN MAIN.JS", data);
+
     const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
     // lowercase the headers of events
     const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
     // remove headers from trimmed arr
     trimmed.shift();
-    console.log("TRIMMED LOGS", trimmed);
+    // console.log("TRIMMED LOGS", trimmed);
     const formattedEvents = trimmed.map((event: any) => {
       // any type because we can
       return {
@@ -295,18 +267,18 @@ ipcMain.handle("getLogs", async () => {
 // PROMETHEUS API //
 // get memory metrics
 
-ipcMain.handle("getLimits", async () => {
-  const date = new Date();
-  try {
-    const query = `${PROM_URL}query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`;
-    const data = await fetch(query);
-    const jsonData = await data.json();
-    return jsonData.data.result.values[0][1];
-    // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
-  } catch (error) {
-    return { err: error };
-  }
-});
+// ipcMain.handle("getLimits", async () => {
+//   const date = new Date();
+//   try {
+//     const query = `${PROM_URL}query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`;
+//     const data = await fetch(query);
+//     const jsonData = await data.json();
+//     return jsonData.data.result.values[0][1];
+//     // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
+//   } catch (error) {
+//     return { err: error };
+//   }
+// });
 
 ipcMain.handle("getMemoryUsageByPods", async () => {
   const { startTime, endTime } = setStartAndEndTime();
@@ -324,9 +296,6 @@ ipcMain.handle("getMemoryUsageByPods", async () => {
     const data = await res.json();
 
     // data.data.result returns matrix
-    // console.log('IS ELECTRONMON THE ANSWER TO OUR PRAYERS???!!!');
-    // console.log('I THINK IT\'S WORKING???!!!');
-    // console.log('OHMYGOODNESSIT\'SWORKING??AHHHHHH!!!');
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
