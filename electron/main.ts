@@ -103,7 +103,7 @@ ipcMain.handle("getAllInfo", async () : Promise<any> => {
     })
     // console.log('I AM NODE DATA asdf', nodeData)
     
-    console.log('I AM POD DATASDASDASDASDDAD ', podData)
+    await console.log('I AM POD DATASDASDASDASDDAD ', podData)
     return podData;
   } catch (error) {
     return { err: error };
