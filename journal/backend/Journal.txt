@@ -9,3 +9,8 @@ an array of promises<pending>, whereas an await without promise.all is expecting
 
 LOOK AT TYPES OF DATA THAT IS BEING RETURNED.
 
+change PromQL queries for memory to:
+const query = `${prometheusURL}query_range?query=sum(container_memory_working_set_bytes${namespaceStr}) 
+                  by (pod)&start=${startDateTime}&end=${endDateTime}&step=${"1m"}`;
+
+takes a little bit of time to load
