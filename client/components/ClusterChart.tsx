@@ -6,7 +6,6 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
 
 
   const names: ["Clusters", "Nodes", "Pods", "Deployments"] = ["Clusters", "Nodes", "Pods", "Deployments"];
-  // const names: ["Clusters", "Nodes", "Pods", "Deployments"] = ["Clusters", "Nodes", "Pods", "Deployments"];
   // const names: string[] = ["Clusters", "Nodes", "Pods", "Deployments",'a','a'];
   const clusterCards: JSX.Element[] = [];
   if (props.click)

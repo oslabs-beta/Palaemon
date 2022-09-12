@@ -1,9 +1,3 @@
-export type test = string;
-
-export type EventProps = {};
-
-export type ClusterChart = {};
-
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
   name: string // name of pod, node, or cluster, or deployment
@@ -34,23 +28,23 @@ export class SvgInfoObj implements SvgInfo {
   namespace: string; 
 }
 
-export interface ModalProps extends SvgInfo {
-  position: {left: string, top: string}
-  close: () => void;
-}
-
-export interface ClusterChartProps extends Lulu {
-  close: () => void;
-};
-
 export type Lulu = {
   Clusters: SvgInfo[];
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
   Deployments: SvgInfo[];
-  click?: (e: any, input: SvgInfo) => void;
 };
 
+export interface ModalProps extends SvgInfo {
+  position: {left: string, top: string}
+  close: () => void;
+}
+//--------------------------------Types for ----------------------------------------------------
+
+export interface ClusterChartProps extends Lulu {
+  close: () => void;
+  click: (e: any, input: SvgInfo) => void;
+};
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
@@ -59,6 +53,7 @@ export type ClusterChartCardProps = {
   close: () => void;
 };
 
+//--------------------------------Types for the right side and alerts/events ----------------------------------------------------
 export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
@@ -75,21 +70,14 @@ export type EventObject = {
 };
 
 export type AlertObject = {
-  group: any;
-  state: any;
-  name: any;
-  severity: any;
-  description: any;
-  summary: any;
-  alerts: any;
+  group: string;
+  state: string;
+  name: string;
+  severity: string;
+  description: string;
+  summary: string;
+  alerts: string;
 };
-
-// export type ModalCard = {
-//   name: string;
-//   usage: number;
-//   request: number;
-//   limit: number;
-// };
 
 export type GraphData = {
     [podName: string]: {
@@ -97,3 +85,6 @@ export type GraphData = {
       values: number[];
     };
   }[];
+
+
+  export type EventProps = {};
