@@ -1,4 +1,8 @@
 import { SvgInfo, SvgInfoObj } from "../client/Types";
+
+const fetch: any = (...args: any) =>
+  import("node-fetch").then(({ default: fetch }: any) => fetch(...args));
+
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
   var now = new Date();
@@ -65,27 +69,77 @@ export function capitalize(data: string) {
 
 export function parseMem(entry:string) {
   // if dealing with memory (ki, mb, mi, etc.)
-  
+
   return parseInt(entry.slice(0, entry.length-2))
 }
 
-// export function grabData(obj: any) {
-//   const output: SvgInfo = new SvgInfoObj();
 
-//   if (obj.status?.allocatable !== undefined) {
-//     const memUsage: number = parseMem(obj.status.allocatable.memory);
-//     output.usage = memUsage;
-//   }
-//   if (obj.status?.capacity !== undefined) {
-//     const memLimit: number = parseMem(obj.status.capacity.memory);
-//     output.limit = memLimit;
-//   }
-//   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
-//   if (obj?.metadata?.name) output.name = obj.metadata.name;
-//   return output;
+export function parseNode(obj: any) {
+      // for each node from query we spit back this object
 
-// }
+      // using Type Assertion to create an empty object for the typed variable
+      // this could potentially create inconsistencies.
+      // const output: SvgInfo = {} as SvgInfo;
 
-// this.request = 1;
-// this.parent = '';
-// this.namespace = '';
+      // best practice might be to create a new class object with default values and set
+      const output: SvgInfo = new SvgInfoObj();
+
+      if (obj.status?.allocatable !== undefined) {
+        const memUsage: number = parseMem(obj.status.allocatable.memory);
+        output.usage = memUsage;
+      }
+      if (obj.status?.capacity !== undefined) {
+        const memLimit: number = parseMem(obj.status.capacity.memory);
+        output.limit = memLimit;
+      }
+      // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
+      if (obj?.metadata?.name) output.name = obj.metadata.name;
+      return output;
+
+}
+
+export async function parsePod(obj: any) {
+  const output: SvgInfo = new SvgInfoObj();
+
+  // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
+  if (obj?.metadata?.name) output.name = obj.metadata.name;
+  // (async (): Promise<any> => {
+    const {startTime, endTime} = setStartAndEndTime()
+    const podName = obj.metadata.name
+
+    // PromQL to query resource limits for pods in all namespaces
+    try {
+      const query1 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
+      const query2 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
+      const data1 = await fetch(query1);
+
+      const jsonData1: any = await data1.json();
+
+      const data2 = await fetch(query2);
+      const jsonData2: any = await data2.json();
+
+      if (jsonData1.data.result[0]) {
+        output.limit = parseInt(jsonData1.data.result[0].values[0][1]);
+        // console.log('OUTPUT LIMITS', output.limit)
+      }
+
+      if (jsonData2.data.result[0]) {
+        output.request = parseInt(jsonData2.data.result[0].values[0][1]);
+      }
+
+      output.parent = obj.spec.nodeName;
+      output.namespace = obj.metadata.namespace;
+
+      return output;
+    } 
+    catch (error) {
+      return {
+        name: 'string',
+        usage: 1,
+        request: 1,
+        limit: 1,
+        parent:'strong',
+        namespace: 'string',
+      }
+    }
+}
