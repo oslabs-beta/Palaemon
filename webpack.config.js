@@ -1,85 +1,85 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const path = require('path');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
 module.exports = [
   {
-    mode: 'development',
+    mode: "development",
     entry: {
-      "main": './electron/main.ts',
-      "preload": './electron/preload.ts'
+      main: "./electron/main.ts",
+      preload: "./electron/preload.ts",
     },
-    target: 'electron-main',
+    target: "electron-main",
     module: {
       rules: [
         {
           test: /\.ts(x?)$/,
           exclude: /node-modules/,
-          use: 'ts-loader',
+          use: "ts-loader",
         },
       ],
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      extensions: [".ts", ".tsx", ".js", ".jsx"],
     },
     output: {
-      path: path.resolve(__dirname, './dist/electron/'),
+      path: path.resolve(__dirname, "./dist/electron/"),
       clean: true,
     },
     externals: [
       {
-        'utf-8-validate': 'commonjs utf-8-validate',
-        bufferutil: 'commonjs bufferutil',
+        "utf-8-validate": "commonjs utf-8-validate",
+        bufferutil: "commonjs bufferutil",
       },
-    ]
+    ],
   },
   {
-    mode: 'development',
-    entry: './client/index.tsx',
-    devtool: 'inline-source-map',
+    mode: "development",
+    entry: "./client/index.tsx",
+    devtool: "inline-source-map",
     module: {
       rules: [
         {
           test: /\.ts(x?)$/,
           exclude: /node_modules/,
-          use: 'ts-loader',
+          use: "ts-loader",
         },
         {
           test: /\.s?[ac]ss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: ["style-loader", "css-loader", "sass-loader"],
         },
         {
           test: /\.png/,
-          type: 'asset/resource',
+          type: "asset/resource",
         },
       ],
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      extensions: [".ts", ".tsx", ".js", ".jsx"],
     },
     output: {
-      path: path.resolve(__dirname, './dist/client'),
-      filename: 'index.js',
+      path: path.resolve(__dirname, "./dist/client"),
+      filename: "index.js",
       clean: true,
     },
-    devServer: {
-      host: 'localhost',
-      port: 8080,
-      hot: true,
-      static: {
-        directory: path.resolve(__dirname, './client/assets'),
-        publicPath: '/assets',
-      },
-    },
+    // devServer: {
+    //   host: 'localhost',
+    //   port: 8080,
+    //   hot: true,
+    //   static: {
+    //     directory: path.resolve(__dirname, './client/assets'),
+    //     publicPath: '/assets',
+    //   },
+    // },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'client/index.html',
+        template: "client/index.html",
       }),
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: path.resolve(__dirname, 'client/assets'),
-            to: 'assets/',
+            from: path.resolve(__dirname, "client/assets"),
+            to: "assets/",
           },
         ],
       }),

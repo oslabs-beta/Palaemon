@@ -12,7 +12,8 @@ import {
   formatClusterData,
   formatEvents,
   formatAlerts,
-  parseMem
+  parseNode,
+  parsePod
 } from "./utils";
 
 // metrics modules
@@ -89,37 +90,17 @@ ipcMain.handle("getAllInfo", async () : Promise<any> => {
   try {
     const getNodes = await k8sApiCore.listNode(namespace);
     const nodeData = getNodes.body.items.map((node) => {
-      // for each node from query we spit back this object
-
-      // using Type Assertion to create an empty object for the typed variable
-      // this could potentially create inconsistencies.
-      // const output: SvgInfo = {} as SvgInfo;
-
-      // best practice might be to create a new class object with default values and set
-      const output: SvgInfo = new SvgInfoObj();
-
-      if (node.status?.allocatable !== undefined) {
-        const memUsage: number = parseMem(node.status.allocatable.memory);
-        output.usage = memUsage;
-      }
-      if (node.status?.capacity !== undefined) {
-        const memLimit: number = parseMem(node.status.capacity.memory);
-        output.limit = memLimit;
-      }
-      // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
-      if (node?.metadata?.name) output.name = node.metadata.name;
-      return output;
+      return parseNode(node)
     }); // end of nodeData
+
     const getPods = await k8sApiCore.listPodForAllNamespaces();
-    console.log('i am a pod ', getPods.body.items[0])
     
     const podData = getPods.body.items.map(pod => {
-      const output: SvgInfo = new SvgInfoObj();
-
-      
+      return parsePod(pod)
     })
-
-    return nodeData;
+    // console.log('I AM NODE DATA ', nodeData)
+    console.log('I AM POD DATA ', podData)
+    return podData;
   } catch (error) {
     return { err: error };
   }
@@ -150,7 +131,7 @@ ipcMain.handle("getDeployments", async (): Promise<any> => {
     const formattedData: any = data.body.items.map(
       (pod) => pod?.metadata?.name
     );
-    console.log("THIS IS DATA ", formattedData);
+    // console.log("THIS IS DATA ", formattedData);
     return formattedData;
   } catch (error) {
     console.log(`Error in getDeployments function: ERROR: ${error}`);
@@ -182,7 +163,7 @@ ipcMain.handle("getPods", async (): Promise<any> => {
     const namespace: (string | undefined)[] = data.body.items.map(
       (pod) => pod?.metadata?.namespace
     );
-    // console.log('THIS IS FORMATTED PODDS ', formattedData);
+    console.log('I AM INEVITABLE: ', data.body.items[0])
     return { podNames, node, namespace };
   } catch (error) {
     return console.log(`Error in getPods function: ERROR: ${error}`);
@@ -225,13 +206,14 @@ ipcMain.handle("getLogs", async () => {
     );
     const data = response.split("\n");
     // divides each event into subarrs
-    console.log("THIS IS LOGS DATA IN MAIN.JS", data);
+    // console.log("THIS IS LOGS DATA IN MAIN.JS", data);
+
     const trimmed: any = data.map((el: any) => el.split(/[ ]{2,}/)); // added any type here.. made split happy? whats the data we get back
     // lowercase the headers of events
     const eventHeaders = trimmed[0].map((header: any) => header.toLowerCase()); // any type because we can
     // remove headers from trimmed arr
     trimmed.shift();
-    console.log("TRIMMED LOGS", trimmed);
+    // console.log("TRIMMED LOGS", trimmed);
     const formattedEvents = trimmed.map((event: any) => {
       // any type because we can
       return {
@@ -287,18 +269,18 @@ ipcMain.handle("getLogs", async () => {
 // PROMETHEUS API //
 // get memory metrics
 
-ipcMain.handle("getLimits", async () => {
-  const date = new Date();
-  try {
-    const query = `${PROM_URL}query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`;
-    const data = await fetch(query);
-    const jsonData = await data.json();
-    return jsonData.data.result.values[0][1];
-    // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
-  } catch (error) {
-    return { err: error };
-  }
-});
+// ipcMain.handle("getLimits", async () => {
+//   const date = new Date();
+//   try {
+//     const query = `${PROM_URL}query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`;
+//     const data = await fetch(query);
+//     const jsonData = await data.json();
+//     return jsonData.data.result.values[0][1];
+//     // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
+//   } catch (error) {
+//     return { err: error };
+//   }
+// });
 
 ipcMain.handle("getMemoryUsageByPods", async () => {
   const { startTime, endTime } = setStartAndEndTime();

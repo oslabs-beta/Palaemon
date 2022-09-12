@@ -69,23 +69,57 @@ export function parseMem(entry:string) {
   return parseInt(entry.slice(0, entry.length-2))
 }
 
-// export function grabData(obj: any) {
-//   const output: SvgInfo = new SvgInfoObj();
+export function parseNode(obj: any) {
+      // for each node from query we spit back this object
 
-//   if (obj.status?.allocatable !== undefined) {
-//     const memUsage: number = parseMem(obj.status.allocatable.memory);
-//     output.usage = memUsage;
-//   }
-//   if (obj.status?.capacity !== undefined) {
-//     const memLimit: number = parseMem(obj.status.capacity.memory);
-//     output.limit = memLimit;
-//   }
-//   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
-//   if (obj?.metadata?.name) output.name = obj.metadata.name;
-//   return output;
+      // using Type Assertion to create an empty object for the typed variable
+      // this could potentially create inconsistencies.
+      // const output: SvgInfo = {} as SvgInfo;
 
-// }
+      // best practice might be to create a new class object with default values and set
+      const output: SvgInfo = new SvgInfoObj();
 
-// this.request = 1;
-// this.parent = '';
-// this.namespace = '';
+      if (obj.status?.allocatable !== undefined) {
+        const memUsage: number = parseMem(obj.status.allocatable.memory);
+        output.usage = memUsage;
+      }
+      if (obj.status?.capacity !== undefined) {
+        const memLimit: number = parseMem(obj.status.capacity.memory);
+        output.limit = memLimit;
+      }
+      // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
+      if (obj?.metadata?.name) output.name = obj.metadata.name;
+      return output;
+
+}
+
+export function parsePod(obj: any) {
+  const output: SvgInfo = new SvgInfoObj();
+
+  // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
+  if (obj?.metadata?.name) output.name = obj.metadata.name;
+  (() => {
+    const date = new Date();
+
+    const query1 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits&start=${date}&end=${date}&step=24h`;
+    const query2 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests&start=${date}&end=${date}&step=24h`
+    // const data1 = fetch(query1).then((res) => res.json()).then((result) => output.limit = result.data.result.values[0][1])
+    fetch(query1).then((res) => res.json()).then((result) => output.limit = result.data.result.values[0][1])
+    // const jsonData1 = await data1.json();
+    // console.log('LIMIT RESOURCE ',jsonData1)
+    // const data2 = await fetch(query2);
+    // const jsonData2 = await data2.json();
+    // console.log('REQUEST RESOURCE ', jsonData2)
+    // output.limit = jsonData1.data.result.values[0][1];
+    // output.request = jsonData2.data.result.values[0][1];
+    // return console.log('THIS IS REQUEST LIMITS ', jsonData.data.result.values)
+    output.parent = obj.spec.nodeName;
+    output.namespace = obj.metadata.namespace;
+    return;
+    })();
+    console.log('I AM OUTPUT', output)
+    return output;
+
+}
+
+// this.usage = 1;

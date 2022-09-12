@@ -30,12 +30,8 @@ const Events = (props: EventProps): JSX.Element => {
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
     window.api.getAllInfo();
 
-
+    // window.api.getPods();
     const createLogs = async () => {
-      //testing can remove later
-      const test = await window.api.getNodes();
-      console.log('THIS IS ALL NODES', test)
-      //
       const logCards: JSX.Element[] = [];
       let logsData;
       if (logType === 'events') {
