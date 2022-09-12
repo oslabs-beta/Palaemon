@@ -1,5 +1,3 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
 import { useState, useEffect } from 'react';
 import ClusterChart from './ClusterChart';
 import Events from './Events';
@@ -17,10 +15,10 @@ const App = (): JSX.Element => {
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
-  const [modalState, setModalState] = React.useState({
+  const [modalState, setModalState] = useState({
     open: false
   })
-  const [theModal, setTheModal] = React.useState(<p>help</p>)
+  const [theModal, setTheModal] = useState(<p>help</p>)
 
 
   const openModal = (e: any, data: SvgInfo) => {
