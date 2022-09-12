@@ -91,11 +91,9 @@ export type AlertObject = {
 //   limit: number;
 // };
 
-export type GraphProps = {
-  data: {
+export type GraphData = {
     [podName: string]: {
       times: string[];
       values: number[];
     };
   }[];
-};
