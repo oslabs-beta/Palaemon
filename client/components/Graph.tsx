@@ -99,8 +99,7 @@ const Graph = (props: GraphProps): JSX.Element => {
     },
   };
 
-  // options.scales['x'].title='title1'
-  // const labels = ["January", "February", "March", "April", "May", "June"];
+
 // console.log('chartjs', ChartJS.defaults.plugins.tooltip)
   const data = {
     labels: xLabels,
