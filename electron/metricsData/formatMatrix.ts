@@ -26,6 +26,11 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
   // times: Array
   // values: array
   // }
+  const dateOptions: any = {
+    // dateStyle: "full",
+    timeStyle: "short"
+
+  }
 
   matrix.result.forEach((obj: any) => {
     const output: graph = {};
@@ -39,7 +44,8 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
 
     // output[podName].times = obj.values.map((el: [number, string]) => convertUnixToISOString(el[0]));
     output[podName].times = obj.values.map((el: [number, number]) => {
-      return new Date(el[0] * 1000).toISOString();
+      // console.log(el[0])
+      return new Date(el[0] * 1000).toLocaleTimeString('en-US', dateOptions);
     });
     //convert bytes to GB when unit type is bytes
     output[podName].values = obj.values.map((el: [number, number]) =>

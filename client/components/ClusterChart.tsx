@@ -1,30 +1,8 @@
-import * as React from "react";
-import { ClusterChartProps, SvgInfo } from "../Types";
+import { ClusterChartProps } from "../Types";
 import ClusterChartCard from "./ClusterChartCard";
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {
 
-  const modalStateInit = {
-    open: false,
-    position: { top: 0, left: 0 },
-  }
-
-  const [modalState, setModalState] = React.useState(modalStateInit)
-
-  const openModal = (position: { top: number, left: number }): void => {
-    setModalState({
-      open: true,
-      position: position
-    }
-    );
-  }
-
-  const closeModal = (): void => {
-    setModalState({
-      open: false,
-      position: { top: 0, left: 0 }
-    })
-  }
 
 
   const names: ["Clusters", "Nodes", "Pods", "Deployments"] = ["Clusters", "Nodes", "Pods", "Deployments"];
@@ -38,6 +16,7 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
           title={names[i]}
           data={props[names[i]]}
           click={props.click}
+          close={props.close}
           key={10 + i}
         />
       );
@@ -46,14 +25,6 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
   return (
     <div id="cluster-chart">
       {clusterCards}
-      {/* {modalState.open &&
-          <Modal
-            type={this.state.modalState.type}
-            position={this.state.modalState.position}
-            id={this.state.modalState.id}
-            closeModal={this.closeModal}
-          />
-        } */}
     </div>
     )
 };
