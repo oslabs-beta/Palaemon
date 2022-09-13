@@ -102,6 +102,7 @@ const Graph = (): JSX.Element => {
 
   const options: any = {
     responsive: true,
+    responsiveAnimationDuration: 1000,
     pointRadius: 0,
     indexAxis: 'x',
     plugins: {
