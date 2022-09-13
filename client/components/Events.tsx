@@ -116,7 +116,7 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
-        {loading && <div className="loader"></div>}
+        {loading && <span>Loading <div className="loader"></div></span>}
 
       </nav>
       <div id="container-event-logs" className="container events">
