@@ -78,7 +78,7 @@ const ChartGrid = (props: any) => {
 
     const xLabels: string[] = graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
 
-    const options: any = {
+    let options: string = JSON.stringify({
         responsive: true,
         responsiveAnimationDuration: 1000,
         pointRadius: 0,
@@ -89,7 +89,7 @@ const ChartGrid = (props: any) => {
             },
             title: {
                 display: true,
-                text: 'Current Memory Usage by Pods'
+                text: 'working title'
             },
         },
         scales: {
@@ -118,39 +118,53 @@ const ChartGrid = (props: any) => {
                 }
             },
         },
-    };
+    });
 
-
-    const charts: JSX.Element[] = []
+    const multiOptions = {
+        nodeMem:JSON.parse(options), 
+        nodeCPU:JSON.parse(options), 
+        podMem: JSON.parse(options),
+        podCPU: JSON.parse(options),
+    }
+    
+    const charts: JSX.Element[] = [];
     let datasetData = [] as GraphableData[];
     let keyCounter: number = 0;
+    console.log('a');
+    console.log('multiopt', multiOptions);
 
-    // first we iterate of the total number of graphs we want
-    (Object.keys(graphState) as (keyof typeof graphState)[]).forEach((key, index) => {
-        console.log('whats this ', key, graphState[key], index);
+        // first we iterate of the total number of graphs we want
+        (Object.keys(graphState) as (keyof typeof graphState)[]).forEach((key, index) => {
+            console.log('whats this ', key, graphState[key], index);
 
-        // then we iterate over all of the lines in that graph
-        for (let i = 0; i < graphState[key].length; i++) {
-            const podName: string = Object.keys(graphState[key][i])[0];
-            datasetData.push({
-                label: podName,
-                backgroundColor: colorArray[i],
-                borderColor: colorArray[i],
-                data: graphState[key][i][podName].values,
-            });
-        }
-
-        // this is part of the each individual graphs
-        options.scales.y.title.text = 'y-axis label'
-        options.plugins.title.text = 'Chart Title'
-        charts.push(<div style={{position: 'relative', height:'40vh', width:'30vw'}}><Line options={options} data={
-            {
-                labels: xLabels,
-                datasets: datasetData,
+            // then we iterate over all of the lines in that graph
+            for (let i = 0; i < graphState[key].length; i++) {
+                const podName: string = Object.keys(graphState[key][i])[0];
+                datasetData.push({
+                    label: podName,
+                    backgroundColor: colorArray[i],
+                    borderColor: colorArray[i],
+                    data: graphState[key][i][podName].values,
+                });
             }
-        } key={70 + keyCounter++} width={300} height={300}/></div>)
-        datasetData = [] as GraphableData[];
-    });
+
+            // this is part of the each individual graphs
+            multiOptions[key].scales.y.title.text = 'y-axis label'
+            multiOptions[key].plugins.title.text = key
+            charts.push(<div style={{
+                position: 'relative',
+                height: '40vh',
+                width: '30vw'
+            }} key={70 + keyCounter++}>
+                <Line options={multiOptions[key]} data={
+                    {
+                        labels: xLabels,
+                        datasets: datasetData,
+                    }
+                } key={70 + keyCounter++} width={300} height={300} />
+            </div>)
+            datasetData = [] as GraphableData[];
+        });
 
 
 
