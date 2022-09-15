@@ -19,3 +19,5 @@ takes a little bit of time to load
 
 Some 'memory used' queries are returning cores which is a CPU metric depending on the node. Using object lookup which is constant time, we will create
 a conditional statement to extract just the nodes that are returning memory metrics.
+
+container request/limit fetches sometimes returns both memory AND cpu usage. 

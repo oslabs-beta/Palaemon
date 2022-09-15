@@ -14,7 +14,8 @@ import {
   formatEvents,
   formatAlerts,
   parseNode,
-  parsePod,
+  fetchMem,
+  fetchCPU
 } from "./utils";
 
 // metrics modules
@@ -90,12 +91,13 @@ app.on("window-all-closed", () => {
 ipcMain.handle("getAllInfo", async (): Promise<any> => {
   // nodes
   const tempData: SvgInfo = {
-    name: 'string',
+    name: 'deploy',
     usage: 1,
+    resource: 'deploy',
     request: 0.9,
     limit: Math.random() + 1,
-    parent: 'string',
-    namespace: 'string',
+    parent: 'deploy',
+    namespace: 'deploy',
   }
 
   const namespace = "default";
@@ -110,20 +112,26 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
     const getPods = await k8sApiCore.listPodForAllNamespaces();
 
     // console.log('SINGLE POD BODY ITEMS', getPods.body.items[0])
+
     const podData = await Promise.all(
-      getPods.body.items.map((pod) => parsePod(pod))
+      getPods.body.items.map((pod) => {
+        // each pod is either mem or CPU but we dont know which one it is..
+
+        fetchMem(pod)
+
+      })
     );
 
     if (podData) {
       const newObj: Lulu = {
         Clusters: [
           {
-            name: "test",
+            name: "",
             usage: 1,
-            // resource: 'memory',
+            resource: "memory",
             limit: 1,
             request: 1,
-            parent: "bob",
+            parent: "",
             namespace: "",
           },
         ],
