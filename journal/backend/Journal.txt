@@ -14,3 +14,8 @@ const query = `${prometheusURL}query_range?query=sum(container_memory_working_se
                   by (pod)&start=${startDateTime}&end=${endDateTime}&step=${"1m"}`;
 
 takes a little bit of time to load
+
+9.15.22
+
+Some 'memory used' queries are returning cores which is a CPU metric depending on the node. Using object lookup which is constant time, we will create
+a conditional statement to extract just the nodes that are returning memory metrics.
