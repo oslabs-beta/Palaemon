@@ -97,25 +97,30 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
     parent: 'string',
     namespace: 'string',
   }
+
   const namespace = "default";
+  
   try {
     const getNodes = await k8sApiCore.listNode(namespace);
+    
     const nodeData = getNodes.body.items.map((node) => {
       return parseNode(node);
     }); // end of nodeData
 
     const getPods = await k8sApiCore.listPodForAllNamespaces();
+
+    // console.log('SINGLE POD BODY ITEMS', getPods.body.items[0])
     const podData = await Promise.all(
       getPods.body.items.map((pod) => parsePod(pod))
     );
 
-    
     if (podData) {
       const newObj: Lulu = {
         Clusters: [
           {
             name: "test",
             usage: 1,
+            // resource: 'memory',
             limit: 1,
             request: 1,
             parent: "bob",

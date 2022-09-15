@@ -85,13 +85,15 @@ export function parseNode(obj: any) {
       const output: SvgInfo = new SvgInfoObj();
 
       if (obj.status?.allocatable !== undefined) {
-        const memUsage: number = parseMem(obj.status.allocatable.memory);
-        output.usage = memUsage;
+        const memRequest: number = parseMem(obj.status.allocatable.memory);
+        output.request = memRequest;
       }
+
       if (obj.status?.capacity !== undefined) {
         const memLimit: number = parseMem(obj.status.capacity.memory);
         output.limit = memLimit;
       }
+
       // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
       if (obj?.metadata?.name) output.name = obj.metadata.name;
       return output;
@@ -118,6 +120,7 @@ export async function parsePod(obj: any) {
       const data2 = await fetch(query2);
       const jsonData2: any = await data2.json();
 
+      // console.log('THIS IS JSONDATA 1', jsonData1.data.result)
       if (jsonData1.data.result[0]) {
         output.limit = parseInt(jsonData1.data.result[0].values[0][1]);
         // console.log('OUTPUT LIMITS', output.limit)
