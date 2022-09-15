@@ -1,11 +1,11 @@
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
-  name: string // name of pod, node, or cluster, or deployment
-  usage: number // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
-  request: number // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
-  limit: number // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
-  parent: string // pod: node name -- node: cluster name
-  namespace: string // the namespace of a pod, or n/a for node
+  name: string; // name of pod, node, or cluster, or deployment
+  usage: number; // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
+  request: number; // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
+  limit: number; // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
+  parent: string; // pod: node name -- node: cluster name
+  namespace: string; // the namespace of a pod, or n/a for node
 };
 
 export class SvgInfoObj implements SvgInfo {
@@ -36,7 +36,7 @@ export type Lulu = {
 };
 
 export interface ModalProps extends SvgInfo {
-  position: { left: string, top: string }
+  position: { left: string; top: string };
   close: () => void;
 }
 //--------------------------------Types for Cluster Chart----------------------------------------------------
@@ -44,11 +44,11 @@ export interface ModalProps extends SvgInfo {
 export interface ClusterChartProps extends Lulu {
   close: () => void;
   click: (e: any, input: SvgInfo) => void;
-};
+}
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
-  data: SvgInfo[]
+  data: SvgInfo[];
   click: (e: any, input: SvgInfo) => void;
   close: () => void;
 };
@@ -60,7 +60,7 @@ export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
   logType: string;
-};
+}
 
 export type EventObject = {
   namespace: string;
@@ -80,6 +80,24 @@ export type AlertObject = {
   summary: string;
   alerts: string;
 };
+
+export type LimOrReq = {
+  limitCpu: string;
+  limitMemory: string;
+};
+
+export type newObj = {
+  lastState: string;
+  reason: string;
+  exitCode: string;
+  started: string;
+  sinished: string;
+  ready: string;
+  restartCount: string;
+  limits: LimOrReq;
+  requests: LimOrReq;
+};
+
 //--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {
   [podName: string]: {
@@ -89,15 +107,15 @@ export type GraphData = {
 }[];
 
 export type ChartGraphData = {
-  nodeMem: GraphData,
-  nodeCPU: GraphData,
-  podMem: GraphData,
-  podCPU: GraphData
-}
+  nodeMem: GraphData;
+  nodeCPU: GraphData;
+  podMem: GraphData;
+  podCPU: GraphData;
+};
 
 export type GraphableData = {
-  label: string,
-  backgroundColor: string,
-  borderColor: string,
-  data: number[]
-}
+  label: string;
+  backgroundColor: string;
+  borderColor: string;
+  data: number[];
+};

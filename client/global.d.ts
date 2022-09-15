@@ -18,6 +18,7 @@ declare global {
       getNamespaces: () => Promise<any>;
       getAlerts: () => Promise<any>;
       getAllInfo: () => Promise<any>;
+      getOOMKills: () => Promise<any>;
     };
   }
 }

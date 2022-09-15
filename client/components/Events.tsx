@@ -32,7 +32,10 @@ const Events = (props: EventProps): JSX.Element => {
     // window.api.getPods();
     const createLogs = async () => {
       const testig: any = await window.api.getAllInfo();
-      console.log('AM I A PROMISE?, ', testig)
+      console.log('AM I A PROMISE?, ', testig);
+
+      const oomkills: any = await window.api.getOOMKills();
+      console.log('OOMKILL DATA', oomkills);
 
       const logCards: JSX.Element[] = [];
       let logsData;
@@ -47,7 +50,7 @@ const Events = (props: EventProps): JSX.Element => {
       for (let i = 0; i < logsData.length; i++) {
         logCards.push(
           <LogCard
-            key={i+200}
+            key={i + 200}
             eventObj={logType === 'events' ? logsData[i] : undefined}
             alertObj={logType === 'alerts' ? logsData[i] : undefined}
             logType={logType}
@@ -55,8 +58,8 @@ const Events = (props: EventProps): JSX.Element => {
         );
       }
 
-      if(logCards.length > 0){
-        setLoading(false)
+      if (logCards.length > 0) {
+        setLoading(false);
       }
 
       if (severityType !== 'Default') {
@@ -79,8 +82,6 @@ const Events = (props: EventProps): JSX.Element => {
     createLogs();
   }, [logType, severityType]);
 
-
-
   return (
     <div id="container-event" className="container events right-side">
       <nav id="container-select" className="container events">
@@ -90,8 +91,8 @@ const Events = (props: EventProps): JSX.Element => {
           name="log-type"
           defaultValue={'event'}
           onChange={e => {
-            setLoading(true)
-            handleLogTypeChange(e)
+            setLoading(true);
+            handleLogTypeChange(e);
           }}
         >
           <option value="events">Events</option>
@@ -103,8 +104,8 @@ const Events = (props: EventProps): JSX.Element => {
           name="severity"
           defaultValue={'Default'}
           onChange={e => {
-            setLoading(true)
-            handleSeverityChange(e)
+            setLoading(true);
+            handleSeverityChange(e);
           }}
         >
           <option value="default">Default</option>
@@ -116,8 +117,12 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
-        {loading &&<><p>Loading </p><p className="loader"></p></>}
-
+        {loading && (
+          <>
+            <p>Loading </p>
+            <p className="loader"></p>
+          </>
+        )}
       </nav>
       <div id="container-event-logs" className="container events">
         {logs.length ? logs : <p>No data</p>}
