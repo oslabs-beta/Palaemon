@@ -8,6 +8,7 @@ const Events = (props: EventProps): JSX.Element => {
   const [logs, setLogs]: any = useState([]);
   const [logType, setLogType]: any = useState('events');
   const [severityType, setSeverityType]: any = useState('Default');
+  const [loading, setLoading]: any = useState(true);
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
@@ -28,14 +29,11 @@ const Events = (props: EventProps): JSX.Element => {
   useEffect(() => {
     // populate and set logCards according to what type of logs is requested.
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
-    window.api.getAllInfo();
-
-
+    // window.api.getPods();
     const createLogs = async () => {
-      //testing can remove later
-      const test = await window.api.getNodes();
-      console.log('THIS IS ALL NODES', test)
-      //
+      const testig: any = await window.api.getAllInfo();
+      console.log('AM I A PROMISE?, ', testig)
+
       const logCards: JSX.Element[] = [];
       let logsData;
       if (logType === 'events') {
@@ -55,6 +53,10 @@ const Events = (props: EventProps): JSX.Element => {
             logType={logType}
           />
         );
+      }
+
+      if(logCards.length > 0){
+        setLoading(false)
       }
 
       if (severityType !== 'Default') {
@@ -77,6 +79,8 @@ const Events = (props: EventProps): JSX.Element => {
     createLogs();
   }, [logType, severityType]);
 
+
+
   return (
     <div id="container-event" className="container events right-side">
       <nav id="container-select" className="container events">
@@ -85,7 +89,10 @@ const Events = (props: EventProps): JSX.Element => {
           id="selector-log-type"
           name="log-type"
           defaultValue={'event'}
-          onChange={e => handleLogTypeChange(e)}
+          onChange={e => {
+            setLoading(true)
+            handleLogTypeChange(e)
+          }}
         >
           <option value="events">Events</option>
           <option value="alerts">Alerts</option>
@@ -95,7 +102,10 @@ const Events = (props: EventProps): JSX.Element => {
           id="selector-severity"
           name="severity"
           defaultValue={'Default'}
-          onChange={e => handleSeverityChange(e)}
+          onChange={e => {
+            setLoading(true)
+            handleSeverityChange(e)
+          }}
         >
           <option value="default">Default</option>
           <option value="info">Info</option>
@@ -106,6 +116,8 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
+        {loading &&<><p>Loading </p><p className="loader"></p></>}
+
       </nav>
       <div id="container-event-logs" className="container events">
         {logs.length ? logs : <p>No data</p>}

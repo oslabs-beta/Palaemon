@@ -1,9 +1,3 @@
-export type test = string;
-
-export type EventProps = {};
-
-export type ClusterChart = {};
-
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
   name: string // name of pod, node, or cluster, or deployment
@@ -15,7 +9,7 @@ export type SvgInfo = {
 };
 
 export class SvgInfoObj implements SvgInfo {
-  constructor(){
+  constructor() {
     // set default values for each prop
     // number defaults are set to 1 (instead of) to avoid divide by 0 issues
     this.name = '';
@@ -31,26 +25,26 @@ export class SvgInfoObj implements SvgInfo {
   request: number; // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
   limit: number; // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
   parent: string; // pod: node name -- node: cluster name
-  namespace: string; 
+  namespace: string;
 }
-
-export interface ModalProps extends SvgInfo {
-  position: {left: string, top: string}
-  close: () => void;
-}
-
-export interface ClusterChartProps extends Lulu {
-  close: () => void;
-};
 
 export type Lulu = {
   Clusters: SvgInfo[];
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
   Deployments: SvgInfo[];
-  click?: (e: any, input: SvgInfo) => void;
 };
 
+export interface ModalProps extends SvgInfo {
+  position: { left: string, top: string }
+  close: () => void;
+}
+//--------------------------------Types for Cluster Chart----------------------------------------------------
+
+export interface ClusterChartProps extends Lulu {
+  close: () => void;
+  click: (e: any, input: SvgInfo) => void;
+};
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
@@ -59,6 +53,9 @@ export type ClusterChartCardProps = {
   close: () => void;
 };
 
+//--------------------------------Types for the right side and alerts/events ----------------------------------------------------
+
+export type EventProps = {};
 export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
@@ -75,25 +72,32 @@ export type EventObject = {
 };
 
 export type AlertObject = {
-  group: any;
-  state: any;
-  name: any;
-  severity: any;
-  description: any;
-  summary: any;
-  alerts: any;
+  group: string;
+  state: string;
+  name: string;
+  severity: string;
+  description: string;
+  summary: string;
+  alerts: string;
 };
-
-// export type ModalCard = {
-//   name: string;
-//   usage: number;
-//   request: number;
-//   limit: number;
-// };
-
+//--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {
-    [podName: string]: {
-      times: string[];
-      values: number[];
-    };
-  }[];
+  [podName: string]: {
+    times: string[];
+    values: number[];
+  };
+}[];
+
+export type ChartGraphData = {
+  nodeMem: GraphData,
+  nodeCPU: GraphData,
+  podMem: GraphData,
+  podCPU: GraphData
+}
+
+export type GraphableData = {
+  label: string,
+  backgroundColor: string,
+  borderColor: string,
+  data: number[]
+}

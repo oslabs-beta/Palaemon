@@ -207,7 +207,9 @@ footer {
 #container-select {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   gap: 24px;
+  height: 50px;
 
   & > select {
     width: 140px;
@@ -227,4 +229,35 @@ footer {
       box-shadow: 0 0 10px 100px $s-light-color inset !important;
     }
   }
+}
+
+
+#chartarea {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+
+  // display: flex;
+  // flex-direction: row-reverse;
+
+  canvas {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.loader {
+  border: 6px solid $s-dark-color; /* Light grey */
+  border-top: 6px solid $p-dark-color; /*#3498db; /* Blue */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  margin: 0px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

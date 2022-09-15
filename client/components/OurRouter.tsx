@@ -3,6 +3,9 @@ import * as React from 'react';
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 import Graph from "./Graph";
 
+import '../stylesheets/style.scss';
+import AppTwo from "./AppTwo";
+
 const OurRouter = () => {
 
   return (
@@ -19,7 +22,7 @@ const OurRouter = () => {
 
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="graphs" element={<h1> THIS IS GRAPHS! Only kind people can see it.</h1>} />
+          <Route path="graphs" element={<AppTwo />} />
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}
         </Routes>
