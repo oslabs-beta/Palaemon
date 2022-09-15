@@ -15,9 +15,7 @@ html {
   overflow: hidden;
 }
 
-body,
-#root,
-#app-container {
+body, #root, #sidebar, #contents{
   height: 100%;
 }
 
@@ -31,10 +29,100 @@ body {
 }
 
 #logo {
-  width: 100px;
+  width: 180px;
   margin: 8px;
 }
 
+#root {
+  height: 100vh;
+  padding: 0px;
+  display: flex;
+}
+
+#sidebar {
+  width: 240px;
+  background-color: $ugly-sewage-green;
+  ul {
+    list-style-type: none;
+    li {
+      &, * {
+        text-decoration: none;
+        margin: 20px 0;
+        font-size: 1.5rem;
+        color: whitesmoke;
+      }
+    }
+  }
+}
+
+#page {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#header {
+  display: flex;
+  justify-content: flex-end;
+  background-color: $ugly-sewage-green;
+  img {
+    display: block;
+  }
+  a {
+    text-decoration: none;
+  }
+  h1 {
+    display: block;
+    height: max-content;
+    color: whitesmoke;
+    padding-right: 12px;
+    margin: 12px;
+    font-size: 1.7rem;
+  }
+}
+
+#contents {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  & #left-side,
+  #right-side {
+    height: 100%;
+    width: 50%;
+  }
+}
+
+#left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  & > * {
+    margin: 8px;
+    padding: 12px;
+  }
+}
+
+#tagline {
+  display: block;
+  margin: 0;
+  text-align: right;
+  background-color: $ugly-sewage-green;
+  font-weight: 100;
+  font-size: 1rem;
+  font-style: italic;
+  color: whitesmoke;
+  padding-right: 12px;
+}
+
+footer {
+  font-size: 0.75rem;
+  text-align: center;
+  color: $ugly-sewage-green;
+  padding: 4px 0;
+}
+
+// left side styling
 .cluster-chart-card {
   background-color: $s-light-color;
   box-shadow: 0px 1px 4px 0px $p-dark-color;
@@ -92,73 +180,6 @@ body {
   }
 }
 
-#app-container {
-  height: 100vh;
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-}
-
-#contents {
-  flex-grow: 1;
-  display: flex;
-  justify-content: space-between;
-  & #left-side,
-  #right-side {
-    width: 50vw;
-    height: 100%;
-  }
-}
-
-#left-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-
-  & > * {
-    margin: 8px;
-    padding: 12px;
-  }
-}
-
-#tagline {
-  display: block;
-  margin: 0;
-  text-align: right;
-  background-color: $ugly-sewage-green;
-  font-weight: 100;
-  font-size: 1rem;
-  font-style: italic;
-  color: whitesmoke;
-  padding-right: 12px;
-}
-
-#navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  background-color: $ugly-sewage-green;
-  img {
-    display: block;
-  }
-  a {
-    text-decoration: none;
-  }
-  h1 {
-    display: block;
-    height: max-content;
-    color: whitesmoke;
-    padding-right: 12px;
-    font-size: 2rem;
-  }
-}
-
-footer {
-  font-size: 0.75rem;
-  text-align: center;
-  color: $ugly-sewage-green;
-  padding: 4px 0;
-}
 
 // Right side event styling
 #container-event {
@@ -231,7 +252,7 @@ footer {
   }
 }
 
-
+// chart styling
 #chartarea {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

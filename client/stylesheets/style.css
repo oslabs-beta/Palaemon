@@ -1,0 +1,244 @@
+html {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body,
+#root,
+#app-container {
+  height: 100%;
+}
+
+body {
+  margin: 0px;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#logo {
+  width: 100px;
+  margin: 8px;
+}
+
+.cluster-chart-card {
+  background-color: #e5ffff;
+  box-shadow: 0px 1px 4px 0px #003d33;
+  border-radius: 0.2rem;
+  margin: 10px 10px;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-weight: bold;
+}
+.cluster-chart-card .cluster-chart-names {
+  display: inline-block;
+  width: 100px;
+}
+.cluster-chart-card svg {
+  margin: 0px 5px;
+}
+.cluster-chart-card svg:hover {
+  filter: drop-shadow(2px 2px 3px #003d33);
+}
+
+.modal {
+  -webkit-animation-name: opac;
+          animation-name: opac;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+  position: absolute;
+  top: 100;
+  background-color: #82ada9;
+}
+.modal .modalHeading {
+  position: relative;
+  top: 100px;
+}
+
+@-webkit-keyframes opac {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes opac {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+#app-container {
+  height: 100vh;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+#contents {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+}
+#contents #left-side,
+#contents #right-side {
+  width: 50vw;
+  height: 100%;
+}
+
+#left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+#left-side > * {
+  margin: 8px;
+  padding: 12px;
+}
+
+#tagline {
+  display: block;
+  margin: 0;
+  text-align: right;
+  background-color: #00695c;
+  font-weight: 100;
+  font-size: 1rem;
+  font-style: italic;
+  color: whitesmoke;
+  padding-right: 12px;
+}
+
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background-color: #00695c;
+}
+#navbar img {
+  display: block;
+}
+#navbar a {
+  text-decoration: none;
+}
+#navbar h1 {
+  display: block;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  color: whitesmoke;
+  padding-right: 12px;
+  font-size: 2rem;
+}
+
+footer {
+  font-size: 0.75rem;
+  text-align: center;
+  color: #00695c;
+  padding: 4px 0;
+}
+
+#container-event {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #d1ece9;
+}
+#container-event > * {
+  padding: 12px;
+  margin: 8px;
+}
+
+#container-event-logs {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100px;
+  color: #00120f;
+  background-color: whitesmoke;
+  box-shadow: 0px 1px 4px 0px #003d33;
+  margin: 0px 20px 16px 20px;
+}
+#container-event-logs .event-card {
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0px 1px 4px 0px #003d33;
+  background-color: white;
+  border-radius: 0.4rem;
+}
+#container-event-logs .event-card-header {
+  display: flex;
+  justify-content: space-between;
+}
+#container-event-logs .event-card p {
+  margin: 0.5rem 0;
+}
+
+#container-select {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  height: 50px;
+}
+#container-select > select {
+  width: 140px;
+  font-size: 1.1rem;
+  box-shadow: 0px 0.4px 2px 0px #003d33;
+  padding: 0.25rem 0.5rem;
+}
+#container-select > select:hover, #container-select > select:focus-visible {
+  outline: 2px solid #439889;
+}
+#container-select > select > option:hover,
+#container-select > select option:checked {
+  box-shadow: 0 0 10px 100px #e5ffff inset !important;
+}
+
+#chartarea {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+}
+#chartarea canvas {
+  width: 200px;
+  height: 200px;
+}
+
+.loader {
+  border: 6px solid #82ada9; /* Light grey */
+  border-top: 6px solid #003d33; /*#3498db; /* Blue */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  margin: 0px;
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}/*# sourceMappingURL=style.css.map */

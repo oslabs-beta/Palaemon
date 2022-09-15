@@ -3,7 +3,7 @@ import Graph from "./Graph"
 import { useState, useEffect } from 'react';
 import ChartGrid from "./ChartGrid";
 
-const AppTwo = () => {
+const AnalysisPage = () => {
 
     return (
         <>
@@ -16,4 +16,4 @@ const AppTwo = () => {
     )
 }
 
-export default AppTwo
+export default AnalysisPage
