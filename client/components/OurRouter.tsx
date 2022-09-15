@@ -4,7 +4,7 @@ import { HashRouter, Link, Route, Routes } from "react-router-dom";
 import Graph from "./Graph";
 
 import '../stylesheets/style.scss';
-import PageTwo from "./PageTwo";
+import AppTwo from "./AppTwo";
 
 const OurRouter = () => {
 
@@ -22,7 +22,7 @@ const OurRouter = () => {
 
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="graphs" element={<PageTwo />} />
+          <Route path="graphs" element={<AppTwo />} />
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}
         </Routes>

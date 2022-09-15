@@ -9,7 +9,7 @@ export type SvgInfo = {
 };
 
 export class SvgInfoObj implements SvgInfo {
-  constructor(){
+  constructor() {
     // set default values for each prop
     // number defaults are set to 1 (instead of) to avoid divide by 0 issues
     this.name = '';
@@ -25,7 +25,7 @@ export class SvgInfoObj implements SvgInfo {
   request: number; // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
   limit: number; // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
   parent: string; // pod: node name -- node: cluster name
-  namespace: string; 
+  namespace: string;
 }
 
 export type Lulu = {
@@ -36,10 +36,10 @@ export type Lulu = {
 };
 
 export interface ModalProps extends SvgInfo {
-  position: {left: string, top: string}
+  position: { left: string, top: string }
   close: () => void;
 }
-//--------------------------------Types for ----------------------------------------------------
+//--------------------------------Types for Cluster Chart----------------------------------------------------
 
 export interface ClusterChartProps extends Lulu {
   close: () => void;
@@ -54,6 +54,8 @@ export type ClusterChartCardProps = {
 };
 
 //--------------------------------Types for the right side and alerts/events ----------------------------------------------------
+
+export type EventProps = {};
 export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
@@ -78,13 +80,24 @@ export type AlertObject = {
   summary: string;
   alerts: string;
 };
-
+//--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {
-    [podName: string]: {
-      times: string[];
-      values: number[];
-    };
-  }[];
+  [podName: string]: {
+    times: string[];
+    values: number[];
+  };
+}[];
 
+export type ChartGraphData = {
+  nodeMem: GraphData,
+  nodeCPU: GraphData,
+  podMem: GraphData,
+  podCPU: GraphData
+}
 
-  export type EventProps = {};
+export type GraphableData = {
+  label: string,
+  backgroundColor: string,
+  borderColor: string,
+  data: number[]
+}

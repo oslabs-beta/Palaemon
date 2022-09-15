@@ -1,22 +1,19 @@
 import Graph from "./Graph"
 
+import { useState, useEffect } from 'react';
+import ChartGrid from "./ChartGrid";
 
-const PageTwo = () => {
-
+const AppTwo = () => {
 
     return (
         <>
             <h1> THIS IS GRAPHS! Only kind people can see it.</h1>
             <div id="contents"></div>
             <div id="chartarea">
-                <Graph />
-                <Graph />
-                <Graph />
-                <Graph />
-                <Graph />
+              <ChartGrid />
             </div>
         </>
     )
 }
 
-export default PageTwo
+export default AppTwo

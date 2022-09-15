@@ -207,7 +207,9 @@ footer {
 #container-select {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   gap: 24px;
+  height: 50px;
 
   & > select {
     width: 140px;
@@ -232,9 +234,12 @@ footer {
 
 #chartarea {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   grid-auto-rows: minmax(100px, auto);
+
+  // display: flex;
+  // flex-direction: row-reverse;
 
   canvas {
     width: 200px;
@@ -246,8 +251,9 @@ footer {
   border: 6px solid $s-dark-color; /* Light grey */
   border-top: 6px solid $p-dark-color; /*#3498db; /* Blue */
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  margin: 0px;
   animation: spin 1s linear infinite;
 }
 
