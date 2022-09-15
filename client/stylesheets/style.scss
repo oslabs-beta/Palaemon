@@ -95,7 +95,7 @@ body {
 #left-side {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
 
   & > * {
     margin: 8px;
