@@ -3,11 +3,13 @@ import * as React from 'react';
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 import Graph from "./Graph";
 
+import { ShoppingCart } from "../Types";
+
 import '../stylesheets/style.scss';
 import AppTwo from "./AppTwo";
 
 const OurRouter = () => {
-
+  const [ shoppingCart, setShoppingCart] = React.useState<ShoppingCart>([])
   return (
     <HashRouter>
       <div id="app-container">
@@ -21,7 +23,7 @@ const OurRouter = () => {
 
 
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<App setShoppingCart={setShoppingCart} shoppingCart={shoppingCart}/>} />
           <Route path="graphs" element={<AppTwo />} />
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}

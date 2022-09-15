@@ -1,7 +1,7 @@
 import { LogCardProps } from '../Types';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
-
+console.log(props)
   // create the header elements
   let headerObj: {[key:string]: string} = {};
   let bodyObj: {[key:string]: string} = {};
@@ -32,6 +32,7 @@ const LogCard = (props: LogCardProps): JSX.Element => {
   
   return (
     <div className="event-card">
+      <button onClick={() => props.addToCart(headerObj, bodyObj)}>Add to list</button>
       <header className="event-card-header">
         {header}
       </header>

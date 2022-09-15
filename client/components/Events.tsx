@@ -9,6 +9,20 @@ const Events = (props: EventProps): JSX.Element => {
   const [logType, setLogType]: any = useState('events');
   const [severityType, setSeverityType]: any = useState('Default');
   const [loading, setLoading]: any = useState(true);
+  const setShoppingCart = props.setShoppingCart;
+  const shoppingCart = props.shoppingCart;
+
+  const addToCart = (headerObj: {}, bodyObj: {}) => {
+    const cartItem = {
+      headerObj,
+      bodyObj
+    }
+    console.log('cartitem', cartItem)
+    console.log('shoppingcart', shoppingCart)
+    shoppingCart.push(cartItem)
+    // setShoppingCart([...shoppingCart, cartItem])
+    setShoppingCart(shoppingCart)
+  }
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
@@ -51,6 +65,7 @@ const Events = (props: EventProps): JSX.Element => {
             eventObj={logType === 'events' ? logsData[i] : undefined}
             alertObj={logType === 'alerts' ? logsData[i] : undefined}
             logType={logType}
+            addToCart={addToCart}
           />
         );
       }
