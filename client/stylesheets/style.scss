@@ -9,6 +9,8 @@ $tertiary-color: #d1ece9;
 $s-light-color: #e5ffff;
 $s-dark-color: #82ada9;
 
+$sidebar-width: 240px;
+
 html {
   height: 100vh;
   // prevents the window from over-scrolling and bouncing beyond the 100% screen size
@@ -40,7 +42,7 @@ body {
 }
 
 #sidebar {
-  width: 240px;
+  width: $sidebar-width;
   background-color: $ugly-sewage-green;
   ul {
     list-style-type: none;
@@ -88,7 +90,7 @@ body {
   & #left-side,
   #right-side {
     height: 100%;
-    width: 50%;
+    width: calc((100vw - $sidebar-width) / 2);
   }
 }
 
