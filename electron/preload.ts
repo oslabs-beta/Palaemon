@@ -17,7 +17,8 @@ const WINDOW_API = {
   getMemoryUsageByPods: async () => ipcRenderer.invoke('getMemoryUsageByPods'),
   getAlerts: async () => ipcRenderer.invoke('getAlerts'),
   getLimits: async () => ipcRenderer.invoke('getLimits'),
-  getAllInfo: async() => ipcRenderer.invoke('getAllInfo'),
+  getAllInfo: async () => ipcRenderer.invoke('getAllInfo'),
+  getOOMKills: async () => ipcRenderer.invoke('getOOMKills'),
 };
 
 // exposes WINDOW_API methods to the frontend under "window.api" object

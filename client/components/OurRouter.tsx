@@ -3,10 +3,26 @@ import * as React from 'react';
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 import Graph from "./Graph";
 
+import { ShoppingCart } from "../Types";
+
 import '../stylesheets/style.scss';
 import AnalysisPage from "./AppTwo";
 
 const App = () => {
+  const [ shoppingCart, setShoppingCart] = React.useState<any[]>([])
+
+  const getShoppingCartLength = () => {
+    // console.log('from our router', shoppingCart)
+    return shoppingCart.length;
+  }
+
+  const updateShoppingCart = (newLogData: any) => {
+    // console.log('updateshoppingcart fun', newLogData)
+    const newArray = shoppingCart;
+    // console.log('newArray: ',newArray);
+    newArray.push(newLogData);
+    setShoppingCart(newArray);
+  }
 
   return (
     <HashRouter>
@@ -28,7 +44,7 @@ const App = () => {
 
 
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage updateShoppingCart={updateShoppingCart} getShoppingCartLength={getShoppingCartLength}/>} />
           <Route path="graphs" element={<AnalysisPage />} />
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}

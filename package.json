@@ -22,6 +22,9 @@
     "url": "https://github.com/oslabs-beta/Palaemon/issues"
   },
   "homepage": "https://github.com/oslabs-beta/Palaemon#readme",
+  "browser":{
+    "child_process": false
+    },  
   "devDependencies": {
     "@kubernetes/client-node": "^0.17.0",
     "@types/node-fetch": "^2.6.2",
@@ -47,6 +50,7 @@
     "sass": "^1.54.8",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
+    "supertest": "^6.2.4",
     "ts-loader": "^9.3.1",
     "typescript": "^4.8.2",
     "wait-on": "^6.0.1",
