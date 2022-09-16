@@ -132,10 +132,10 @@ export async function fetchMem(obj: any) {
   } catch (err) {
       return {
         name: "",
-        usage: 0,
+        usage: 1,
         resource: "",
-        limit: 0,
-        request: 0,
+        limit: 1,
+        request: 1,
         parent: "",
         namespace: "",
       }
@@ -164,23 +164,22 @@ export async function fetchCPU(obj: any) {
 
     if (limitData.data.result[0]) {
       if (limitData.data.result[0].metric.resource === "cpu") {
-
         output.resource = "cpu"
         output.limit = limitData.data.result[0].values[0][1] * 1000;
         output.request = requestData.data.result[0].values[0][1] * 1000;
         output.unit = 'milicores';
       }
     }
-
     return output;
   } catch (error) {
     return {
-      name: 'string',
+      name: '',
       usage: 1,
       request: 1,
+      resource: '',
       limit: 1,
-      parent: 'strong',
-      namespace: 'string',
+      parent: '',
+      namespace: '',
     };
   }
 }

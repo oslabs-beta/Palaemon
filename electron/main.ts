@@ -124,13 +124,15 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
     const cpuData = await Promise.all(
       getPods.body.items.map((pod) => fetchCPU(pod))
     );
-    console.log('CPU DATA', cpuData)
+
     const filteredMem = memData.filter(el => el.request > 1)
     const filteredCPU = cpuData.filter(el => el.resource === 'cpu')
     const filteredPods = filteredMem;
+
     for (let i = 0; i < filteredCPU.length; i++) {
       filteredPods.push(filteredCPU[i])
     }
+
     if (filteredPods) {
       const newObj: Lulu = {
         Clusters: [
