@@ -29,7 +29,7 @@ const App = (props: any): JSX.Element => {
   const [portOpen, setPortOpen]: any = useState(false);
   const [clusterChartData, setClusterChartData] = useState<Lulu>(initalClusterChartData)
   
-  // const setShoppingCart = props.setShoppingCart;
+  // const updateShoppingCart = props.setShoppingCart;
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
@@ -95,7 +95,7 @@ const App = (props: any): JSX.Element => {
           </div>
         </div>
         <div id="right-side">
-          <Events setShoppingCart={props.setShoppingCart} shoppingCart={props.shoppingCart} />
+          <Events updateShoppingCart={props.updateShoppingCart} getShoppingCartLength={props.getShoppingCartLength} />
         </div>
       </div>
       {modalState.open && theModal}

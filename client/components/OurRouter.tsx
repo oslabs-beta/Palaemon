@@ -9,10 +9,26 @@ import '../stylesheets/style.scss';
 import AppTwo from "./AppTwo";
 
 const OurRouter = () => {
-  const [ shoppingCart, setShoppingCart] = React.useState<ShoppingCart>([])
+  const [ shoppingCart, setShoppingCart] = React.useState<any[]>([])
+
+  const getShoppingCartLength = () => {
+    // console.log('from our router', shoppingCart)
+    return shoppingCart.length;
+  }
+
+  const updateShoppingCart = (newLogData: any) => {
+    // console.log('updateshoppingcart fun', newLogData)
+    const newArray = shoppingCart;
+    // console.log('newArray: ',newArray);
+    newArray.push(newLogData);
+    setShoppingCart(newArray);
+  }
+
   return (
     <HashRouter>
       <div id="app-container">
+        {/* <h1 onClick={()=>updateShoppingCart(3)}>test click update</h1> */}
+        {/* <h1 onClick={()=>getShoppingCart()}>test click get</h1> */}
         <div id="navbar">
           <Link to='/'><img id="logo" src="./assets/logo.png" alt="" /></Link>
           <Link to="graphs">Graphs</Link>
@@ -23,7 +39,7 @@ const OurRouter = () => {
 
 
         <Routes>
-          <Route path="/" element={<App setShoppingCart={setShoppingCart} shoppingCart={shoppingCart}/>} />
+          <Route path="/" element={<App updateShoppingCart={updateShoppingCart} getShoppingCartLength={getShoppingCartLength}/>} />
           <Route path="graphs" element={<AppTwo />} />
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}
