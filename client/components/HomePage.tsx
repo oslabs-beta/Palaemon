@@ -99,6 +99,7 @@ const HomePage = (props: any): JSX.Element => {
         <div id="right-side">
           <Events updateShoppingCart={props.updateShoppingCart} getShoppingCartLength={props.getShoppingCartLength} />
         </div>
+        {modalState.open && theModal}
       </div>
     </>
   );
