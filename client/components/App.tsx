@@ -23,12 +23,14 @@ const initalClusterChartData: Lulu = {
   Deployments: tempData,
 }
 
-const App = (): JSX.Element => {
+const App = (props: any): JSX.Element => {
   const [pods, setPods]: any = useState([]);
   const [nodes, setNodes]: any = useState(["node1"]);
   const [portOpen, setPortOpen]: any = useState(false);
   const [clusterChartData, setClusterChartData] = useState<Lulu>(initalClusterChartData)
   
+  // const updateShoppingCart = props.setShoppingCart;
+
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
   const [modalState, setModalState] = useState({
@@ -93,7 +95,7 @@ const App = (): JSX.Element => {
           </div>
         </div>
         <div id="right-side">
-          <Events />
+          <Events updateShoppingCart={props.updateShoppingCart} getShoppingCartLength={props.getShoppingCartLength} />
         </div>
       </div>
       {modalState.open && theModal}
