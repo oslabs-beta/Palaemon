@@ -1,13 +1,13 @@
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
-  name: string // name of pod, node, or cluster, or deployment
-  usage: number // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
-  resource: string // default should be memory. if a pod tracks cpu it will overwrite
-  unit?: string // either megabytes or milicores
-  request: number // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
-  limit: number // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
-  parent: string // pod: node name -- node: cluster name
-  namespace: string // the namespace of a pod, or n/a for node
+  name: string; // name of pod, node, or cluster, or deployment
+  usage: number; // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
+  resource: string; // default should be memory. if a pod tracks cpu it will overwrite
+  unit?: string; // either megabytes or milicores
+  request: number; // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
+  limit: number; // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
+  parent: string; // pod: node name -- node: cluster name
+  namespace: string; // the namespace of a pod, or n/a for node
 };
 
 export class SvgInfoObj implements SvgInfo {
@@ -23,14 +23,14 @@ export class SvgInfoObj implements SvgInfo {
     this.namespace = '';
   }
 
-  name: string // name of pod, node, or cluster, or deployment
-  usage: number // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
-  resource: string // default should be memory. if a pod tracks cpu it will overwrite
-  unit?: string // either megabytes or milicores
-  request: number // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
-  limit: number // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
-  parent: string // pod: node name -- node: cluster name
-  namespace: string // the namespace of a pod, or n/a for node
+  name: string; // name of pod, node, or cluster, or deployment
+  usage: number; // pods: memory used in bytes -- node: "memory requested" field from k8 (kibibytes)
+  resource: string; // default should be memory. if a pod tracks cpu it will overwrite
+  unit?: string; // either megabytes or milicores
+  request: number; // pods: request memory in bytes -- node: 0 (node does not have same type of "request" memory as pods)
+  limit: number; // pods: limit memory in bytes -- node: "memory allocatable" field from k8 (kibibytes)
+  parent: string; // pod: node name -- node: cluster name
+  namespace: string; // the namespace of a pod, or n/a for node
 }
 
 export type Lulu = {
@@ -70,7 +70,7 @@ export type ShoppingCart = any[];
 export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
-  oomObj?: OomObject;
+  oomObj?: oomObject;
   logType: string;
   addToCart: (input1: {}) => void;
 }
@@ -94,14 +94,28 @@ export type AlertObject = {
   alerts: string;
 };
 
-export type OomObject = {
-  group: string;
-  state: string;
-  name: string;
-  severity: string;
-  description: string;
-  summary: string;
-  alerts: string;
+// export type oomObject = {
+//   group: string;
+//   state: string;
+//   name: string;
+//   severity: string;
+//   description: string;
+//   summary: string;
+//   alerts: string;
+// };
+
+export type oomObject = {
+  namespace: string;
+  podName: string;
+  laststate: string;
+  restartcount: string;
+  reason: string;
+  exitcode: string;
+  started: string;
+  finished: string;
+  ready: string;
+  limits: LimOrReq;
+  requests: LimOrReq;
 };
 
 export type LimOrReq = {
@@ -109,17 +123,17 @@ export type LimOrReq = {
   limitMemory: string;
 };
 
-export type newObj = {
-  lastState: string;
-  reason: string;
-  exitCode: string;
-  started: string;
-  sinished: string;
-  ready: string;
-  restartCount: string;
-  limits: LimOrReq;
-  requests: LimOrReq;
-};
+// export type newObj = {
+//   lastState: string;
+//   reason: string;
+//   exitCode: string;
+//   started: string;
+//   finished: string;
+//   ready: string;
+//   restartCount: string;
+//   limits: LimOrReq;
+//   requests: LimOrReq;
+// };
 
 //--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {

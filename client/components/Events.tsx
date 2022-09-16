@@ -18,6 +18,11 @@ const Events = (props: EventProps): JSX.Element => {
     // consol
   };
 
+  const removeFromCart = (logsData: any) => {
+    props.updateShoppingCart(logsData);
+    setCartLength(props.getShoppingCartLength());
+  };
+
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
     setLogType(logTypeStr);
@@ -39,9 +44,6 @@ const Events = (props: EventProps): JSX.Element => {
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
     // window.api.getPods();
     const createLogs = async () => {
-      const testig: any = await window.api.getAllInfo();
-      console.log('AM I A PROMISE?, ', testig);
-
       const oomkills: any = await window.api.getOOMKills();
       console.log('OOMKILL DATA', oomkills);
 
@@ -54,8 +56,7 @@ const Events = (props: EventProps): JSX.Element => {
       } else if (logType === 'alerts') {
         logsData = await window.api.getAlerts();
       } else if (logType === 'oomkills') {
-        // THANG FILL IN YOUR FUNCTION HERE
-        logsData = await window.api.getAlerts();
+        logsData = await window.api.getOOMKills();
       }
 
       for (let i = 0; i < logsData.length; i++) {
@@ -110,7 +111,7 @@ const Events = (props: EventProps): JSX.Element => {
         >
           <option value="events">Events</option>
           <option value="alerts">Alerts</option>
-          <option value="oomkills">OOM Kills</option>
+          <option value="oomkills">OOMKills</option>
         </select>
         <select
           className="event-selector"

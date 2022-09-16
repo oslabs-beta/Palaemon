@@ -17,7 +17,10 @@ html {
   overflow: hidden;
 }
 
-body, #root, #sidebar, #contents{
+body,
+#root,
+#sidebar,
+#contents {
   height: 100%;
 }
 
@@ -47,7 +50,8 @@ body {
   ul {
     list-style-type: none;
     li {
-      &, * {
+      &,
+      * {
         text-decoration: none;
         margin: 20px 0;
         font-size: 1.5rem;
@@ -151,37 +155,34 @@ footer {
   }
 }
 
-
 .modal {
-
-	animation-name: opac;
-	animation-fill-mode: both;
-	animation-duration: .5s;
+  animation-name: opac;
+  animation-fill-mode: both;
+  animation-duration: 0.5s;
 
   position: absolute;
   top: 100;
   background-color: #82ada9;
-  .modalHeading{
+  .modalHeading {
     position: relative;
     // right: 0px;
     top: 100px;
-// display: flex;
-// justify-content: flex-end;
+    // display: flex;
+    // justify-content: flex-end;
     // #modalhead{
-  
+
     // }
   }
 }
 
 @keyframes opac {
-  from{
-    opacity:0
-  } 
+  from {
+    opacity: 0;
+  }
   to {
-    opacity:1
+    opacity: 1;
   }
 }
-
 
 // Right side event styling
 #container-event {
@@ -215,6 +216,7 @@ footer {
     box-shadow: 0px 1px 4px 0px $p-dark-color;
     background-color: white;
     border-radius: 0.4rem;
+    position: relative;
 
     &-header {
       display: flex;
@@ -254,6 +256,12 @@ footer {
   }
 }
 
+.addToList {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 // chart styling
 #chartarea {
   display: grid;
@@ -281,6 +289,10 @@ footer {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

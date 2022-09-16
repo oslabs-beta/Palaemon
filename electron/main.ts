@@ -1,8 +1,10 @@
-import { app, session, BrowserWindow, ipcMain, dialog } from "electron";
-import { Lulu } from "../client/Types";
-import path from "path";
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
-
+import { app, session, BrowserWindow, ipcMain, dialog } from 'electron';
+import { Lulu } from '../client/Types';
+import path from 'path';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
+} from 'electron-devtools-installer';
 
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
@@ -17,7 +19,7 @@ import {
   parseNode,
   fetchMem,
   fetchCPU,
-  formatOOMKills
+  formatOOMKills,
 } from './utils';
 
 // metrics modules
@@ -31,7 +33,7 @@ const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
 const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
 
-const isDev: boolean = process.env.NODE_ENV === "development";
+const isDev: boolean = process.env.NODE_ENV === 'development';
 // const PORT: string | number = process.env.PORT || 8080;
 
 // this is to allow the BrowserWindow object to be referrable globally
@@ -51,8 +53,8 @@ const loadMainWindow = () => {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "../client/index.html"));
-  console.log("Main Window loaded file index.html");
+  mainWindow.loadFile(path.join(__dirname, '../client/index.html'));
+  console.log('Main Window loaded file index.html');
 
   // check to see if port 9090 is open
   const checkPort = () => {
@@ -64,21 +66,21 @@ const loadMainWindow = () => {
       .catch((err: Error) => {
         console.log('fetch to 9090 has failed in main.ts in loadMainWindow');
         const num = dialog.showMessageBoxSync({
-          message: "Please make sure port-forwarding to 9090 is set up.",
-          type: "warning",
+          message: 'Please make sure port-forwarding to 9090 is set up.',
+          type: 'warning',
           // Cancel returns 0, OK returns 1
-          buttons: ["Cancel", "OK"],
-          title: "Port 9090 missing",
-          detail: "Open Port 9090 for prometheus, then click OK."
+          buttons: ['Cancel', 'OK'],
+          title: 'Port 9090 missing',
+          detail: 'Open Port 9090 for prometheus, then click OK.',
         });
-        if(num === 1) checkPort();
+        if (num === 1) checkPort();
         else if (num === 0) app.quit();
       });
-  }
+  };
   checkPort();
 };
 
-app.on("ready", async () => {
+app.on('ready', async () => {
   // if(isDev){
   //   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   //   const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
@@ -113,14 +115,14 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
     limit: Math.random() + 1,
     parent: 'deploy',
     namespace: 'deploy',
-  }
+  };
 
-  const namespace = "default";
-  
+  const namespace = 'default';
+
   try {
     const getNodes = await k8sApiCore.listNode(namespace);
-    
-    const nodeData = getNodes.body.items.map((node) => {
+
+    const nodeData = getNodes.body.items.map(node => {
       return parseNode(node);
     }); // end of nodeData
 
@@ -128,31 +130,31 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
 
     // console.log('SINGLE POD BODY ITEMS', getPods.body.items[0])
     const memData = await Promise.all(
-      getPods.body.items.map((pod) => fetchMem(pod))
+      getPods.body.items.map(pod => fetchMem(pod))
     );
     const cpuData = await Promise.all(
-      getPods.body.items.map((pod) => fetchCPU(pod))
+      getPods.body.items.map(pod => fetchCPU(pod))
     );
 
-    const filteredMem = memData.filter(el => el.request > 1)
-    const filteredCPU = cpuData.filter(el => el.resource === 'cpu')
+    const filteredMem = memData.filter(el => el.request > 1);
+    const filteredCPU = cpuData.filter(el => el.resource === 'cpu');
     const filteredPods = filteredMem;
 
     for (let i = 0; i < filteredCPU.length; i++) {
-      filteredPods.push(filteredCPU[i])
+      filteredPods.push(filteredCPU[i]);
     }
 
     if (filteredPods) {
       const newObj: Lulu = {
         Clusters: [
           {
-            name: "",
+            name: '',
             usage: 1,
-            resource: "memory",
+            resource: 'memory',
             limit: 1,
             request: 1,
-            parent: "",
-            namespace: "",
+            parent: '',
+            namespace: '',
           },
         ],
         Nodes: nodeData,
@@ -165,7 +167,6 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
     return [tempData];
   }
 });
-
 
 // get nodes in cluster
 ipcMain.handle('getNodes', async (): Promise<any> => {
