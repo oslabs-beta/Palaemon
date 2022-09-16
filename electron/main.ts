@@ -240,18 +240,36 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
   const interval = '15s';
   try {
-    // startTime and endTime look like this
 
-    // data interval
-
-    // promQL query to api/v1 endpoint
+    // fetch time series data from prom api
     const query = `${PROM_URL}query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
 
     // data.data.result returns matrix
-    return formatMatrix(data.data);
+    return formatMatrix(data.data, 'megabytes');
+  } catch (error) {
+    console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
+    return { err: error };
+  }
+});
+
+ipcMain.handle('getCPUUsageByPods', async () => {
+  const { startTime, endTime } = setStartAndEndTime();
+  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
+  const interval = '15s';
+  try {
+
+    // fetch time series data from prom api
+    const query = `${PROM_URL}query_range?query=sum(
+      rate(container_cpu_usage_seconds_total{container!~"POD|"}[5m])*1000) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+    // fetch request
+    const res = await fetch(query);
+    const data = await res.json();
+
+    // data.data.result returns matrix
+    return formatMatrix(data.data, 'milicores');
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
     return { err: error };

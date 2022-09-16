@@ -14,6 +14,7 @@ interface graph {
   [key: string]: {
     times: string[];
     values: number[];
+    units?: string[];
   };
 }
 
@@ -37,6 +38,7 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
     output[podName] = {
       times: [],
       values: [],
+      units: []
     };
 
 
@@ -47,10 +49,18 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
 
     });
     //this is bytes/units - convert bytes to GB when unit type is bytes
-    output[podName].values = obj.values.map((el: [number, number]) =>
-      // do i need to remove a 0 here??? -pat
-      Number(el[1] / 10000000)
-    );
+    if (unitType === 'megabytes') {
+      output[podName].values = obj.values.map((el: [number, number]) =>
+        // do i need to remove a 0 here??? -pat
+        Number(el[1] / 10000000)
+      );
+    }
+    else if (unitType === 'milicores') {
+      output[podName].values = obj.values.map((el : [number, number]) =>
+      
+      Number(el[1]/1000)
+      )
+    }
 
     arr.push(output);
   });
