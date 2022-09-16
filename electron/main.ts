@@ -17,8 +17,9 @@ import {
   formatEvents,
   formatAlerts,
   parseNode,
-  parsePod,
-  formatOOMKills,
+  fetchMem,
+  fetchCPU,
+  formatOOMKills
 } from './utils';
 
 // metrics modules
@@ -96,39 +97,57 @@ app.on('window-all-closed', () => {
 ipcMain.handle('getAllInfo', async (): Promise<any> => {
   // nodes
   const tempData: SvgInfo = {
-    name: 'string',
+    name: 'deploy',
     usage: 1,
+    resource: 'deploy',
     request: 0.9,
     limit: Math.random() + 1,
-    parent: 'string',
-    namespace: 'string',
-  };
-  const namespace = 'default';
+    parent: 'deploy',
+    namespace: 'deploy',
+  }
+
+  const namespace = "default";
+  
   try {
     const getNodes = await k8sApiCore.listNode(namespace);
-    const nodeData = getNodes.body.items.map(node => {
+    
+    const nodeData = getNodes.body.items.map((node) => {
       return parseNode(node);
     }); // end of nodeData
 
     const getPods = await k8sApiCore.listPodForAllNamespaces();
-    const podData = await Promise.all(
-      getPods.body.items.map(pod => parsePod(pod))
+
+    // console.log('SINGLE POD BODY ITEMS', getPods.body.items[0])
+    const memData = await Promise.all(
+      getPods.body.items.map((pod) => fetchMem(pod))
+    );
+    const cpuData = await Promise.all(
+      getPods.body.items.map((pod) => fetchCPU(pod))
     );
 
-    if (podData) {
+    const filteredMem = memData.filter(el => el.request > 1)
+    const filteredCPU = cpuData.filter(el => el.resource === 'cpu')
+    const filteredPods = filteredMem;
+
+    for (let i = 0; i < filteredCPU.length; i++) {
+      filteredPods.push(filteredCPU[i])
+    }
+
+    if (filteredPods) {
       const newObj: Lulu = {
         Clusters: [
           {
-            name: 'test',
+            name: "",
             usage: 1,
+            resource: "memory",
             limit: 1,
             request: 1,
-            parent: 'bob',
-            namespace: '',
+            parent: "",
+            namespace: "",
           },
         ],
         Nodes: nodeData,
-        Pods: podData,
+        Pods: filteredPods,
         Deployments: [tempData],
       };
       return newObj;

@@ -85,59 +85,101 @@ export function parseNode(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
 
   if (obj.status?.allocatable !== undefined) {
-    const memUsage: number = parseMem(obj.status.allocatable.memory);
-    output.usage = memUsage;
+    const memRequest: number = parseMem(obj.status.allocatable.memory);
+    output.request = memRequest;
   }
   if (obj.status?.capacity !== undefined) {
     const memLimit: number = parseMem(obj.status.capacity.memory);
     output.limit = memLimit;
   }
+
   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
   if (obj?.metadata?.name) output.name = obj.metadata.name;
   return output;
+
 }
 
-export async function parsePod(obj: any) {
+export async function fetchMem(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
-
-  // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
-  if (obj?.metadata?.name) output.name = obj.metadata.name;
-  // (async (): Promise<any> => {
-  const { startTime, endTime } = setStartAndEndTime();
-  const podName = obj.metadata.name;
-
-  // PromQL to query resource limits for pods in all namespaces
-  try {
-    const query1 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
-    const query2 = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}"}&start=${startTime}&end=${endTime}&step=24h`;
-    const data1 = await fetch(query1);
-
-    const jsonData1: any = await data1.json();
-
-    const data2 = await fetch(query2);
-    const jsonData2: any = await data2.json();
-
-    if (jsonData1.data.result[0]) {
-      output.limit = parseInt(jsonData1.data.result[0].values[0][1]);
-      // console.log('OUTPUT LIMITS', output.limit)
-    }
-
-    if (jsonData2.data.result[0]) {
-      output.request = parseInt(jsonData2.data.result[0].values[0][1]);
-    }
-
+  const podName = obj.metadata.name
+  const {startTime, endTime} = setStartAndEndTime()
+  
+  if (obj?.metadata?.name) {
+    output.name = obj.metadata.name;
     output.parent = obj.spec.nodeName;
     output.namespace = obj.metadata.namespace;
+  }
 
+  try {
+    // PromQL to query resource limits for pods in all namespaces
+    const limitsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+    const requestsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+    const limit = await fetch(limitsQuery);
+    const request = await fetch(requestsQuery);
+    const limitData: any = await limit.json();
+    const requestData: any = await request.json()
+
+    // console.log('THIS IS JSONDATA 1', limitData.data.result)
+    if (limitData.data.result[0]) {
+      if (limitData.data.result[0].metric.resource === "memory") {
+        output.resource = "memory"
+        output.limit = parseInt(limitData.data.result[0].values[0][1]) / 1000000;
+        output.request = parseInt(requestData.data.result[0].values[0][1]) / 1000000;
+        output.unit = 'megabytes';
+      }
+    }
+    return output
+  } catch (err) {
+      return {
+        name: "",
+        usage: 1,
+        resource: "",
+        limit: 1,
+        request: 1,
+        parent: "",
+        namespace: "",
+      }
+    }
+}
+
+export async function fetchCPU(obj: any) {
+  const output: SvgInfo = new SvgInfoObj();
+  const podName = obj.metadata.name
+  const {startTime, endTime} = setStartAndEndTime()
+  // console.log('I AM POD NAME', podName)
+  if (obj?.metadata?.name) {
+    output.name = obj.metadata.name;
+    output.parent = obj.spec.nodeName;
+    output.namespace = obj.metadata.namespace;
+  }
+
+  try {
+    const limitsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="cpu"}&start=${startTime}&end=${endTime}&step=24h`;
+    const requestsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="cpu"}&start=${startTime}&end=${endTime}&step=24h`;
+    const limit = await fetch(limitsQuery);
+    const limitData: any = await limit.json();
+    const request = await fetch(requestsQuery);
+    const requestData: any = await request.json()
+  
+
+    if (limitData.data.result[0]) {
+      if (limitData.data.result[0].metric.resource === "cpu") {
+        output.resource = "cpu"
+        output.limit = limitData.data.result[0].values[0][1] * 1000;
+        output.request = requestData.data.result[0].values[0][1] * 1000;
+        output.unit = 'milicores';
+      }
+    }
     return output;
   } catch (error) {
     return {
-      name: 'string',
+      name: '',
       usage: 1,
       request: 1,
+      resource: '',
       limit: 1,
-      parent: 'strong',
-      namespace: 'string',
+      parent: '',
+      namespace: '',
     };
   }
 }

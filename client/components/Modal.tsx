@@ -2,7 +2,7 @@ import { ModalProps } from '../Types';
 
 const DetailsModal = (props: ModalProps) => {
 
-    const { name, usage, request, limit, parent, namespace, position, close } = props;
+    const { name, usage, request, resource, unit, limit, parent, namespace, position, close } = props;
     // console.log('detail modal rendering soon')
 
     return (
@@ -14,11 +14,13 @@ const DetailsModal = (props: ModalProps) => {
             </div>
             <ul className="modalList">
                 <li className="modalDetail">Name: {name}</li>
+                <li className="modalDetail">Name Space: {namespace}</li>
+                <li className="modalDetail">Parent: {parent}</li>
                 <li className="modalDetail">Usage: {usage}</li>
                 <li className="modalDetail">Request: {request}</li>
                 <li className="modalDetail">Limit: {limit}</li>
-                <li className="modalDetail">Name Space: {namespace}</li>
-                <li className="modalDetail">Parent: {parent}</li>
+                <li className="modalDetail">Unit: {unit}</li>
+                <li className="modalDetail">Resource: {resource}</li>
             </ul>
         </div>
     );
