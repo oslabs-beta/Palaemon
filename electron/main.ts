@@ -1,7 +1,8 @@
-import { app, session, BrowserWindow, ipcMain } from "electron";
+import { app, session, BrowserWindow, ipcMain, dialog } from "electron";
 import { Lulu } from "../client/Types";
 import path from "path";
-import os from "os";
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+
 
 import * as k8s from "@kubernetes/client-node";
 import * as cp from "child_process";
@@ -29,6 +30,7 @@ const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 const PROM_URL = "http://127.0.0.1:9090/api/v1/";
 
 const isDev: boolean = process.env.NODE_ENV === "development";
+const portOpen: boolean = false;
 // const PORT: string | number = process.env.PORT || 8080;
 
 // this is to allow the BrowserWindow object to be referrable globally
@@ -39,6 +41,7 @@ const loadMainWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       // contextIsolation: false,
@@ -47,34 +50,45 @@ const loadMainWindow = () => {
     },
   });
 
-  // depending on whether this is dev mode or production mode
-  // if dev mode, open port 8080 to share server
-  // if production mode, open directly from build file in /dist folder
-  // if (isDev) {
-  //   mainWindow.loadURL(`http://localhost:${PORT}`);
-  //   console.log(`Main Window loaded PORT ${PORT}`);
-  // } else {
-  //   mainWindow.loadFile(path.join(__dirname, '../client/index.html'));
-  //   console.log('Main Window loaded file index.html');
-  // }
-
-  // above code has skeleton for runnin
   mainWindow.loadFile(path.join(__dirname, "../client/index.html"));
   console.log("Main Window loaded file index.html");
+
+  // check to see if port 9090 is open
+  const checkPort = () => {
+    fetch('http://localhost:9090/')
+      .then((res: any) => {
+        console.log('status code in loadMainWindow is ', res.status);
+        mainWindow.show();
+      })
+      .catch((err: Error) => {
+        console.log('fetch to 9090 has failed in main.ts in loadMainWindow');
+        const num = dialog.showMessageBoxSync({
+          message: "Please make sure port-forwarding to 9090 is set up.",
+          type: "warning",
+          // Cancel returns 0, OK returns 1
+          buttons: ["Cancel", "OK"],
+          title: "Port 9090 missing",
+          detail: "Open Port 9090 for prometheus, then click OK."
+        });
+        if(num === 1) checkPort();
+        else if (num === 0) app.quit();
+      });
+  }
+  checkPort();
 };
 
-app.on("ready", loadMainWindow);
-// invoke preload? to load up all the data..? maybe
-
-// adding react dev tools on load
-const REACT_DEV_TOOL_HASHSTRING: string = "fmkadmapgofadopljbjfkapdkoienihi";
-// the following should be different for different os
-const REACT_DEV_TOOL_PATH_MAC_OS: string = path.resolve(
-  os.homedir(),
-  "/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.9.0_0"
-);
-app.whenReady().then(async () => {
-  await session.defaultSession.loadExtension(REACT_DEV_TOOL_PATH_MAC_OS);
+app.on("ready", async () => {
+  if(isDev){
+    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
+    installExtension(
+      extensions,
+      {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
+    ).then((name:string) => {console.log(`Added Extension: ${name}`)})
+     .then(loadMainWindow)
+    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
+  }
+  else loadMainWindow();
 });
 
 app.on("window-all-closed", () => {
@@ -109,7 +123,7 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
       getPods.body.items.map((pod) => parsePod(pod))
     );
 
-    
+
     if (podData) {
       const newObj: Lulu = {
         Clusters: [
@@ -128,11 +142,12 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
       };
       return newObj;
     }
-    
+
   } catch (error) {
     return [tempData];
   }
 });
+
 
 // get nodes in cluster
 ipcMain.handle("getNodes", async (): Promise<any> => {

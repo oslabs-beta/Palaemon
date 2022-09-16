@@ -5,7 +5,10 @@ const path = require('path');
 module.exports = [
   {
     mode: 'production',
-    entry: './electron/main.ts',
+    entry: {
+      main: './electron/main.ts',
+      preload: './electron/preload.ts'
+    },
     target: 'electron-main',
     module: {
       rules: [
@@ -21,37 +24,15 @@ module.exports = [
     },
     output: {
       path: path.resolve(__dirname, 'dist/electron'),
-      filename: 'main.js',
       clean: true
     },
     externals: [
       {
         'utf-8-validate': 'commonjs utf-8-validate',
         bufferutil: 'commonjs bufferutil',
+        fsevents: "require('fsevents')",
       },
     ],
-  },
-  {
-    mode: 'production',
-    entry: './electron/preload.ts',
-    target: 'electron-preload',
-    module: {
-      rules: [
-        {
-          test: /\.ts(x?)$/,
-          exclude: /node-modules/,
-          use: 'ts-loader',
-        },
-      ],
-    },
-    resolve: {
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    },
-    output: {
-      path: path.resolve(__dirname, './dist/electron'),
-      filename: 'preload.js',
-      clean: true,
-    },
   },
   {
     mode: 'production',

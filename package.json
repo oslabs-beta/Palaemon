@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack --watch --config ./webpack.config.js",
     "build:production": "webpack --config ./webpack.production.js",
-    "dev": "concurrently \"npm run build\" \"electronmon ./dist/electron/main.js\"",
-    "start": "concurrently \"webpack --watch --config ./webpack.config.js\" \"wait-on ./dist/electron/main.js && electronmon ./dist/electron/main.js\"",
+    "dev": "concurrently \"webpack --watch --config ./webpack.config.js\" \"wait-on ./dist/electron/main.js && electronmon ./dist/electron/main.js\"",
+    "start": "concurrently \"webpack --watch --config webpack.config.js\" \"wait-on dist/electron/main.js && electronmon ./dist/electron/main.js\"",
     "start:production": "npm run build:production && electron ./dist/electron/main.js"
   },
   "repository": {

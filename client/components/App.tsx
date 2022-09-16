@@ -14,7 +14,7 @@ const App = () => {
         <Link to='/'><img id="logo" src="./assets/logo.png" alt="" /></Link>
         <ul id="sidebar-list">
 
-          <li>LANDING</li>
+          <li>NAMESPACE</li>
           <li><Link to='/'>HOME</Link></li>
           <li><Link to="graphs">ANALYSIS</Link></li>
         </ul>
