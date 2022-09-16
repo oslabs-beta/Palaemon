@@ -1,6 +1,6 @@
 import { createRoot, Root } from 'react-dom/client';
-import HomePage from './components/HomePage';
-import App from './components/App';
+import HomePage from './components/App';
+import App from './components/OurRouter';
 
 const rootElement: HTMLElement | null = document.getElementById('root');
 

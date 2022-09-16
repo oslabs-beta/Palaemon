@@ -1,10 +1,10 @@
-import HomePage from "./HomePage"
+import HomePage from "./App"
 import * as React from 'react';
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 import Graph from "./Graph";
 
 import '../stylesheets/style.scss';
-import AnalysisPage from "./AnalysisPage";
+import AnalysisPage from "./AppTwo";
 
 const App = () => {
 
