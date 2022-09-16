@@ -10,6 +10,7 @@ import { ClusterChartProps, SvgInfo, ModalProps, Lulu } from "../Types";
 const tempData: SvgInfo[] = [{
   name: "string",
   usage: 1,
+  resource: 'hello',
   request: 0.9,
   limit: Math.random() + 1,
   parent: "string",

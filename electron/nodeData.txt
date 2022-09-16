@@ -1,0 +1,280 @@
+{
+     apiVersion: undefined,
+     kind: undefined,
+     metadata: V1ObjectMeta {
+       annotations: {
+         'container.googleapis.com/instance_id': '1370463551247696189',
+         'csi.volume.kubernetes.io/nodeid': '{"pd.csi.storage.gke.io":"projects/guestbook-tutorial-361218/zones/us-central1-c/instances/gke-guestbook-my-first-c-default-pool-feaf7786-685t"}',
+         'node.alpha.kubernetes.io/ttl': '0',
+         'node.gke.io/last-applied-node-labels': 'cloud.google.com/gke-boot-disk=pd-standard,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=1,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-nodepool=default-pool,cloud.google.com/gke-os-distribution=cos,cloud.google.com/machine-family=g1',
+         'node.gke.io/last-applied-node-taints': '',
+         'volumes.kubernetes.io/controller-managed-attach-detach': 'true'
+       },
+       clusterName: undefined,
+       creationTimestamp: 2022-09-01T18:57:38.000Z,
+       deletionGracePeriodSeconds: undefined,
+       deletionTimestamp: undefined,
+       finalizers: undefined,
+       generateName: undefined,
+       generation: undefined,
+       labels: {
+         'beta.kubernetes.io/arch': 'amd64',
+         'beta.kubernetes.io/instance-type': 'g1-small',
+         'beta.kubernetes.io/os': 'linux',
+         'cloud.google.com/gke-boot-disk': 'pd-standard',
+         'cloud.google.com/gke-container-runtime': 'containerd',
+         'cloud.google.com/gke-cpu-scaling-level': '1',
+         'cloud.google.com/gke-max-pods-per-node': '110',
+         'cloud.google.com/gke-nodepool': 'default-pool',
+         'cloud.google.com/gke-os-distribution': 'cos',
+         'cloud.google.com/machine-family': 'g1',
+         'failure-domain.beta.kubernetes.io/region': 'us-central1',
+         'failure-domain.beta.kubernetes.io/zone': 'us-central1-c',
+         'kubernetes.io/arch': 'amd64',
+         'kubernetes.io/hostname': 'gke-guestbook-my-first-c-default-pool-feaf7786-685t',
+         'kubernetes.io/os': 'linux',
+         'node.kubernetes.io/instance-type': 'g1-small',
+         'topology.gke.io/zone': 'us-central1-c',
+         'topology.kubernetes.io/region': 'us-central1',
+         'topology.kubernetes.io/zone': 'us-central1-c'
+       },
+       managedFields: [
+         [V1ManagedFieldsEntry],
+         [V1ManagedFieldsEntry],
+         [V1ManagedFieldsEntry],
+         [V1ManagedFieldsEntry],
+         [V1ManagedFieldsEntry],
+         [V1ManagedFieldsEntry]
+       ],
+       name: 'gke-guestbook-my-first-c-default-pool-feaf7786-685t',
+       namespace: undefined,
+       ownerReferences: undefined,
+       resourceVersion: '9343817',
+       selfLink: undefined,
+       uid: '927088d8-70ab-45e4-97b1-1aaf5ccf04d6'
+     },
+     spec: V1NodeSpec {
+       configSource: undefined,
+       externalID: undefined,
+       podCIDR: '10.120.2.0/24',
+       podCIDRs: [ '10.120.2.0/24' ],
+       providerID: 'gce://guestbook-tutorial-361218/us-central1-c/gke-guestbook-my-first-c-default-pool-feaf7786-685t',
+       taints: undefined,
+       unschedulable: undefined
+     },
+     status: V1NodeStatus {
+       addresses: [
+         [V1NodeAddress],
+         [V1NodeAddress],
+         [V1NodeAddress],
+         [V1NodeAddress]
+       ],
+
+      //  LIMIT = REQUEST - ALLOCATABLE ??
+       allocatable REQUEST: {
+         'attachable-volumes-gce-pd': '15',
+         cpu: '940m',
+         'ephemeral-storage': '9251574536',
+         'hugepages-1Gi': '0',
+         'hugepages-2Mi': '0',
+         memory: '1171492Ki',
+         pods: '110'
+       },
+       capacity aka LIMIT: {
+         'attachable-volumes-gce-pd': '15',
+         cpu: '1',
+         'ephemeral-storage': '28679952Ki',
+         'hugepages-1Gi': '0',
+         'hugepages-2Mi': '0',
+         memory: '1719332Ki',
+         pods: '110'
+       },
+       conditions: [
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition],
+         [V1NodeCondition]
+       ],
+       config: undefined,
+       daemonEndpoints: V1NodeDaemonEndpoints { kubeletEndpoint: [V1DaemonEndpoint] },
+       images: [
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage], [V1ContainerImage],
+         [V1ContainerImage]
+       ],
+       nodeInfo: V1NodeSystemInfo {
+         architecture: 'amd64',
+         bootID: '11523d77-c977-4aad-a8d5-091cfe65f0c1',
+         containerRuntimeVersion: 'containerd://1.5.13',
+         kernelVersion: '5.10.109+',
+         kubeProxyVersion: 'v1.22.11-gke.400',
+         kubeletVersion: 'v1.22.11-gke.400',
+         machineID: 'f7cbf0b42d030f88ca75e09a1d5c0058',
+         operatingSystem: 'linux',
+         osImage: 'Container-Optimized OS from Google',
+         systemUUID: 'f7cbf0b4-2d03-0f88-ca75-e09a1d5c0058'
+       },
+       phase: undefined,
+       volumesAttached: undefined,
+       volumesInUse: undefined
+     }
+   }
+
+  //  NODE 2
+
+  THIS IS WHAT NODE LOOKS LIKE  V1Node {
+    [1]   apiVersion: undefined,
+    [1]   kind: undefined,
+    [1]   metadata: V1ObjectMeta {
+    [1]     annotations: {
+    [1]       'container.googleapis.com/instance_id': '8947014740198900029',
+    [1]       'csi.volume.kubernetes.io/nodeid': '{"pd.csi.storage.gke.io":"projects/guestbook-tutorial-361218/zones/us-central1-c/instances/gke-guestbook-my-first-c-default-pool-feaf7786-h6kd"}',
+    [1]       'node.alpha.kubernetes.io/ttl': '0',
+    [1]       'node.gke.io/last-applied-node-labels': 'cloud.google.com/gke-boot-disk=pd-standard,cloud.google.com/gke-container-runtime=containerd,cloud.google.com/gke-cpu-scaling-level=1,cloud.google.com/gke-max-pods-per-node=110,cloud.google.com/gke-nodepool=default-pool,cloud.google.com/gke-os-distribution=cos,cloud.google.com/machine-family=g1',
+    [1]       'node.gke.io/last-applied-node-taints': '',
+    [1]       'volumes.kubernetes.io/controller-managed-attach-detach': 'true'
+    [1]     },
+    [1]     clusterName: undefined,
+    [1]     creationTimestamp: 2022-09-01T18:57:38.000Z,
+    [1]     deletionGracePeriodSeconds: undefined,
+    [1]     deletionTimestamp: undefined,
+    [1]     finalizers: undefined,
+    [1]     generateName: undefined,
+    [1]     generation: undefined,
+    [1]     labels: {
+    [1]       'beta.kubernetes.io/arch': 'amd64',
+    [1]       'beta.kubernetes.io/instance-type': 'g1-small',
+    [1]       'beta.kubernetes.io/os': 'linux',
+    [1]       'cloud.google.com/gke-boot-disk': 'pd-standard',
+    [1]       'cloud.google.com/gke-container-runtime': 'containerd',
+    [1]       'cloud.google.com/gke-cpu-scaling-level': '1',
+    [1]       'cloud.google.com/gke-max-pods-per-node': '110',
+    [1]       'cloud.google.com/gke-nodepool': 'default-pool',
+    [1]       'cloud.google.com/gke-os-distribution': 'cos',
+    [1]       'cloud.google.com/machine-family': 'g1',
+    [1]       'failure-domain.beta.kubernetes.io/region': 'us-central1',
+    [1]       'failure-domain.beta.kubernetes.io/zone': 'us-central1-c',
+    [1]       'kubernetes.io/arch': 'amd64',
+    [1]       'kubernetes.io/hostname': 'gke-guestbook-my-first-c-default-pool-feaf7786-h6kd',
+    [1]       'kubernetes.io/os': 'linux',
+    [1]       'node.kubernetes.io/instance-type': 'g1-small',
+    [1]       'topology.gke.io/zone': 'us-central1-c',
+    [1]       'topology.kubernetes.io/region': 'us-central1',
+    [1]       'topology.kubernetes.io/zone': 'us-central1-c'
+    [1]     },
+    [1]     managedFields: [
+    [1]       [V1ManagedFieldsEntry],
+    [1]       [V1ManagedFieldsEntry],
+    [1]       [V1ManagedFieldsEntry],
+    [1]       [V1ManagedFieldsEntry],
+    [1]       [V1ManagedFieldsEntry],
+    [1]       [V1ManagedFieldsEntry]
+    [1]     ],
+    [1]     name: 'gke-guestbook-my-first-c-default-pool-feaf7786-h6kd',
+    [1]     namespace: undefined,
+    [1]     ownerReferences: undefined,
+    [1]     resourceVersion: '9344431',
+    [1]     selfLink: undefined,
+    [1]     uid: 'f5e9c8c1-3072-4807-8754-464da75d5a2b'
+    [1]   },
+    [1]   spec: V1NodeSpec {
+    [1]     configSource: undefined,
+    [1]     externalID: undefined,
+    [1]     podCIDR: '10.120.1.0/24',
+    [1]     podCIDRs: [ '10.120.1.0/24' ],
+    [1]     providerID: 'gce://guestbook-tutorial-361218/us-central1-c/gke-guestbook-my-first-c-default-pool-feaf7786-h6kd',
+    [1]     taints: undefined,
+    [1]     unschedulable: undefined
+    [1]   },
+    [1]   status: V1NodeStatus {
+    [1]     addresses: [
+    [1]       [V1NodeAddress],
+    [1]       [V1NodeAddress],
+    [1]       [V1NodeAddress],
+    [1]       [V1NodeAddress]
+    [1]     ],
+    [1]     allocatable: {
+    [1]       'attachable-volumes-gce-pd': '15',
+    [1]       cpu: '940m',
+    [1]       'ephemeral-storage': '9251574536',
+    [1]       'hugepages-1Gi': '0',
+    [1]       'hugepages-2Mi': '0',
+    [1]       memory: '1171492Ki',
+    [1]       pods: '110'
+    [1]     },
+    [1]     capacity: {
+    [1]       'attachable-volumes-gce-pd': '15',
+    [1]       cpu: '1',
+    [1]       'ephemeral-storage': '28679952Ki',
+    [1]       'hugepages-1Gi': '0',
+    [1]       'hugepages-2Mi': '0',
+    [1]       memory: '1719332Ki',
+    [1]       pods: '110'
+    [1]     },
+    [1]     conditions: [
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition],
+    [1]       [V1NodeCondition]
+    [1]     ],
+    [1]     config: undefined,
+    [1]     daemonEndpoints: V1NodeDaemonEndpoints { kubeletEndpoint: [V1DaemonEndpoint] },
+    [1]     images: [
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage], [V1ContainerImage],
+    [1]       [V1ContainerImage]
+    [1]     ],
+    [1]     nodeInfo: V1NodeSystemInfo {
+    [1]       architecture: 'amd64',
+    [1]       bootID: 'bea3fd18-9a4c-4b9a-9776-dba147bf8711',
+    [1]       containerRuntimeVersion: 'containerd://1.5.13',
+    [1]       kernelVersion: '5.10.109+',
+    [1]       kubeProxyVersion: 'v1.22.11-gke.400',
+    [1]       kubeletVersion: 'v1.22.11-gke.400',
+    [1]       machineID: '99d31b34508ce4185a9b6a5abbe8953e',
+    [1]       operatingSystem: 'linux',
+    [1]       osImage: 'Container-Optimized OS from Google',
+    [1]       systemUUID: '99d31b34-508c-e418-5a9b-6a5abbe8953e'
+    [1]     },
+    [1]     phase: undefined,
+    [1]     volumesAttached: undefined,
+    [1]     volumesInUse: undefined
+    [1]   }
+    [1] }
+
