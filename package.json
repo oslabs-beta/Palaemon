@@ -20,6 +20,9 @@
     "url": "https://github.com/oslabs-beta/Palaemon/issues"
   },
   "homepage": "https://github.com/oslabs-beta/Palaemon#readme",
+  "browser":{
+    "child_process": false
+    },  
   "devDependencies": {
     "@kubernetes/client-node": "^0.17.0",
     "@types/node-fetch": "^2.6.2",

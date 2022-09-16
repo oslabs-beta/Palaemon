@@ -1,7 +1,8 @@
-import { SvgInfo, SvgInfoObj } from "../client/Types";
+import { SvgInfo, SvgInfoObj, newObj } from '../client/Types';
+import * as cp from 'child_process';
 
 const fetch: any = (...args: any) =>
-  import("node-fetch").then(({ default: fetch }: any) => fetch(...args));
+  import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
 
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
@@ -67,10 +68,10 @@ export function capitalize(data: string) {
   return data[0].toUpperCase() + data.slice(1);
 }
 
-export function parseMem(entry:string) {
+export function parseMem(entry: string) {
   // if dealing with memory (ki, mb, mi, etc.)
 
-  return parseInt(entry.slice(0, entry.length-2))
+  return parseInt(entry.slice(0, entry.length - 2));
 }
 
 export function parseNode(obj: any) {
@@ -173,14 +174,67 @@ export async function fetchCPU(obj: any) {
 
     return output;
   } catch (error) {
-      return {
-        name: "",
-        usage: 0,
-        resource: '',
-        limit: 0,
-        request: 0,
-        parent: "",
-        namespace: "",
-      }
+    return {
+      name: 'string',
+      usage: 1,
+      request: 1,
+      limit: 1,
+      parent: 'strong',
+      namespace: 'string',
+    };
   }
 }
+
+export const formatOOMKills = (data: string[]) => {
+  const OOMKills: {}[] = [];
+
+  data.forEach((el: any) => {
+    const podDesc = cp.execSync(`kubectl describe pod ${el}`).toString();
+    const podData = podDesc.split('\n');
+    const updatedPodData = podData.map(pod =>
+      pod.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
+    );
+    // console.log(updatedPodData);
+    const indexOfTerm = updatedPodData.indexOf('Last State: Terminated');
+    // console.log(indexOfTerm);
+    const filteredPodData: string[] = updatedPodData.slice(
+      indexOfTerm,
+      indexOfTerm + 13
+    );
+    // console.log(filteredPodData);
+
+    const newObj: { [index: string]: any } = {};
+
+    const limitIdx: any = filteredPodData.indexOf('Limits:');
+    const limitCpu = filteredPodData[limitIdx + 1];
+    const limitMemory = filteredPodData[limitIdx + 2];
+    const limits = {
+      limitCpu,
+      limitMemory,
+    };
+
+    const requestIdx = filteredPodData.indexOf('Requests:');
+    const requestCpu = filteredPodData[requestIdx + 1];
+    const requestMemory = filteredPodData[requestIdx + 2];
+    const requests = {
+      requestCpu,
+      requestMemory,
+    };
+
+    newObj['Pod Name'] = el;
+    newObj[filteredPodData[limitIdx]] = limits;
+    newObj[filteredPodData[requestIdx]] = requests;
+
+    filteredPodData.slice(0, 7).forEach((el: any) => {
+      const colon: any = el.indexOf(':');
+      // Extravts key from the left of colon
+      const key: keyof newObj = el.slice(0, colon);
+      // Extracts value from the right of colon and removes white space
+      newObj[key] = el.slice(colon + 2);
+    });
+
+    OOMKills.push(newObj);
+  });
+
+  return OOMKills;
+};

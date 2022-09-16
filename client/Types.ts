@@ -11,7 +11,7 @@ export type SvgInfo = {
 };
 
 export class SvgInfoObj implements SvgInfo {
-  constructor(){
+  constructor() {
     // set default values for each prop
     // number defaults are set to 1 (instead of) to avoid divide by 0 issues
     this.name = '';
@@ -41,30 +41,39 @@ export type Lulu = {
 };
 
 export interface ModalProps extends SvgInfo {
-  position: {left: string, top: string}
+  position: { left: string; top: string };
   close: () => void;
 }
-
-//--------------------------------Types for ----------------------------------------------------
+//--------------------------------Types for Cluster Chart----------------------------------------------------
 
 export interface ClusterChartProps extends Lulu {
   close: () => void;
   click: (e: any, input: SvgInfo) => void;
-};
+}
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
-  data: SvgInfo[]
+  data: SvgInfo[];
   click: (e: any, input: SvgInfo) => void;
   close: () => void;
 };
 
 //--------------------------------Types for the right side and alerts/events ----------------------------------------------------
+
+export type EventProps = {
+  updateShoppingCart: (input: any) => void;
+  getShoppingCartLength: () => [];
+};
+
+export type ShoppingCart = any[];
+
 export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
+  oomObj?: OomObject;
   logType: string;
-};
+  addToCart: (input1: {}) => void;
+}
 
 export type EventObject = {
   namespace: string;
@@ -85,12 +94,51 @@ export type AlertObject = {
   alerts: string;
 };
 
+export type OomObject = {
+  group: string;
+  state: string;
+  name: string;
+  severity: string;
+  description: string;
+  summary: string;
+  alerts: string;
+};
+
+export type LimOrReq = {
+  limitCpu: string;
+  limitMemory: string;
+};
+
+export type newObj = {
+  lastState: string;
+  reason: string;
+  exitCode: string;
+  started: string;
+  sinished: string;
+  ready: string;
+  restartCount: string;
+  limits: LimOrReq;
+  requests: LimOrReq;
+};
+
+//--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {
-    [podName: string]: {
-      times: string[];
-      values: number[];
-    };
-  }[];
+  [podName: string]: {
+    times: string[];
+    values: number[];
+  };
+}[];
 
+export type ChartGraphData = {
+  nodeMem: GraphData;
+  nodeCPU: GraphData;
+  podMem: GraphData;
+  podCPU: GraphData;
+};
 
-  export type EventProps = {};
+export type GraphableData = {
+  label: string;
+  backgroundColor: string;
+  borderColor: string;
+  data: number[];
+};

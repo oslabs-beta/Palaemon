@@ -46,8 +46,9 @@ const Graph = (): JSX.Element => {
   if (!portOpen)
   fetch('http://localhost:9090/')
     .then((response) => {
-      console.log('status code', response.status)
+      // console.log('status code', response.status)
       if (response.status === 200) {
+        console.log('Port 9090 is Open')
         setPortOpen(true)
       } else {
 
@@ -64,7 +65,7 @@ const Graph = (): JSX.Element => {
         .getMemoryUsageByPods()
         .then((output: any) => {
           if (!output.err) setGraphState(output);
-          console.log('itworks')
+          // console.log('itworks')
         })
         .catch((err: any) => {
           return { err: err };
@@ -102,6 +103,7 @@ const Graph = (): JSX.Element => {
 
   const options: any = {
     responsive: true,
+    responsiveAnimationDuration: 1000,
     pointRadius: 0,
     indexAxis: 'x',
     plugins: {
