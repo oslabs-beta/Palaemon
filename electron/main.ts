@@ -1,7 +1,8 @@
 import { app, session, BrowserWindow, ipcMain } from "electron";
 import { Lulu } from "../client/Types";
 import path from "path";
-import os from "os";
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+
 
 import * as k8s from "@kubernetes/client-node";
 import * as cp from "child_process";
@@ -63,18 +64,17 @@ const loadMainWindow = () => {
   console.log("Main Window loaded file index.html");
 };
 
-app.on("ready", loadMainWindow);
-// invoke preload? to load up all the data..? maybe
-
-// adding react dev tools on load
-const REACT_DEV_TOOL_HASHSTRING: string = "fmkadmapgofadopljbjfkapdkoienihi";
-// the following should be different for different os
-const REACT_DEV_TOOL_PATH_MAC_OS: string = path.resolve(
-  os.homedir(),
-  "/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.9.0_0"
-);
-app.whenReady().then(async () => {
-  await session.defaultSession.loadExtension(REACT_DEV_TOOL_PATH_MAC_OS);
+app.on("ready", async () => {
+  if(isDev){
+    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
+    installExtension(
+      extensions,
+      {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
+    ).then((name:string) => {console.log(`Added Extension: ${name}`)})
+     .then(loadMainWindow)
+    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
+  }
 });
 
 app.on("window-all-closed", () => {
@@ -109,7 +109,7 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
       getPods.body.items.map((pod) => parsePod(pod))
     );
 
-    
+
     if (podData) {
       const newObj: Lulu = {
         Clusters: [
@@ -128,7 +128,7 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
       };
       return newObj;
     }
-    
+
   } catch (error) {
     return [tempData];
   }

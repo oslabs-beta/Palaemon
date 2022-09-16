@@ -55,11 +55,19 @@ export type ClusterChartCardProps = {
 
 //--------------------------------Types for the right side and alerts/events ----------------------------------------------------
 
-export type EventProps = {};
+export type EventProps = {
+  updateShoppingCart: (input: any) => void;
+  getShoppingCartLength: () => []
+};
+
+export type ShoppingCart = any[]
+
 export interface LogCardProps {
   eventObj?: EventObject;
   alertObj?: AlertObject;
+  oomObj?: OomObject;
   logType: string;
+  addToCart: (input1: {}) => void
 };
 
 export type EventObject = {
@@ -80,6 +88,17 @@ export type AlertObject = {
   summary: string;
   alerts: string;
 };
+
+export type OomObject = {
+  group: string;
+  state: string;
+  name: string;
+  severity: string;
+  description: string;
+  summary: string;
+  alerts: string;
+};
+
 //--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {
   [podName: string]: {
