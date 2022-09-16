@@ -112,17 +112,20 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
     const getPods = await k8sApiCore.listPodForAllNamespaces();
 
     // console.log('SINGLE POD BODY ITEMS', getPods.body.items[0])
-
-    const podData = await Promise.all(
-      getPods.body.items.map((pod) => {
-        // each pod is either mem or CPU but we dont know which one it is..
-
-        fetchMem(pod)
-
-      })
+    const memData = await Promise.all(
+      getPods.body.items.map((pod) => fetchMem(pod))
     );
-
-    if (podData) {
+    const cpuData = await Promise.all(
+      getPods.body.items.map((pod) => fetchCPU(pod))
+    );
+    console.log('CPU DATA', cpuData)
+    const filteredMem = memData.filter(el => el.request > 1)
+    const filteredCPU = cpuData.filter(el => el.resource === 'cpu')
+    const filteredPods = filteredMem;
+    for (let i = 0; i < filteredCPU.length; i++) {
+      filteredPods.push(filteredCPU[i])
+    }
+    if (filteredPods) {
       const newObj: Lulu = {
         Clusters: [
           {
@@ -136,7 +139,7 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
           },
         ],
         Nodes: nodeData,
-        Pods: podData,
+        Pods: filteredPods,
         Deployments: [tempData],
       };
       return newObj;
