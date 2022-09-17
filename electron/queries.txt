@@ -43,3 +43,27 @@ by (pod)&start=1662500157637&end=1662503958134&step=6h
 
 multiply the number on top 1662345234512341234.033 by 1000 (miliseconds) to get the actual date
 
+-------------------- CPU METRICS --------------------
+
+CPU Utilization by Node. should list 2 nodes (based on deployment replicas)
+100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[1m]) * 100) * on(instance) group_left(nodename) (node_uname_info))
+
+per pod average number of CPUS used during last 1m
+sum(
+  rate(container_cpu_usage_seconds_total{container!~"POD|"}[1m])
+) by (pod)
+
+the [1m] in the queries can be adjusted to show in the PAST x time
+if you want to display past 5 hours, replace with 5h
+
+allocatable is 940 mCPU = 940 mili cpu
+
+-------------------- CPU USAGE BY POD --------------------
+
+sum(
+  rate(container_cpu_usage_seconds_total{container!~"POD|"}[5m])*100
+) by (node)
+
+gives us usage by milicores
+0.07031443141175173
+0.06659781737942783

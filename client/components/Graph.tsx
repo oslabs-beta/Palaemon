@@ -64,13 +64,14 @@ const Graph = (): JSX.Element => {
       window.api
         .getMemoryUsageByPods()
         .then((output: any) => {
+          console.log(output)
           if (!output.err) setGraphState(output);
           // console.log('itworks')
         })
         .catch((err: any) => {
           return { err: err };
         });
-      setTimeout(doMeBabyOneMoreTime, 1000);
+      setTimeout(doMeBabyOneMoreTime, 5000);
     }
   };
 
@@ -145,7 +146,7 @@ const Graph = (): JSX.Element => {
         },
         title: {
           display: true,
-          text: 'Mibibytes'
+          text: 'Megabytes'
         }
       },
     },

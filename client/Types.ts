@@ -33,7 +33,7 @@ export class SvgInfoObj implements SvgInfo {
   namespace: string; // the namespace of a pod, or n/a for node
 }
 
-export type Lulu = {
+export type ClusterAllInfo = {
   Clusters: SvgInfo[];
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
@@ -46,7 +46,7 @@ export interface ModalProps extends SvgInfo {
 }
 //--------------------------------Types for Cluster Chart----------------------------------------------------
 
-export interface ClusterChartProps extends Lulu {
+export interface ClusterChartProps extends ClusterAllInfo {
   close: () => void;
   click: (e: any, input: SvgInfo) => void;
 }

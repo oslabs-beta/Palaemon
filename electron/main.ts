@@ -1,5 +1,5 @@
 import { app, session, BrowserWindow, ipcMain, dialog } from 'electron';
-import { Lulu } from '../client/Types';
+import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
@@ -81,20 +81,18 @@ const loadMainWindow = () => {
 };
 
 app.on('ready', async () => {
-  if (isDev) {
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
-    installExtension(extensions, {
-      loadExtensionOptions: { allowFileAccess: true },
-      forceDownload: forceDownload,
-    })
-      .then((name: string) => {
-        console.log(`Added Extension: ${name}`);
-      })
-      .then(loadMainWindow);
-    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
-  } else loadMainWindow();
-  // loadMainWindow();
+  // if(isDev){
+  //   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  //   const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
+  //   installExtension(
+  //     extensions,
+  //     {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
+  //   ).then((name:string) => {console.log(`Added Extension: ${name}`)})
+  //    .then(loadMainWindow)
+  //   //  .catch((err: Error) => {console.log('There was an Error: ', err)})
+  // }
+  // else loadMainWindow();
+  loadMainWindow();
 });
 
 app.on('window-all-closed', () => {
@@ -109,6 +107,7 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('getAllInfo', async (): Promise<any> => {
   // nodes
+
   const tempData: SvgInfo = {
     name: 'deploy',
     usage: 1,
@@ -119,26 +118,33 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
     namespace: 'deploy',
   };
 
-  const namespace = 'default';
-
   try {
-    const getNodes = await k8sApiCore.listNode(namespace);
+    const nsSelect = await mainWindow.webContents
+      .executeJavaScript('({...localStorage});', true)
+      /* check what type this is with team */ /* check what type this is with team */
+      .then((localStorage: any) => {
+        return localStorage.namespace;
+      });
+    const getNodes = await k8sApiCore.listNode(`${nsSelect}`);
 
     const nodeData = getNodes.body.items.map(node => {
       return parseNode(node);
     }); // end of nodeData
 
-    const getPods = await k8sApiCore.listPodForAllNamespaces();
+    const getPods = await k8sApiCore.listNamespacedPod(`${nsSelect}`);
 
-    // console.log('SINGLE POD BODY ITEMS', getPods.body.items[0])
     const memData = await Promise.all(
-      getPods.body.items.map(pod => fetchMem(pod))
+      getPods.body.items.map(pod => {
+        // console.log('this is all pods fom k8s', pod)
+        return fetchMem(pod);
+      })
     );
     const cpuData = await Promise.all(
       getPods.body.items.map(pod => fetchCPU(pod))
     );
 
-    const filteredMem = memData.filter(el => el.request > 1);
+    const filteredMem = memData;
+    // const filteredMem = memData.filter(el => el.request > 1)
     const filteredCPU = cpuData.filter(el => el.resource === 'cpu');
     const filteredPods = filteredMem;
 
@@ -147,7 +153,7 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
     }
 
     if (filteredPods) {
-      const newObj: Lulu = {
+      const newObj: ClusterAllInfo = {
         Clusters: [
           {
             name: '',
@@ -173,15 +179,15 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
 // get nodes in cluster
 ipcMain.handle('getNodes', async (): Promise<any> => {
   // dynamically get this from frontend later
-  const namespace = 'default';
   try {
-    const data = await k8sApiCore.listNode(namespace);
-    // console.log('THIS IS INDIVIDUAL NODE ', data.body.items[0]);
-    // const formattedData: any = data.body.items.map(
-    //   (pod) => pod?.metadata?.name
-    // );
+    const nsSelect = await mainWindow.webContents
+      .executeJavaScript('({...localStorage});', true)
+      /* check what type this is with team */ /* check what type this is with team */
+      .then((localStorage: any) => {
+        return localStorage.namespace;
+      });
+    const data = await k8sApiCore.listNode(`${nsSelect}`);
 
-    // return formattedData;
     return data.body.items;
   } catch (error) {
     return console.log(`Error in getNodes function: ERROR: ${error}`);
@@ -189,16 +195,16 @@ ipcMain.handle('getNodes', async (): Promise<any> => {
 });
 
 // get deployments in cluster
-ipcMain.handle('getDeployments', async (): Promise<any> => {
-  try {
-    const data = await k8sApiApps.listDeploymentForAllNamespaces();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    // console.log("THIS IS DATA ", formattedData);
-    return formattedData;
-  } catch (error) {
-    console.log(`Error in getDeployments function: ERROR: ${error}`);
-  }
-});
+// ipcMain.handle('getDeployments', async (): Promise<any> => {
+//   try {
+//     const data = await k8sApiApps.listDeploymentForAllNamespaces();
+//     const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+//     // console.log("THIS IS DATA ", formattedData);
+//     return formattedData;
+//   } catch (error) {
+//     console.log(`Error in getDeployments function: ERROR: ${error}`);
+//   }
+// });
 
 // get namespaces
 ipcMain.handle('getNamespaces', async () => {
@@ -211,27 +217,35 @@ ipcMain.handle('getNamespaces', async () => {
   }
 });
 
-// get pods in cluster
-ipcMain.handle('getPods', async (): Promise<any> => {
-  try {
-    // const data = await k8sApiCore.listPodForAllNamespaces();
-    const data = await k8sApiCore.listPodForAllNamespaces();
-    // console.log('THIS OS BODY.ITEMS ', data.body.items);
-    const podNames: (string | undefined)[] = data.body.items.map(
-      pod => pod?.metadata?.name
-    );
-    const node: (string | undefined)[] = data.body.items.map(
-      pod => pod?.spec?.nodeName
-    );
-    const namespace: (string | undefined)[] = data.body.items.map(
-      pod => pod?.metadata?.namespace
-    );
-    // console.log('I AM INEVITABLSDFSDFSDFSDFS: ', data.body.items[0])
-    return { podNames, node, namespace };
-  } catch (error) {
-    return console.log(`Error in getPods function: ERROR: ${error}`);
-  }
-});
+// // get pods in cluster
+// ipcMain.handle('getPods', async (): Promise<any> => {
+//   try {
+//     const nsSelect = await mainWindow.webContents
+//       .executeJavaScript('({...localStorage});', true)
+//         /* check what type this is with team */        /* check what type this is with team */
+//       .then((localStorage: any) => {
+//         return localStorage.namespace
+//       });
+//     // const data = await k8sApiCore.listPodForAllNamespaces();
+//     const data = await k8sApiCore.listNamespacedPod('default')
+//     console.log('HERES THE PODS', data)
+//     // const data = await k8sApiCore.listPodForAllNamespaces();
+//     // console.log('THIS OS BODY.ITEMS ', data.body.items);
+//     const podNames: (string | undefined)[] = data.body.items.map(
+//       pod => pod?.metadata?.name
+//     );
+//     const node: (string | undefined)[] = data.body.items.map(
+//       pod => pod?.spec?.nodeName
+//     );
+//     const namespace: (string | undefined)[] = data.body.items.map(
+//       pod => pod?.metadata?.namespace
+//     );
+//     // console.log('I AM INEVITABLSDFSDFSDFSDFS: ', data.body.items[0])
+//     return { podNames, node, namespace };
+//   } catch (error) {
+//     return console.log(`Error in getPods function: ERROR: ${error}`);
+//   }
+// });
 
 // COMMAND LINE //
 // get events
@@ -255,18 +269,46 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
   const interval = '15s';
   try {
-    // startTime and endTime look like this
-
-    // data interval
-
-    // promQL query to api/v1 endpoint
-    const query = `${PROM_URL}query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+    const nsSelect = await mainWindow.webContents
+      .executeJavaScript('({...localStorage});', true)
+      /* check what type this is with team */ /* check what type this is with team */
+      .then((localStorage: any) => {
+        return localStorage.namespace;
+      });
+    // fetch time series data from prom api
+    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image=""}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
 
     // data.data.result returns matrix
     return formatMatrix(data.data);
+  } catch (error) {
+    console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
+    return { err: error };
+  }
+});
+
+ipcMain.handle('getCPUUsageByPods', async () => {
+  const { startTime, endTime } = setStartAndEndTime();
+  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
+  const interval = '15s';
+  try {
+    const nsSelect = await mainWindow.webContents
+      .executeJavaScript('({...localStorage});', true)
+      /* check what type this is with team */ /* check what type this is with team */
+      .then((localStorage: any) => {
+        return localStorage.namespace;
+      });
+    // fetch time series data from prom api
+    const query = `${PROM_URL}query_range?query=sum(
+      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}}[5m])) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+    // fetch request
+    const res = await fetch(query);
+    const data = await res.json();
+
+    // data.data.result returns matrix
+    return formatMatrix(data.data, 'milicores');
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
     return { err: error };
