@@ -263,7 +263,7 @@ ipcMain.handle('getCPUUsageByPods', async () => {
 
     // fetch time series data from prom api
     const query = `${PROM_URL}query_range?query=sum(
-      rate(container_cpu_usage_seconds_total{container!~"POD|"}[5m])*1000) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+      rate(container_cpu_usage_seconds_total{container!~"POD|"}[5m])) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
