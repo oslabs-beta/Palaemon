@@ -17,7 +17,7 @@ html {
   overflow: hidden;
 }
 
-body, #root, #sidebar, #contents{
+body, #root, #sidebar, #contents, #landing-container{
   height: 100%;
 }
 
@@ -283,4 +283,50 @@ footer {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+// This is styling for Landing page
+#landing-container {
+  background-color: $secondary-color;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  #logo{
+    height: 48%;
+    width: auto;
+  }
+
+  #namespace-selector-form{
+    margin-top: 15vh;
+    height:fit-content;
+    width: 400px;
+    padding: 10px 30px 30px 30px;
+
+    // the code below will center the form absolutely
+    // position: absolute;
+    // margin-left: auto;
+    // margin-right: auto;
+    // left: 0;
+    // right: 0;
+  
+    background-color:white;
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
+
+    text-align: center;
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    #selector-namespace {
+      width: 320px;
+      height: 3rem;
+      padding: 10px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+    }
+  }
 }
