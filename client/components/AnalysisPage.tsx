@@ -28,21 +28,23 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       <nav className="analysis-nav">
         <div className="analysis-nav-left">
           <select id="oomkill-selector">{OOMKillsList}</select>
-          <select>
+          <select className="analysis-interval">
             <option>Interval</option>
           </select>
-          <button>Delete</button>
+          <button className="analysis-delete-btn">Delete</button>
         </div>
         <div className="analysis-oomkill-data">
           podName, restartCount, started, finished
         </div>
       </nav>
-      <div id="left-side">
-        <div className="pod-overview">Pod overview</div>
-        <div className="filtered-event-log">Filtered Event Log</div>
-      </div>
-      <div id="chartarea">
-        <ChartGrid />
+      <div className="analysis-main">
+        <div id="left-side">
+          <div className="pod-overview">Pod overview</div>
+          <div className="filtered-event-log">Filtered Event Log</div>
+        </div>
+        <div id="chartarea">
+          <ChartGrid />
+        </div>
       </div>
     </div>
   );

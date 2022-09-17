@@ -2,7 +2,7 @@ $ugly-sewage-green: #00695c;
 $p-light-color: #439889;
 $p-dark-color: #003d33;
 
-$font-color: #00120f;
+$font-color: #002a25;
 
 $secondary-color: #b2dfdb;
 $tertiary-color: #d1ece9;
@@ -138,7 +138,7 @@ footer {
 
 // left side styling
 .cluster-chart-card {
-  background-color: whitesmoke;
+  background-color: white;
   box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
   border-radius: 10px;
   margin: 0px 10px 10px 10px;
@@ -147,6 +147,7 @@ footer {
   align-items: center;
   flex-wrap: wrap;
   font-weight: bold;
+  color: $font-color;
 
   .cluster-chart-names {
     display: inline-block;
@@ -159,7 +160,11 @@ footer {
   }
 
   svg:hover {
-    filter: drop-shadow(2px 2px 3px $p-dark-color);
+    filter: drop-shadow(2px 2px 3px $font-color);
+  }
+
+  .health-bar {
+    cursor: pointer;
   }
 }
 
@@ -250,10 +255,11 @@ footer {
   & > select {
     width: 140px;
     font-size: 1.1rem;
-    // border: 1px solid black;
-    // border-radius: 0.4rem;
-    box-shadow: 0px 0.4px 0.8px 0px black;
     padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+    border-radius: 10px;
+    border: none;
   }
 }
 
@@ -261,22 +267,20 @@ footer {
   position: absolute;
   top: 10px;
   right: 10px;
+  box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 1.1rem;
+  color: $font-color;
+  background-color: $secondary-color;
+  transition: all 0.3s;
 }
 
-// chart styling
-#chartarea {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
-
-  // display: flex;
-  // flex-direction: row-reverse;
-
-  canvas {
-    width: 200px;
-    height: 200px;
-  }
+.analyze:hover {
+  background-color: $font-color;
+  color: white;
+  cursor: pointer;
 }
 
 #graph {
@@ -363,24 +367,106 @@ select:focus-visible {
 // ANALYSIS PAGE
 
 #analysis-container {
+  background-color: $secondary-color;
   .analysis-nav {
     display: flex;
     justify-content: space-around;
     margin-top: 1rem;
+
+    .analysis-nav-left {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background-color: #eee;
+      height: 4rem;
+      min-width: 50rem;
+      background-color: whitesmoke;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      margin: 0px 10px 10px 10px;
+      padding: 0.6rem;
+
+      #oomkill-selector {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+      }
+
+      .analysis-interval {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+      }
+
+      .analysis-delete-btn {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+        color: $font-color;
+        background-color: $secondary-color;
+        transition: all 0.3s;
+      }
+
+      .analysis-delete-btn:hover {
+        background-color: $font-color;
+        color: white;
+        cursor: pointer;
+      }
+    }
+
+    .analysis-oomkill-data {
+      background-color: #eee;
+      height: 4rem;
+      min-width: 50rem;
+      background-color: whitesmoke;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      margin: 0px 10px 10px 10px;
+      padding: 0.6rem;
+    }
   }
 
-  #ommkill-selector {
-    width: 320px;
-    height: 3rem;
-    padding: 10px;
-    font-size: 1.2rem;
-    border-radius: 5px;
-  }
+  .analysis-main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
 
-  .analysis-oomkill-data {
-    background-color: #eee;
-    height: 4rem;
-    min-width: 50rem;
-    box-shadow: 0px 1px 3px 0px black;
+    .pod-overview {
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: white;
+      border-radius: 10px;
+      height: 14rem;
+    }
+
+    .filtered-event-log {
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: white;
+      border-radius: 10px;
+      height: 30rem;
+    }
+
+    // chart styling
+    #chartarea {
+      background-color: white;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      grid-auto-rows: minmax(100px, auto);
+
+      canvas {
+        width: 200px;
+        height: 200px;
+      }
+    }
   }
 }
