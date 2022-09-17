@@ -3,6 +3,7 @@ import Graph from './Graph';
 import { useState, useEffect } from 'react';
 import ChartGrid from './ChartGrid';
 import { AnalysisPageProps } from '../Types';
+import LogCard from './LogCard';
 
 const AnalysisPage = (props: AnalysisPageProps) => {
   const [OOMKillsList, setOOMKillsList]: any = useState([]);
@@ -18,6 +19,23 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       );
       setOOMKillsList([...oomKillOptions]);
     };
+
+    // const getPodOOMKillData = async() => {
+    //   for (let i = 0; i < logsData.length; i++) {
+    //     logCards.push(
+    //       <LogCard
+    //         key={i + 200}
+    //         eventObj={logType === 'events' ? logsData[i] : undefined}
+    //         alertObj={logType === 'alerts' ? logsData[i] : undefined}
+    //         oomObj={logType === 'oomkills' ? logsData[i] : undefined}
+    //         logType={logType}
+    //         analyzedPod={analyzedPod}
+    //         setAnalyzedPod={setAnalyzedPod}
+    //       />
+    //     );
+    //   }
+    // };
+
     renderOOMKills();
 
     console.log('ANALYZED POD CHANGED', analyzedPod);
@@ -34,7 +52,30 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           <button className="analysis-delete-btn">Delete</button>
         </div>
         <div className="analysis-oomkill-data">
-          podName, restartCount, started, finished
+          {analyzedPod.podName ? (
+            <>
+              <div className="analysis-oomkill-data-left">
+                <p>
+                  <strong>Pod:</strong> {analyzedPod.podName}
+                </p>
+                <p>
+                  <strong>Terminated At:</strong> {analyzedPod.started}
+                </p>
+              </div>
+              <div className="analysis-oomkill-data-right">
+                <p>
+                  <strong>Restarted At:</strong> {analyzedPod.finished}
+                </p>
+                <p>
+                  <strong>Restarts:</strong> {analyzedPod.restartcount}
+                </p>
+              </div>
+            </>
+          ) : (
+            <p className="select-oomkill-msg">
+              Select an OOMKill error to analyze
+            </p>
+          )}
         </div>
       </nav>
       <div className="analysis-main">

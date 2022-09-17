@@ -425,13 +425,18 @@ select:focus-visible {
 
     .analysis-oomkill-data {
       background-color: #eee;
-      height: 4rem;
+      min-height: 4rem;
       min-width: 50rem;
       background-color: whitesmoke;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
       margin: 0px 10px 10px 10px;
       padding: 0.6rem;
+      font-size: 0.6rem;
+    }
+    .select-oomkill-msg {
+      font-size: 1.6rem;
+      text-align: center;
     }
   }
 
