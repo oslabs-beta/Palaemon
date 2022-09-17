@@ -27,6 +27,8 @@ body,
 
 body {
   margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
 
 * {
@@ -378,13 +380,12 @@ select:focus-visible {
       justify-content: center;
       gap: 2rem;
       background-color: #eee;
-      height: 4rem;
-      min-width: 50rem;
+      min-height: 4rem;
       background-color: whitesmoke;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
       margin: 0px 10px 10px 10px;
-      padding: 0.6rem;
+      padding: 0rem 4rem;
 
       #oomkill-selector {
         font-size: 1.1rem;
@@ -424,16 +425,22 @@ select:focus-visible {
     }
 
     .analysis-oomkill-data {
-      background-color: #eee;
       min-height: 4rem;
-      min-width: 50rem;
-      background-color: whitesmoke;
+      background-color: white;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
       margin: 0px 10px 10px 10px;
-      padding: 0.6rem;
+      padding: 0rem 4rem;
       font-size: 0.6rem;
+
+      .analysis-oomkill-data-container {
+        display: flex;
+        font-size: 1rem;
+        justify-content: center;
+        gap: 3rem;
+      }
     }
+
     .select-oomkill-msg {
       font-size: 1.6rem;
       text-align: center;
