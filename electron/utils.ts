@@ -1,4 +1,4 @@
-import { SvgInfo, SvgInfoObj, newObj } from '../client/Types';
+import { SvgInfo, SvgInfoObj, oomObject } from '../client/Types';
 import * as cp from 'child_process';
 
 const fetch: any = (...args: any) =>
@@ -96,14 +96,13 @@ export function parseNode(obj: any) {
   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)
   if (obj?.metadata?.name) output.name = obj.metadata.name;
   return output;
-
 }
 
 export async function fetchMem(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
-  const podName = obj.metadata.name
-  const {startTime, endTime} = setStartAndEndTime()
-  
+  const podName = obj.metadata.name;
+  const { startTime, endTime } = setStartAndEndTime();
+
   if (obj?.metadata?.name) {
     output.name = obj.metadata.name;
     output.parent = obj.spec.nodeName;
@@ -117,35 +116,37 @@ export async function fetchMem(obj: any) {
     const limit = await fetch(limitsQuery);
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
-    const requestData: any = await request.json()
+    const requestData: any = await request.json();
 
     // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {
-      if (limitData.data.result[0].metric.resource === "memory") {
-        output.resource = "memory"
-        output.limit = parseInt(limitData.data.result[0].values[0][1]) / 1000000;
-        output.request = parseInt(requestData.data.result[0].values[0][1]) / 1000000;
+      if (limitData.data.result[0].metric.resource === 'memory') {
+        output.resource = 'memory';
+        output.limit =
+          parseInt(limitData.data.result[0].values[0][1]) / 1000000;
+        output.request =
+          parseInt(requestData.data.result[0].values[0][1]) / 1000000;
         output.unit = 'megabytes';
       }
     }
-    return output
+    return output;
   } catch (err) {
-      return {
-        name: "",
-        usage: 1,
-        resource: "",
-        limit: 1,
-        request: 1,
-        parent: "",
-        namespace: "",
-      }
-    }
+    return {
+      name: '',
+      usage: 1,
+      resource: '',
+      limit: 1,
+      request: 1,
+      parent: '',
+      namespace: '',
+    };
+  }
 }
 
 export async function fetchCPU(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
-  const podName = obj.metadata.name
-  const {startTime, endTime} = setStartAndEndTime()
+  const podName = obj.metadata.name;
+  const { startTime, endTime } = setStartAndEndTime();
   // console.log('I AM POD NAME', podName)
   if (obj?.metadata?.name) {
     output.name = obj.metadata.name;
@@ -159,12 +160,11 @@ export async function fetchCPU(obj: any) {
     const limit = await fetch(limitsQuery);
     const limitData: any = await limit.json();
     const request = await fetch(requestsQuery);
-    const requestData: any = await request.json()
-  
+    const requestData: any = await request.json();
 
     if (limitData.data.result[0]) {
-      if (limitData.data.result[0].metric.resource === "cpu") {
-        output.resource = "cpu"
+      if (limitData.data.result[0].metric.resource === 'cpu') {
+        output.resource = 'cpu';
         output.limit = limitData.data.result[0].values[0][1] * 1000;
         output.request = requestData.data.result[0].values[0][1] * 1000;
         output.unit = 'milicores';
@@ -202,7 +202,11 @@ export const formatOOMKills = (data: string[]) => {
     );
     // console.log(filteredPodData);
 
-    const newObj: { [index: string]: any } = {};
+    const oomObject: { [index: string]: any } = {};
+
+    const namespaceStr: string = updatedPodData[1];
+    const nsColonIdx: any = namespaceStr.indexOf(':');
+    const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
 
     const limitIdx: any = filteredPodData.indexOf('Limits:');
     const limitCpu = filteredPodData[limitIdx + 1];
@@ -220,19 +224,24 @@ export const formatOOMKills = (data: string[]) => {
       requestMemory,
     };
 
-    newObj['Pod Name'] = el;
-    newObj[filteredPodData[limitIdx]] = limits;
-    newObj[filteredPodData[requestIdx]] = requests;
+    oomObject.namespace = namespace;
+    oomObject.podName = el;
+    oomObject[filteredPodData[limitIdx]] = limits;
+    oomObject[filteredPodData[requestIdx]] = requests;
 
     filteredPodData.slice(0, 7).forEach((el: any) => {
       const colon: any = el.indexOf(':');
-      // Extravts key from the left of colon
-      const key: keyof newObj = el.slice(0, colon);
+      // Extracts key from the left of colon and lowercases to send properly to frontend
+      const key: keyof oomObject = el
+        .slice(0, colon)
+        .toLowerCase()
+        .split(' ')
+        .join('');
       // Extracts value from the right of colon and removes white space
-      newObj[key] = el.slice(colon + 2);
+      oomObject[key] = el.slice(colon + 2);
     });
 
-    OOMKills.push(newObj);
+    OOMKills.push(oomObject);
   });
 
   return OOMKills;
