@@ -462,9 +462,21 @@ select:focus-visible {
     .filtered-log-container {
       padding: 1rem 1.5rem;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      background-color: white;
+      background-color: whitesmoke;
       border-radius: 10px;
       height: 30rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .event-card {
+        position: relative;
+        font-size: 0.6rem;
+        margin-bottom: 1rem;
+        padding: 1rem 1.5rem;
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        background-color: white;
+        border-radius: 10px;
+      }
     }
 
     // chart styling

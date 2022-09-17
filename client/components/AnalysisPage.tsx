@@ -11,6 +11,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
   const [allOOMKills, setAllOOMKills]: any = useState([]);
   const [podOverviewData, setPodOverviewData]: any = useState([]);
   const [filteredLogs, setFilteredLogs]: any = useState([]);
+  const [logType, setLogType]: any = useState<string>('events');
   const { analyzedPod, setAnalyzedPod }: any = props;
 
   const updateAnalyzedPod = (e: any) => {
@@ -22,9 +23,12 @@ const AnalysisPage = (props: AnalysisPageProps) => {
   };
 
   useEffect(() => {
+    // Queries for all OOMKilled pods and stores in state variables
+    // 1) oomKillOptions - array of pod names used for drop down list
+    // 2) allOomKills - array of oomkilled objects
     const renderOOMKills = async () => {
-      const data = await window.api.getOOMKills();
-      const oomKillOptions: JSX.Element[] = data.map(
+      const oomkillData = await window.api.getOOMKills();
+      const oomKillOptions: JSX.Element[] = oomkillData.map(
         (oomkill: any, i: number): JSX.Element => {
           return (
             <option key={oomkill.podName + i} value={oomkill.podName}>
@@ -34,11 +38,35 @@ const AnalysisPage = (props: AnalysisPageProps) => {
         }
       );
       setOOMKillsList([...oomKillOptions]);
-      setAllOOMKills([...data]);
+      setAllOOMKills([...oomkillData]);
+    };
+
+    // Queries and generates filtered logs of events for pod being analyzed
+    const createLogs = async () => {
+      const logCards: JSX.Element[] = [];
+      const logsData = await window.api.getEvents();
+      const filtered = logsData.filter(
+        (log: any) => log.object.slice(4) === analyzedPod.podName
+      );
+      for (let i = 0; i < filtered.length; i++) {
+        logCards.push(
+          <LogCard
+            key={i + 200}
+            eventObj={logType === 'events' ? filtered[i] : undefined}
+            alertObj={logType === 'alerts' ? filtered[i] : undefined}
+            oomObj={logType === 'oomkills' ? filtered[i] : undefined}
+            logType={logType}
+            analyzedPod={analyzedPod}
+            setAnalyzedPod={setAnalyzedPod}
+          />
+        );
+      }
+      setFilteredLogs([...logCards]);
     };
 
     // onChange, match the selected option pod with the pod in the allOOMKills then set analyzedPod to be that pod
     renderOOMKills();
+    createLogs();
 
     console.log('ANALYZED POD CHANGED', analyzedPod);
   }, [analyzedPod]);
@@ -48,7 +76,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       <nav className="analysis-nav">
         <div className="analysis-nav-left">
           <select id="oomkill-selector" onChange={e => updateAnalyzedPod(e)}>
-            <option value="default">Select OOMKill Error</option>
+            <option value="default">Select OOMKilled Pod</option>
             {OOMKillsList}
           </select>
           <select className="analysis-interval">
@@ -77,26 +105,24 @@ const AnalysisPage = (props: AnalysisPageProps) => {
               </div>
             </div>
           ) : (
-            <p className="select-oomkill-msg">
-              Select an OOMKill error to analyze
-            </p>
+            <p className="select-oomkill-msg">Select an OOMKilled pod</p>
           )}
         </div>
       </nav>
       <div className="analysis-main">
         <div id="left-side">
           <div className="pod-overview">
-            {filteredLogs.length ? (
+            {analyzedPod.podName ? (
               podOverviewData
             ) : (
-              <p>Select an OOMKill error to show pod overview data</p>
+              <p>Select an OOMKilled pod</p>
             )}
           </div>
           <div className="filtered-log-container">
-            {filteredLogs.length ? (
+            {analyzedPod.podName ? (
               filteredLogs
             ) : (
-              <p>Select an OOMKill error to show logs</p>
+              <p>Select an OOMKilled pod</p>
             )}
           </div>
         </div>
