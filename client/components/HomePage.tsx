@@ -4,7 +4,7 @@ import Events from "./Events";
 import Graph from "./Graph";
 import DetailsModal from "./Modal";
 
-import { ClusterChartProps, SvgInfo, ModalProps, Lulu } from "../Types";
+import { ClusterChartProps, SvgInfo, ModalProps, ClusterAllInfo } from "../Types";
 
 const tempData: SvgInfo[] = [{
   name: "string",
@@ -16,7 +16,7 @@ const tempData: SvgInfo[] = [{
   namespace: "string",
 }];
 
-const initalClusterChartData: Lulu = {
+const initalClusterChartData: ClusterAllInfo = {
   Clusters: tempData,
   Nodes: tempData,
   Pods: tempData,
@@ -27,7 +27,7 @@ const HomePage = (props: any): JSX.Element => {
   const [pods, setPods]: any = useState([]);
   const [nodes, setNodes]: any = useState(["node1"]);
   const [portOpen, setPortOpen]: any = useState(false);
-  const [clusterChartData, setClusterChartData] = useState<Lulu>(initalClusterChartData)
+  const [clusterChartData, setClusterChartData] = useState<ClusterAllInfo>(initalClusterChartData)
   
   // const updateShoppingCart = props.setShoppingCart;
 
