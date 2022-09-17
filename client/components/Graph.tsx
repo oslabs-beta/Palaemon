@@ -146,7 +146,7 @@ const Graph = (): JSX.Element => {
         },
         title: {
           display: true,
-          text: 'Mibibytes'
+          text: 'Megabytes'
         }
       },
     },

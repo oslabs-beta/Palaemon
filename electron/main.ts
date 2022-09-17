@@ -103,8 +103,10 @@ app.on('window-all-closed', () => {
 
 // get all info function for initial load and reloads
 
+
 ipcMain.handle('getAllInfo', async (): Promise<any> => {
   // nodes
+
   const tempData: SvgInfo = {
     name: 'deploy',
     usage: 1,
@@ -135,7 +137,7 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
 
     const memData = await Promise.all(
       getPods.body.items.map((pod) => {
-
+        // console.log('this is all pods fom k8s', pod)
         return fetchMem(pod)
       })
     );
@@ -143,7 +145,8 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
       getPods.body.items.map((pod) => fetchCPU(pod))
     );
 
-    const filteredMem = memData.filter(el => el.request > 1)
+    const filteredMem = memData
+    // const filteredMem = memData.filter(el => el.request > 1)
     const filteredCPU = cpuData.filter(el => el.resource === 'cpu')
     const filteredPods = filteredMem;
 
