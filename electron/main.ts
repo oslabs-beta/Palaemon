@@ -252,15 +252,20 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
   const interval = '15s';
   try {
-
+    const nsSelect = await mainWindow.webContents
+      .executeJavaScript('({...localStorage});', true)
+        /* check what type this is with team */        /* check what type this is with team */
+      .then((localStorage: any) => {
+        return localStorage.namespace
+  });
     // fetch time series data from prom api
-    const query = `${PROM_URL}query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image="",service="operator-kube-prometheus-s-kubelet"}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
 
     // data.data.result returns matrix
-    return formatMatrix(data.data, 'megabytes');
+    return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
     return { err: error };
