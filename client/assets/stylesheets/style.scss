@@ -35,7 +35,7 @@ body {
 }
 
 #logo {
-  width: 180px;
+  width: 120px;
   margin: 8px;
 }
 
@@ -48,10 +48,18 @@ body {
 #sidebar {
   width: $sidebar-width;
   background-color: $ugly-sewage-green;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
+  a {
+    &> img {
+      margin-top: 50px;
+    }
+  }
   ul {
     list-style-type: none;
-
+    padding: 0;
     li {
 
       &,

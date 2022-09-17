@@ -28,7 +28,7 @@ const App = () => {
   return (
     <HashRouter>
       <nav id="sidebar">
-        <Link to='/'><img id="logo" src="./assets/logo.png" alt="" /></Link>
+        <Link to='/'><img id="logo" src="./assets/logo_hat.png" alt="" /></Link>
         <ul id="sidebar-list">
           <li><Link to='/'>NAMESPACE</Link></li>
           <li><Link to='/home'>HOME</Link></li>
