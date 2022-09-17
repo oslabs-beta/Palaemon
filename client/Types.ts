@@ -61,10 +61,8 @@ export type ClusterChartCardProps = {
 //--------------------------------Types for the right side and alerts/events ----------------------------------------------------
 
 export type EventProps = {
-  handleAnalyzeUpdate: (input: any) => void;
-  setAnalyze: (input: any) => void;
-  analyze: any[];
-  // getAnalyzeLength: () => [];
+  setAnalyzedPod: (input: any) => void;
+  analyzedPod: any[];
 };
 
 export type AnalyzeCount = any[];
@@ -74,8 +72,8 @@ export interface LogCardProps {
   alertObj?: AlertObject;
   oomObj?: oomObject;
   logType: string;
-  // addToAnalyze: (input1: {}) => void;
-  handleAnalyzeUpdate: (input: any) => void;
+  analyzedPod: oomObject;
+  setAnalyzedPod: (input: any) => void;
 }
 
 export type EventObject = {
@@ -97,16 +95,6 @@ export type AlertObject = {
   alerts: string;
 };
 
-// export type oomObject = {
-//   group: string;
-//   state: string;
-//   name: string;
-//   severity: string;
-//   description: string;
-//   summary: string;
-//   alerts: string;
-// };
-
 export type oomObject = {
   namespace: string;
   podName: string;
@@ -125,18 +113,6 @@ export type LimOrReq = {
   limitCpu: string;
   limitMemory: string;
 };
-
-// export type newObj = {
-//   lastState: string;
-//   reason: string;
-//   exitCode: string;
-//   started: string;
-//   finished: string;
-//   ready: string;
-//   restartCount: string;
-//   limits: LimOrReq;
-//   requests: LimOrReq;
-// };
 
 //--------------------------------Types for Graphs----------------------------------------------------
 export type GraphData = {
@@ -163,11 +139,11 @@ export type GraphableData = {
 //--------------------------------Types for Analysis Page----------------------------------------------------
 
 export type AnalysisPage = {
-  analyze: any[];
-  setAnalyze: (input: any) => void;
+  analyzedPod: any[];
+  setAnalyzedPod: (input: any) => void;
 };
 
 export type AnalysisPageProps = {
-  setAnalyze: (input: any) => void;
-  analyze: any[];
+  setAnalyzedPod: (input: any) => void;
+  analyzedPod: any[];
 };

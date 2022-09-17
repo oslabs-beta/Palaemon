@@ -5,26 +5,46 @@ import ChartGrid from './ChartGrid';
 import { AnalysisPageProps } from '../Types';
 
 const AnalysisPage = (props: AnalysisPageProps) => {
-  const { analyze, setAnalyze } = props;
-  console.log('ANA', analyze);
-  const addedOOMKills = analyze.map(oomkill => {
-    console.log('OOMKILLS', oomkill);
-    return (
-      <option value="${}">{`Pod: ${oomkill.podName} Terminated At: ${oomkill.started}`}</option>
-    );
-  });
+  const [OOMKillsList, setOOMKillsList]: any = useState([]);
+  const { analyzedPod, setAnalyzedPod }: any = props;
+
+  useEffect(() => {
+    const renderOOMKills = async () => {
+      const data = await window.api.getOOMKills();
+      const oomKillOptions: JSX.Element[] = data.map(
+        (oomkill: any): JSX.Element => {
+          return <option value="">{oomkill.podName}</option>;
+        }
+      );
+      setOOMKillsList([...oomKillOptions]);
+    };
+    renderOOMKills();
+
+    console.log('ANALYZED POD CHANGED', analyzedPod);
+  }, [analyzedPod]);
 
   return (
-    <>
-      <h1> THIS IS GRAPHS! Only kind people can see it.</h1>
-      <div id="contents"></div>
+    <div id="analysis-container">
+      <nav className="analysis-nav">
+        <div className="analysis-nav-left">
+          <select id="oomkill-selector">{OOMKillsList}</select>
+          <select>
+            <option>Interval</option>
+          </select>
+          <button>Delete</button>
+        </div>
+        <div className="analysis-oomkill-data">
+          podName, restartCount, started, finished
+        </div>
+      </nav>
       <div id="left-side">
-        <select>{addedOOMKills}</select>
+        <div className="pod-overview">Pod overview</div>
+        <div className="filtered-event-log">Filtered Event Log</div>
       </div>
       <div id="chartarea">
         <ChartGrid />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,9 +1,16 @@
 import { LogCardProps } from '../Types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
-  const [analyzing, setAnalyzing] = useState(false);
-  // console.log(props)
+  const navigate = useNavigate();
+  const { analyzedPod, setAnalyzedPod }: any = props;
+
+  const handleAnalyze = () => {
+    setAnalyzedPod({ ...props.oomObj });
+    navigate('/analysis');
+  };
+
   // create the header elements
   let headerObj: { [key: string]: string } = {};
   let bodyObj: { [key: string]: string } = {};
@@ -72,19 +79,19 @@ const LogCard = (props: LogCardProps): JSX.Element => {
     // Fixes the capitalization of body labels
     switch (label) {
       case 'PodName:':
-        label = 'Pod Name';
+        label = 'Pod Name:';
         break;
       case 'Restartcount:':
-        label = 'Restart Count';
+        label = 'Restart Count:';
         break;
       case 'Laststate:':
-        label = 'Last State';
+        label = 'Last State:';
         break;
       case 'Exitcode:':
-        label = 'Exit Code';
+        label = 'Exit Code:';
         break;
       case 'LastSeen:':
-        label = 'Last Seen';
+        label = 'Last Seen:';
         break;
       default:
         break;
@@ -102,14 +109,9 @@ const LogCard = (props: LogCardProps): JSX.Element => {
   return (
     <div className="event-card">
       {props.logType === 'oomkills' && (
-        <div className="addToList">
-          <button
-            onClick={() => {
-              props.handleAnalyzeUpdate(props.oomObj);
-              setAnalyzing(!analyzing ? true : false);
-            }}
-          >
-            {!analyzing ? 'Analyze' : 'Remove'}
+        <div>
+          <button onClick={handleAnalyze} className="analyze">
+            Analyze
           </button>
         </div>
       )}

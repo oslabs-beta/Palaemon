@@ -4,7 +4,6 @@ import Events from './Events';
 import Graph from './Graph';
 import DetailsModal from './Modal';
 
-import '../stylesheets/style.scss';
 import { ClusterChartProps, SvgInfo, ModalProps, Lulu } from '../Types';
 
 const tempData: SvgInfo[] = [
@@ -33,8 +32,6 @@ const HomePage = (props: any): JSX.Element => {
   const [clusterChartData, setClusterChartData] = useState<Lulu>(
     initalClusterChartData
   );
-
-  // const handleAnalyzeUpdate={} = props.setShoppingCart;
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
@@ -100,10 +97,8 @@ const HomePage = (props: any): JSX.Element => {
       </div>
       <div id="right-side">
         <Events
-          handleAnalyzeUpdate={props.handleAnalyzeUpdate}
-          analyze={props.analyze}
-          setAnalyze={props.setAnalyze}
-          // getAnalyzeLength={props.getAnalyzeLength}
+          analyzedPod={props.analyzedPod}
+          setAnalyzedPod={props.setAnalyzedPod}
         />
       </div>
       {modalState.open && theModal}
