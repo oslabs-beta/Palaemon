@@ -209,17 +209,6 @@ ipcMain.handle('getNodes', async (): Promise<any> => {
 //   }
 // });
 
-// get namespaces
-ipcMain.handle('getNamespaces', async () => {
-  try {
-    const data = await k8sApiCore.listNamespace();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
-  } catch (error) {
-    console.log(`Error in getNamespaces function: ERROR: ${error}`);
-  }
-});
-
 // // get pods in cluster
 // ipcMain.handle('getPods', async (): Promise<any> => {
 //   try {
@@ -249,6 +238,18 @@ ipcMain.handle('getNamespaces', async () => {
 //     return console.log(`Error in getPods function: ERROR: ${error}`);
 //   }
 // });
+
+// get namespaces
+ipcMain.handle('getNamespaces', async () => {
+  try {
+    const data = await k8sApiCore.listNamespace();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
+  } catch (error) {
+    console.log(`Error in getNamespaces function: ERROR: ${error}`);
+  }
+});
+
 
 // COMMAND LINE //
 // get events
