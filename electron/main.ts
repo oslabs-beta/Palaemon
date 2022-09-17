@@ -79,17 +79,18 @@ const loadMainWindow = () => {
 };
 
 app.on("ready", async () => {
-  if(isDev){
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
-    installExtension(
-      extensions,
-      {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
-    ).then((name:string) => {console.log(`Added Extension: ${name}`)})
-     .then(loadMainWindow)
-    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
-  }
-  else loadMainWindow();
+  // if(isDev){
+  //   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  //   const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
+  //   installExtension(
+  //     extensions,
+  //     {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
+  //   ).then((name:string) => {console.log(`Added Extension: ${name}`)})
+  //    .then(loadMainWindow)
+  //   //  .catch((err: Error) => {console.log('There was an Error: ', err)})
+  // }
+  // else loadMainWindow();
+  loadMainWindow();
 });
 
 app.on('window-all-closed', () => {
@@ -193,6 +194,17 @@ ipcMain.handle('getDeployments', async (): Promise<any> => {
     return formattedData;
   } catch (error) {
     console.log(`Error in getDeployments function: ERROR: ${error}`);
+  }
+});
+
+// get namespaces
+ipcMain.handle('getNamespaces', async () => {
+  try {
+    const data = await k8sApiCore.listNamespace();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
+  } catch (error) {
+    console.log(`Error in getNamespaces function: ERROR: ${error}`);
   }
 });
 

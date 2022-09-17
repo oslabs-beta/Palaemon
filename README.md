@@ -1,7 +1,7 @@
 # Palaemon
 
 - A gentle, euthanization and diagnosis tool for out-of-memory (OOM) kubernetes pods. 
-- Palaemon is a Greek, childe sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of shrimp.
+- Palaemon is a Greek, child sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of shrimp.
 
 ## To run the Electron App
 `npm start:dev` will start a webpack dev server on port 8080, creating a web browser on localhost:8080 that can be shared using VS Code's live share. It will also start the electron app, but the app usually needs to be reloaded (CMD/Ctrl + R). 

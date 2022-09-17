@@ -9,13 +9,19 @@ $tertiary-color: #d1ece9;
 $s-light-color: #e5ffff;
 $s-dark-color: #82ada9;
 
+$sidebar-width: 240px;
+
 html {
   height: 100vh;
   // prevents the window from over-scrolling and bouncing beyond the 100% screen size
   overflow: hidden;
 }
 
-body, #root, #sidebar, #contents{
+body,
+#root,
+#sidebar,
+#contents,
+#landing-container {
   height: 100%;
 }
 
@@ -40,12 +46,16 @@ body {
 }
 
 #sidebar {
-  width: 240px;
+  width: $sidebar-width;
   background-color: $ugly-sewage-green;
+
   ul {
     list-style-type: none;
+
     li {
-      &, * {
+
+      &,
+      * {
         text-decoration: none;
         margin: 20px 0;
         font-size: 1.5rem;
@@ -65,12 +75,15 @@ body {
   display: flex;
   justify-content: flex-end;
   background-color: $ugly-sewage-green;
+
   img {
     display: block;
   }
+
   a {
     text-decoration: none;
   }
+
   h1 {
     display: block;
     height: max-content;
@@ -85,10 +98,11 @@ body {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
+
   & #left-side,
   #right-side {
     height: 100%;
-    width: 50%;
+    width: calc((100vw - $sidebar-width) / 2);
   }
 }
 
@@ -97,7 +111,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
 
-  & > * {
+  &>* {
     margin: 8px;
     padding: 12px;
   }
@@ -152,31 +166,33 @@ footer {
 
 .modal {
 
-	animation-name: opac;
-	animation-fill-mode: both;
-	animation-duration: .5s;
+  animation-name: opac;
+  animation-fill-mode: both;
+  animation-duration: .5s;
 
   position: absolute;
   top: 100;
   background-color: #82ada9;
-  .modalHeading{
+
+  .modalHeading {
     position: relative;
     // right: 0px;
     top: 100px;
-// display: flex;
-// justify-content: flex-end;
+    // display: flex;
+    // justify-content: flex-end;
     // #modalhead{
-  
+
     // }
   }
 }
 
 @keyframes opac {
-  from{
-    opacity:0
-  } 
+  from {
+    opacity: 0
+  }
+
   to {
-    opacity:1
+    opacity: 1
   }
 }
 
@@ -188,7 +204,7 @@ footer {
   height: 100%;
   background-color: $tertiary-color;
 
-  & > * {
+  &>* {
     padding: 12px;
     margin: 8px;
   }
@@ -232,23 +248,13 @@ footer {
   gap: 24px;
   height: 50px;
 
-  & > select {
+  &>select {
     width: 140px;
     font-size: 1.1rem;
     // border: 1px solid black;
     // border-radius: 0.4rem;
     box-shadow: 0px 0.4px 2px 0px #003d33;
     padding: 0.25rem 0.5rem;
-
-    &:hover,
-    &:focus-visible {
-      outline: 2px solid $p-light-color;
-    }
-
-    & > option:hover,
-    option:checked {
-      box-shadow: 0 0 10px 100px $s-light-color inset !important;
-    }
   }
 }
 
@@ -269,8 +275,10 @@ footer {
 }
 
 .loader {
-  border: 6px solid $s-dark-color; /* Light grey */
-  border-top: 6px solid $p-dark-color; /*#3498db; /* Blue */
+  border: 6px solid $s-dark-color;
+  /* Light grey */
+  border-top: 6px solid $p-dark-color;
+  /*#3498db; /* Blue */
   border-radius: 50%;
   width: 16px;
   height: 16px;
@@ -279,6 +287,63 @@ footer {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
+
+// This is styling for Landing page
+#landing-container {
+  background-color: $secondary-color;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  #logo {
+    height: 48%;
+    width: auto;
+  }
+
+  #namespace-selector-form {
+    margin-top: 15vh;
+    height: fit-content;
+    width: 400px;
+    padding: 10px 30px 30px 30px;
+
+    // the code below will center the form absolutely
+    // position: absolute;
+    // margin-left: auto;
+    // margin-right: auto;
+    // left: 0;
+    // right: 0;
+
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
+
+    text-align: center;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    #selector-namespace {
+      width: 320px;
+      height: 3rem;
+      padding: 10px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+    }
+  }
+}
+
+select:hover,
+    select:focus-visible {
+      outline: 2px solid $p-light-color;
+    }
