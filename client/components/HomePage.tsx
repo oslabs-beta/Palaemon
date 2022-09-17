@@ -82,35 +82,32 @@ const HomePage = (props: any): JSX.Element => {
   }, []);
 
   return (
-    <>
-      {/* <h3 id="tagline">A gentle, euthanization tool for OOM kubernetes pods</h3> */}
-      <div id="contents">
-        <div id="left-side">
-          <div id="cluster-chart">
-            <ClusterChart
-              Clusters={gke.Clusters}
-              Nodes={gke.Nodes}
-              Pods={gke.Pods}
-              Deployments={gke.Deployments}
-              click={gke.click}
-              close={gke.close}
-            />
-          </div>
-          <div id="graph">
-            <Graph />
-          </div>
-        </div>
-        <div id="right-side">
-          <Events
-            handleAnalyzeUpdate={props.handleAnalyzeUpdate}
-            analyze={props.analyze}
-            setAnalyze={props.setAnalyze}
-            // getAnalyzeLength={props.getAnalyzeLength}
+    <div id="contents">
+      <div id="left-side">
+        <div id="cluster-chart">
+          <ClusterChart
+            Clusters={gke.Clusters}
+            Nodes={gke.Nodes}
+            Pods={gke.Pods}
+            Deployments={gke.Deployments}
+            click={gke.click}
+            close={gke.close}
           />
         </div>
-        {modalState.open && theModal}
+        <div id="graph">
+          <Graph />
+        </div>
       </div>
-    </>
+      <div id="right-side">
+        <Events
+          handleAnalyzeUpdate={props.handleAnalyzeUpdate}
+          analyze={props.analyze}
+          setAnalyze={props.setAnalyze}
+          // getAnalyzeLength={props.getAnalyzeLength}
+        />
+      </div>
+      {modalState.open && theModal}
+    </div>
   );
 };
 
