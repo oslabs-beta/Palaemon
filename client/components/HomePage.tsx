@@ -4,7 +4,6 @@ import Events from "./Events";
 import Graph from "./Graph";
 import DetailsModal from "./Modal";
 
-import "../stylesheets/style.scss";
 import { ClusterChartProps, SvgInfo, ModalProps, Lulu } from "../Types";
 
 const tempData: SvgInfo[] = [{
@@ -78,8 +77,6 @@ const HomePage = (props: any): JSX.Element => {
   }, []);
 
   return (
-    <>
-      {/* <h3 id="tagline">A gentle, euthanization tool for OOM kubernetes pods</h3> */}
       <div id="contents">
         <div id="left-side">
           <div id="cluster-chart">
@@ -101,7 +98,6 @@ const HomePage = (props: any): JSX.Element => {
         </div>
         {modalState.open && theModal}
       </div>
-    </>
   );
 };
 
