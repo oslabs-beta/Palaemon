@@ -1,8 +1,8 @@
 import { useState, useEffect, EffectCallback, useInsertionEffect } from 'react';
 import LogCard from './LogCard';
 import { EventProps, EventObject } from '../Types';
-import { filter } from '../../webpack.config';
 import { capitalize } from '../../electron/utils';
+import { useNavigate } from 'react-router-dom';
 
 const Events = (props: EventProps): JSX.Element => {
   const [logs, setLogs]: any = useState([]);
@@ -133,24 +133,6 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
-        {logType === 'oomkills' ? (
-          <>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              className="bi bi-search"
-              viewBox="0 0 16 16"
-            >
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-            </svg>
-            <span className="badge badge-warning" id="lblCartCount">
-              {props.analyze.length}
-            </span>
-          </>
-        ) : null}
-
         {loading && (
           <>
             <p>Loading </p>
@@ -159,7 +141,7 @@ const Events = (props: EventProps): JSX.Element => {
         )}
       </nav>
       <div id="container-event-logs" className="container events">
-        {logs.length ? logs : <p>No data</p>}
+        {logs.length ? logs : <p>No {logType} to be displayed</p>}
       </div>
     </div>
   );
