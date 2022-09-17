@@ -263,7 +263,7 @@ ipcMain.handle('getEvents', async () => {
   }
 });
 
-// PROMETHEUS API //
+// HOMEPAGE QUERIES PROMETHEUS API //
 
 ipcMain.handle('getMemoryUsageByPods', async () => {
   const { startTime, endTime } = setStartAndEndTime();
@@ -277,7 +277,8 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image=""}&start=${startTime}&end=${endTime}&step=${interval}`;
+      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
@@ -302,8 +303,9 @@ ipcMain.handle('getCPUUsageByPods', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
+      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
     const query = `${PROM_URL}query_range?query=sum(
-      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}}[5m])) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
