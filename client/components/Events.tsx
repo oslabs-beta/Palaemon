@@ -1,32 +1,25 @@
-import { useState, useEffect, EffectCallback } from 'react';
+import { useState, useEffect, EffectCallback, useInsertionEffect } from 'react';
 import LogCard from './LogCard';
 import { EventProps, EventObject } from '../Types';
-import { filter } from '../../webpack.config';
 import { capitalize } from '../../electron/utils';
+import { useNavigate } from 'react-router-dom';
 
 const Events = (props: EventProps): JSX.Element => {
   const [logs, setLogs]: any = useState([]);
   const [logType, setLogType]: any = useState<string>('events');
   const [severityType, setSeverityType]: any = useState<string>('Default');
   const [loading, setLoading]: any = useState(true);
-  const [cartLength, setCartLength]: any = useState(0);
-
-  const addToCart = (logsData: any) => {
-    props.updateShoppingCart(logsData);
-    // props.getShoppingCartLength()
-    setCartLength(props.getShoppingCartLength());
-    // consol
-  };
+  const { analyzedPod, setAnalyzedPod }: any = props;
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
     setLogType(logTypeStr);
-    console.log(
-      'handleLogTypeChange is working and current logType state is ',
-      logType,
-      ' and e.target.value is ',
-      e.target.value
-    );
+    // console.log(
+    //   'handleLogTypeChange is working and current logType state is ',
+    //   logType,
+    //   ' and e.target.value is ',
+    //   e.target.value
+    // );
   };
 
   const handleSeverityChange = (e: any) => {
@@ -39,12 +32,6 @@ const Events = (props: EventProps): JSX.Element => {
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
     // window.api.getPods();
     const createLogs = async () => {
-      const testig: any = await window.api.getAllInfo();
-      console.log('AM I A PROMISE?, ', testig);
-
-      const oomkills: any = await window.api.getOOMKills();
-      console.log('OOMKILL DATA', oomkills);
-
       const logCards: JSX.Element[] = [];
       let logsData;
       if (logType === 'events') {
@@ -54,8 +41,7 @@ const Events = (props: EventProps): JSX.Element => {
       } else if (logType === 'alerts') {
         logsData = await window.api.getAlerts();
       } else if (logType === 'oomkills') {
-        // THANG FILL IN YOUR FUNCTION HERE
-        logsData = await window.api.getAlerts();
+        logsData = await window.api.getOOMKills();
       }
 
       for (let i = 0; i < logsData.length; i++) {
@@ -66,7 +52,8 @@ const Events = (props: EventProps): JSX.Element => {
             alertObj={logType === 'alerts' ? logsData[i] : undefined}
             oomObj={logType === 'oomkills' ? logsData[i] : undefined}
             logType={logType}
-            addToCart={addToCart}
+            analyzedPod={analyzedPod}
+            setAnalyzedPod={setAnalyzedPod}
           />
         );
       }
@@ -97,68 +84,50 @@ const Events = (props: EventProps): JSX.Element => {
 
   return (
     <div id="container-event" className="container events right-side">
-      <nav id="container-select" className="container events">
-        <select
-          className="event-selector"
-          id="selector-log-type"
-          name="log-type"
-          defaultValue={'event'}
-          onChange={e => {
-            setLoading(true);
-            handleLogTypeChange(e);
-          }}
-        >
-          <option value="events">Events</option>
-          <option value="alerts">Alerts</option>
-          <option value="oomkills">OOM Kills</option>
-        </select>
-        <select
-          className="event-selector"
-          id="selector-severity"
-          name="severity"
-          defaultValue={'Default'}
-          onChange={e => {
-            setLoading(true);
-            handleSeverityChange(e);
-          }}
-        >
-          <option value="default">Default</option>
-          <option value="info">Info</option>
-          <option value="warning">Warning</option>
-          <option value="error">Error</option>
-          <option value="critical">Critical</option>
-          <option value="alert">Alert</option>
-          <option value="emergency">Emergency</option>
-          <option value="debug">Debug</option>
-        </select>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-shopping-cart"
-        >
-          <circle cx="9" cy="21" r="1"></circle>
-          <circle cx="20" cy="21" r="1"></circle>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-        </svg>
-        <span className="badge badge-warning" id="lblCartCount">
-          {cartLength}
-          {/* {5} */}
-        </span>
-        {loading && (
-          <>
-            <p>Loading </p>
-            <p className="loader"></p>
-          </>
-        )}
-      </nav>
       <div id="container-event-logs" className="container events">
-        {logs.length ? logs : <p>No data</p>}
+        <nav id="container-select" className="container events">
+          <select
+            className="event-selector"
+            id="selector-log-type"
+            name="log-type"
+            defaultValue={'event'}
+            onChange={e => {
+              setLoading(true);
+              handleLogTypeChange(e);
+            }}
+          >
+            <option value="events">Events</option>
+            <option value="alerts">Alerts</option>
+            <option value="oomkills">OOMKills</option>
+          </select>
+          <select
+            className="event-selector"
+            id="selector-severity"
+            name="severity"
+            defaultValue={'Default'}
+            onChange={e => {
+              setLoading(true);
+              handleSeverityChange(e);
+            }}
+          >
+            <option value="default">Default</option>
+            <option value="info">Info</option>
+            <option value="warning">Warning</option>
+            <option value="error">Error</option>
+            <option value="critical">Critical</option>
+            <option value="alert">Alert</option>
+            <option value="emergency">Emergency</option>
+            <option value="debug">Debug</option>
+          </select>
+          {loading && (
+            <>
+              <p>Loading </p>
+              <p className="loader"></p>
+            </>
+          )}
+        </nav>
+
+        {logs.length ? logs : <p>No {logType} in current namespace</p>}
       </div>
     </div>
   );

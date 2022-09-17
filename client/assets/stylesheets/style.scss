@@ -2,7 +2,7 @@ $ugly-sewage-green: #00695c;
 $p-light-color: #439889;
 $p-dark-color: #003d33;
 
-$font-color: #00120f;
+$font-color: #002a25;
 
 $secondary-color: #b2dfdb;
 $tertiary-color: #d1ece9;
@@ -27,6 +27,8 @@ body,
 
 body {
   margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
 
 * {
@@ -61,7 +63,6 @@ body {
     list-style-type: none;
     padding: 0;
     li {
-
       &,
       * {
         text-decoration: none;
@@ -106,6 +107,7 @@ body {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
+  background-color: #b2dfdb;
 
   & #left-side,
   #right-side {
@@ -119,7 +121,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
 
-  &>* {
+  & > * {
     margin: 8px;
     padding: 12px;
   }
@@ -146,15 +148,16 @@ footer {
 
 // left side styling
 .cluster-chart-card {
-  background-color: $s-light-color;
-  box-shadow: 0px 1px 4px 0px $p-dark-color;
-  border-radius: 0.2rem;
-  margin: 10px 10px;
-  padding: 0.4rem;
+  background-color: white;
+  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  margin: 0px 10px 10px 10px;
+  padding: 0.6rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   font-weight: bold;
+  color: $font-color;
 
   .cluster-chart-names {
     display: inline-block;
@@ -167,16 +170,18 @@ footer {
   }
 
   svg:hover {
-    filter: drop-shadow(2px 2px 3px $p-dark-color);
+    filter: drop-shadow(2px 2px 3px $font-color);
+  }
+
+  .health-bar {
+    cursor: pointer;
   }
 }
 
-
 .modal {
-
   animation-name: opac;
   animation-fill-mode: both;
-  animation-duration: .5s;
+  animation-duration: 0.5s;
 
   position: absolute;
   top: 100;
@@ -196,23 +201,22 @@ footer {
 
 @keyframes opac {
   from {
-    opacity: 0
+    opacity: 0;
   }
 
   to {
-    opacity: 1
+    opacity: 1;
   }
 }
-
 
 // Right side event styling
 #container-event {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: $tertiary-color;
+  // background-color: $tertiary-color;
 
-  &>* {
+  & > * {
     padding: 12px;
     margin: 8px;
   }
@@ -228,15 +232,17 @@ footer {
   color: $font-color;
   background-color: whitesmoke;
   // border: 4px solid $s-dark-color;
-  box-shadow: 0px 1px 4px 0px $p-dark-color;
-  margin: 0px 20px 16px 20px;
+  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+  margin: 16px 20px 16px 20px;
+  border-radius: 10px;
 
   .event-card {
+    position: relative;
     margin-bottom: 1rem;
     padding: 1rem 1.5rem;
-    box-shadow: 0px 1px 4px 0px $p-dark-color;
+    box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
     background-color: white;
-    border-radius: 0.4rem;
+    border-radius: 10px;
 
     &-header {
       display: flex;
@@ -256,30 +262,42 @@ footer {
   gap: 24px;
   height: 50px;
 
-  &>select {
+  & > select {
     width: 140px;
     font-size: 1.1rem;
-    // border: 1px solid black;
-    // border-radius: 0.4rem;
-    box-shadow: 0px 0.4px 2px 0px #003d33;
     padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+    border-radius: 10px;
+    border: none;
   }
 }
 
-// chart styling
-#chartarea {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
+.analyze {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 1.1rem;
+  color: $font-color;
+  background-color: $secondary-color;
+  transition: all 0.3s;
+}
 
-  // display: flex;
-  // flex-direction: row-reverse;
+.analyze:hover {
+  background-color: $font-color;
+  color: white;
+  cursor: pointer;
+}
 
-  canvas {
-    width: 200px;
-    height: 200px;
-  }
+#graph {
+  background-color: white;
+  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  margin: 2rem;
 }
 
 .loader {
@@ -352,6 +370,135 @@ footer {
 }
 
 select:hover,
-    select:focus-visible {
-      outline: 2px solid $p-light-color;
+select:focus-visible {
+  outline: 2px solid $p-light-color;
+}
+
+// ANALYSIS PAGE
+
+#analysis-container {
+  background-color: $secondary-color;
+  .analysis-nav {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+
+    .analysis-nav-left {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background-color: #eee;
+      min-height: 4rem;
+      background-color: whitesmoke;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      margin: 0px 10px 10px 10px;
+      padding: 0rem 4rem;
+
+      #oomkill-selector {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+      }
+
+      .analysis-interval {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+      }
+
+      .analysis-delete-btn {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+        color: $font-color;
+        background-color: $secondary-color;
+        transition: all 0.3s;
+      }
+
+      .analysis-delete-btn:hover {
+        background-color: $font-color;
+        color: white;
+        cursor: pointer;
+      }
     }
+
+    .analysis-oomkill-data {
+      min-height: 4rem;
+      background-color: white;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      margin: 0px 10px 10px 10px;
+      padding: 0rem 4rem;
+      font-size: 0.4rem;
+
+      .analysis-oomkill-data-container {
+        display: flex;
+        font-size: 1rem;
+        justify-content: center;
+        gap: 3rem;
+      }
+    }
+
+    .select-oomkill-msg {
+      font-size: 1.6rem;
+      text-align: center;
+    }
+  }
+
+  .analysis-main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+
+    .pod-overview {
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: white;
+      border-radius: 10px;
+      height: 14rem;
+    }
+
+    .filtered-log-container {
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: whitesmoke;
+      border-radius: 10px;
+      height: 30rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .event-card {
+        position: relative;
+        font-size: 0.6rem;
+        margin-bottom: 1rem;
+        padding: 1rem 1.5rem;
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        background-color: white;
+        border-radius: 10px;
+      }
+    }
+
+    // chart styling
+    #chartarea {
+      background-color: white;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      grid-auto-rows: minmax(100px, auto);
+
+      canvas {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  }
+}
