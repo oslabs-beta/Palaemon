@@ -431,7 +431,7 @@ select:focus-visible {
       border-radius: 10px;
       margin: 0px 10px 10px 10px;
       padding: 0rem 4rem;
-      font-size: 0.6rem;
+      font-size: 0.4rem;
 
       .analysis-oomkill-data-container {
         display: flex;
@@ -459,7 +459,7 @@ select:focus-visible {
       height: 14rem;
     }
 
-    .filtered-event-log {
+    .filtered-log-container {
       padding: 1rem 1.5rem;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       background-color: white;

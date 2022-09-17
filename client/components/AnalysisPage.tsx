@@ -4,10 +4,13 @@ import { useState, useEffect } from 'react';
 import ChartGrid from './ChartGrid';
 import { AnalysisPageProps } from '../Types';
 import LogCard from './LogCard';
+import { filter } from '../../webpack.config';
 
 const AnalysisPage = (props: AnalysisPageProps) => {
   const [OOMKillsList, setOOMKillsList]: any = useState([]);
   const [allOOMKills, setAllOOMKills]: any = useState([]);
+  const [podOverviewData, setPodOverviewData]: any = useState([]);
+  const [filteredLogs, setFilteredLogs]: any = useState([]);
   const { analyzedPod, setAnalyzedPod }: any = props;
 
   const updateAnalyzedPod = (e: any) => {
@@ -15,9 +18,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     const newAnalysis = allOOMKills.filter(
       (oomkill: any) => oomkill.podName === podName
     );
-    console.log('new analysis', newAnalysis);
     setAnalyzedPod({ ...newAnalysis[0] });
-    console.log('analyzedPod', analyzedPod);
   };
 
   useEffect(() => {
@@ -84,8 +85,20 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       </nav>
       <div className="analysis-main">
         <div id="left-side">
-          <div className="pod-overview">Pod overview</div>
-          <div className="filtered-event-log">Filtered Event Log</div>
+          <div className="pod-overview">
+            {filteredLogs.length ? (
+              podOverviewData
+            ) : (
+              <p>Select an OOMKill error to show pod overview data</p>
+            )}
+          </div>
+          <div className="filtered-log-container">
+            {filteredLogs.length ? (
+              filteredLogs
+            ) : (
+              <p>Select an OOMKill error to show logs</p>
+            )}
+          </div>
         </div>
         <div id="chartarea">
           <ChartGrid />
