@@ -40,7 +40,6 @@ const Events = (props: EventProps): JSX.Element => {
     // window.api.getPods();
     const createLogs = async () => {
       const oomkills: any = await window.api.getOOMKills();
-      console.log('OOMKILL DATA', oomkills);
 
       const logCards: JSX.Element[] = [];
       let logsData;

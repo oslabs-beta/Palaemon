@@ -11,31 +11,69 @@ import AnalysisPage from './AnalysisPage';
 const App = () => {
   const [analyze, setAnalyze] = React.useState<any[]>([]);
 
-  const getAnalyzeLength = () => {
-    // console.log('from our router', analyze)
-    return analyze.length;
-  };
+  // const getAnalyzeLength = () => {
+  //   // console.OOMKilledPod('from our router', analyze)
+  //   return analyze.length;
+  // };
 
+  // triggered on click of Analyze/Delete
   const handleAnalyzeUpdate = (newLogData: any) => {
-    console.log('STATE ARRAY', analyze);
-    // console.log('updateshoppingcart fun', newLogData)
-    let newArray = analyze;
-    // console.log('newArray: ',newArray);
-    if (!newArray.includes(newLogData)) {
-      newArray.push(newLogData);
-      console.log('FILTERED', newArray);
-      setAnalyze([...newArray]);
-    } else {
-      newArray = newArray.filter(log => {
-        if (
-          log.podName !== newLogData.podName &&
-          log.restartcount !== newLogData.restartCount
-        )
-          return log;
-      });
-      console.log('FILTERED', newArray);
-      setAnalyze([...newArray]);
+    // check to see if the newLogData is identical to a prexisting object in the array
+    // by comparing the object's podName and restartcount properties
+
+    let included = false;
+    for (let i = 0; i < analyze.length; i++) {
+      if (
+        analyze[i].podName === newLogData.podName &&
+        analyze[i].restartcount === newLogData.restartcount
+      ) {
+        included = true;
+      }
     }
+    if (!included) {
+      let newArr = analyze;
+      console.log('this is newARR', newArr);
+      newArr.push(newLogData);
+      setAnalyze([...newArr]);
+      console.log('here is analyze: ', analyze); // initial run empty, second run 1st element clicked on
+    } else {
+      let newArr = analyze;
+      // analyze = 1 & 2
+      let filtered = newArr.filter(
+        OOMKilledPod =>
+          OOMKilledPod.podName !== newLogData.podName &&
+          OOMKilledPod.restartcount !== newLogData.restartcount
+      );
+      console.log('if this is 1 on first remove', filtered);
+      setAnalyze([...filtered]); // 2
+      console.log('END OF ELSE ', analyze);
+    }
+
+    // const copy = analyze;
+    // const deleteMe = () => {
+    //   const newCopy = copy.filter(
+    //     pod =>
+    //       pod.podName !== newLogData.podName &&
+    //       pod.restartcount !== newLogData.restartcount
+    //   );
+    //   setAnalyze([newCopy]);
+    // };
+    // console.log('should be same', copy);
+    // console.log('should be same', analyze);
+
+    // if (copy.length) {
+    //   for (let i = 0; i < copy.length; i++) {
+    //     if (
+    //       copy[i].podName === newLogData.podName &&
+    //       copy[i].restartcount === newLogData.restartcount
+    //     )
+    //       return deleteMe();
+    //     else copy.push(newLogData);
+    //   }
+    //   setAnalyze([...copy]);
+    // } else {
+    //   setAnalyze([...newLogData]);
+    // }
   };
 
   return (
@@ -75,7 +113,10 @@ const App = () => {
               />
             }
           />
-          <Route path="graphs" element={<AnalysisPage />} />
+          <Route
+            path="graphs"
+            element={<AnalysisPage analyze={analyze} setAnalyze={setAnalyze} />}
+          />
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}
         </Routes>

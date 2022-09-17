@@ -81,18 +81,20 @@ const loadMainWindow = () => {
 };
 
 app.on('ready', async () => {
-  // if(isDev){
-  //   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  //   const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
-  //   installExtension(
-  //     extensions,
-  //     {loadExtensionOptions: {allowFileAccess: true}, forceDownload: forceDownload}
-  //   ).then((name:string) => {console.log(`Added Extension: ${name}`)})
-  //    .then(loadMainWindow)
-  //   //  .catch((err: Error) => {console.log('There was an Error: ', err)})
-  // }
-  // else loadMainWindow();
-  loadMainWindow();
+  if (isDev) {
+    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+    const extensions = [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS];
+    installExtension(extensions, {
+      loadExtensionOptions: { allowFileAccess: true },
+      forceDownload: forceDownload,
+    })
+      .then((name: string) => {
+        console.log(`Added Extension: ${name}`);
+      })
+      .then(loadMainWindow);
+    //  .catch((err: Error) => {console.log('There was an Error: ', err)})
+  } else loadMainWindow();
+  // loadMainWindow();
 });
 
 app.on('window-all-closed', () => {

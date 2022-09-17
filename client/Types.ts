@@ -159,3 +159,15 @@ export type GraphableData = {
   borderColor: string;
   data: number[];
 };
+
+//--------------------------------Types for Analysis Page----------------------------------------------------
+
+export type AnalysisPage = {
+  analyze: any[];
+  setAnalyze: (input: any) => void;
+};
+
+export type AnalysisPageProps = {
+  setAnalyze: (input: any) => void;
+  analyze: any[];
+};

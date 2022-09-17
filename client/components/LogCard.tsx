@@ -31,7 +31,6 @@ const LogCard = (props: LogCardProps): JSX.Element => {
       summary,
     }))(props.alertObj);
   } else if (props.logType === 'oomkills' && props.oomObj) {
-    console.log('OBJ HERE', props.oomObj);
     headerObj = (({ namespace }) => ({ namespace }))(props.oomObj);
     bodyObj = (({
       podName,
@@ -88,7 +87,7 @@ const LogCard = (props: LogCardProps): JSX.Element => {
         label = 'Last Seen';
         break;
       default:
-        console.log('none');
+        break;
     }
 
     body.push(
@@ -105,11 +104,12 @@ const LogCard = (props: LogCardProps): JSX.Element => {
       {props.logType === 'oomkills' && (
         <div className="addToList">
           <button
-            onClick={() =>
-              props.handleAnalyzeUpdate(props.oomObj ? props.oomObj : {})
-            }
+            onClick={() => {
+              props.handleAnalyzeUpdate(props.oomObj);
+              setAnalyzing(!analyzing ? true : false);
+            }}
           >
-            {analyzing ? 'Analyze' : 'Unanalyze'}
+            {!analyzing ? 'Analyze' : 'Remove'}
           </button>
         </div>
       )}
