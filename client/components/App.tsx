@@ -3,26 +3,28 @@ import * as React from 'react';
 import { HashRouter, Link, Route, Routes } from 'react-router-dom';
 import Graph from './Graph';
 
-import { ShoppingCart } from '../Types';
+import { AnalyzeCount } from '../Types';
 
 import '../stylesheets/style.scss';
 import AnalysisPage from './AnalysisPage';
 
 const App = () => {
-  const [shoppingCart, setShoppingCart] = React.useState<any[]>([]);
+  const [analyze, setAnalyze] = React.useState<any[]>([]);
 
-  const getShoppingCartLength = () => {
-    // console.log('from our router', shoppingCart)
-    return shoppingCart.length;
+  const getAnalyzeLength = () => {
+    // console.log('from our router', analyze)
+    return analyze.length;
   };
 
-  const updateShoppingCart = (newLogData: any) => {
+  const handleAnalyzeUpdate = (newLogData: any) => {
+    console.log('STATE ARRAY', analyze);
     // console.log('updateshoppingcart fun', newLogData)
-    let newArray = shoppingCart;
+    let newArray = analyze;
     // console.log('newArray: ',newArray);
     if (!newArray.includes(newLogData)) {
       newArray.push(newLogData);
-      setShoppingCart(newArray);
+      console.log('FILTERED', newArray);
+      setAnalyze([...newArray]);
     } else {
       newArray = newArray.filter(log => {
         if (
@@ -32,7 +34,7 @@ const App = () => {
           return log;
       });
       console.log('FILTERED', newArray);
-      setShoppingCart(newArray);
+      setAnalyze([...newArray]);
     }
   };
 
@@ -66,8 +68,10 @@ const App = () => {
             path="/"
             element={
               <HomePage
-                updateShoppingCart={updateShoppingCart}
-                getShoppingCartLength={getShoppingCartLength}
+                handleAnalyzeUpdate={handleAnalyzeUpdate}
+                analyze={analyze}
+                setAnalyze={setAnalyze}
+                // getAnalyzeLength={getAnalyzeLength}
               />
             }
           />
@@ -75,9 +79,9 @@ const App = () => {
           {/* <Route exact path="/one" component={Stand} /> */}
           {/* <Route exact path="/two" component={Sit} /> */}
         </Routes>
-        <footer className="puny">
+        {/* <footer className="puny">
           Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!
-        </footer>
+        </footer> */}
       </main>
     </HashRouter>
   );

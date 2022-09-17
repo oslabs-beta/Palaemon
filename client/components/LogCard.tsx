@@ -1,6 +1,8 @@
 import { LogCardProps } from '../Types';
+import { useState } from 'react';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
+  const [analyzing, setAnalyzing] = useState(false);
   // console.log(props)
   // create the header elements
   let headerObj: { [key: string]: string } = {};
@@ -103,9 +105,11 @@ const LogCard = (props: LogCardProps): JSX.Element => {
       {props.logType === 'oomkills' && (
         <div className="addToList">
           <button
-            onClick={() => props.addToCart(props.oomObj ? props.oomObj : {})}
+            onClick={() =>
+              props.handleAnalyzeUpdate(props.oomObj ? props.oomObj : {})
+            }
           >
-            Analyze
+            {analyzing ? 'Analyze' : 'Unanalyze'}
           </button>
         </div>
       )}

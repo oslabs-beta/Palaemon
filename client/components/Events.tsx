@@ -1,4 +1,4 @@
-import { useState, useEffect, EffectCallback } from 'react';
+import { useState, useEffect, EffectCallback, useInsertionEffect } from 'react';
 import LogCard from './LogCard';
 import { EventProps, EventObject } from '../Types';
 import { filter } from '../../webpack.config';
@@ -9,19 +9,14 @@ const Events = (props: EventProps): JSX.Element => {
   const [logType, setLogType]: any = useState<string>('events');
   const [severityType, setSeverityType]: any = useState<string>('Default');
   const [loading, setLoading]: any = useState(true);
-  const [cartLength, setCartLength]: any = useState(0);
+  const [analyzeLength, setAnalyzeLength]: any = useState(0);
 
-  const addToCart = (logsData: any) => {
-    props.updateShoppingCart(logsData);
-    // props.getShoppingCartLength()
-    setCartLength(props.getShoppingCartLength());
-    // consol
-  };
-
-  const removeFromCart = (logsData: any) => {
-    props.updateShoppingCart(logsData);
-    setCartLength(props.getShoppingCartLength());
-  };
+  // const addToAnalyze = (logsData: any) => {
+  //   props.handleAnalyzeUpdate(logsData);
+  //   // props.getShoppingCartLength()
+  //   setAnalyzeLength(props.getAnalyzeLength());
+  //   // consol
+  // };
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
@@ -67,7 +62,8 @@ const Events = (props: EventProps): JSX.Element => {
             alertObj={logType === 'alerts' ? logsData[i] : undefined}
             oomObj={logType === 'oomkills' ? logsData[i] : undefined}
             logType={logType}
-            addToCart={addToCart}
+            handleAnalyzeUpdate={props.handleAnalyzeUpdate}
+            // addToAnalyze={addToAnalyze}
           />
         );
       }
@@ -95,6 +91,12 @@ const Events = (props: EventProps): JSX.Element => {
 
     createLogs();
   }, [logType, severityType]);
+
+  // useEffect(() => {
+  //   console.log('changed');
+  //   console.log('length', props.analyze.length);
+  //   setAnalyzeLength(props.analyze.length);
+  // }, [props.analyze]);
 
   return (
     <div id="container-event" className="container events right-side">
@@ -132,25 +134,24 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="emergency">Emergency</option>
           <option value="debug">Debug</option>
         </select>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-shopping-cart"
-        >
-          <circle cx="9" cy="21" r="1"></circle>
-          <circle cx="20" cy="21" r="1"></circle>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-        </svg>
-        <span className="badge badge-warning" id="lblCartCount">
-          {cartLength}
-          {/* {5} */}
-        </span>
+        {logType === 'oomkills' ? (
+          <>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              className="bi bi-search"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+            <span className="badge badge-warning" id="lblCartCount">
+              {props.analyze.length}
+            </span>
+          </>
+        ) : null}
+
         {loading && (
           <>
             <p>Loading </p>
