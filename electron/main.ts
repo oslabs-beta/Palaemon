@@ -1,4 +1,4 @@
-import { app, session, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, session, BrowserWindow, ipcMain, dialog, IpcMainEvent } from 'electron';
 import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
 import installExtension, {
@@ -23,7 +23,7 @@ import {
 } from './utils';
 
 // metrics modules
-import { formatMatrix } from './metricsData/formatMatrix';
+import { formatMatrix, formatUsage } from './metricsData/formatMatrix';
 import { SvgInfo, SvgInfoObj } from '../client/Types';
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
@@ -207,17 +207,6 @@ ipcMain.handle('getNodes', async (): Promise<any> => {
 //   }
 // });
 
-// get namespaces
-ipcMain.handle('getNamespaces', async () => {
-  try {
-    const data = await k8sApiCore.listNamespace();
-    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-    return formattedData;
-  } catch (error) {
-    console.log(`Error in getNamespaces function: ERROR: ${error}`);
-  }
-});
-
 // // get pods in cluster
 // ipcMain.handle('getPods', async (): Promise<any> => {
 //   try {
@@ -248,6 +237,18 @@ ipcMain.handle('getNamespaces', async () => {
 //   }
 // });
 
+// get namespaces
+ipcMain.handle('getNamespaces', async () => {
+  try {
+    const data = await k8sApiCore.listNamespace();
+    const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
+    return formattedData;
+  } catch (error) {
+    console.log(`Error in getNamespaces function: ERROR: ${error}`);
+  }
+});
+
+
 // COMMAND LINE //
 // get events
 ipcMain.handle('getEvents', async () => {
@@ -263,7 +264,7 @@ ipcMain.handle('getEvents', async () => {
   }
 });
 
-// PROMETHEUS API //
+// HOMEPAGE CHART QUERY FOR MEMORY //
 
 ipcMain.handle('getMemoryUsageByPods', async () => {
   const { startTime, endTime } = setStartAndEndTime();
@@ -277,7 +278,8 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image=""}&start=${startTime}&end=${endTime}&step=${interval}`;
+      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
@@ -290,7 +292,8 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   }
 });
 
-ipcMain.handle('getCPUUsageByPods', async () => {
+// QUERY FOR CLUSTER CHART HEALTH
+ipcMain.handle('getCPUUsage', async () => {
   const { startTime, endTime } = setStartAndEndTime();
   // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
   const interval = '15s';
@@ -302,8 +305,9 @@ ipcMain.handle('getCPUUsageByPods', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
+      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
     const query = `${PROM_URL}query_range?query=sum(
-      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}}[5m])) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
+      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
@@ -344,5 +348,43 @@ ipcMain.handle('getOOMKills', async (): Promise<any> => {
     return formatOOMKills(OOMKilledPods);
   } catch (error) {
     console.log(`Error in getOOMKills function: ERROR: ${error}`);
+  }
+});
+
+
+
+// TEST FOR USAGE
+
+ipcMain.handle('getUsage', async (event, ...args) => {
+  const time = new Date().toISOString()
+  const interval = '15s';
+  const podName = args[0];
+  const resource = args[1];
+  let namespace;
+  try {
+
+    await mainWindow.webContents
+      .executeJavaScript('({...localStorage});', true)
+      .then((localStorage: any) => {
+        namespace = localStorage.namespace
+
+      });
+
+    // fetch time series data from prom api
+      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+    const query = resource === "memory" ? `${PROM_URL}query_range?query=
+    container_memory_working_set_bytes{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
+    &start=${time}&end=${time}&step=${interval}` : `${PROM_URL}query_range?query=
+    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]))
+    &start=${time}&end=${time}&step=${interval}`
+
+    const res = await fetch(query)
+    const data = await res.json();
+
+    return resource === "memory" ? formatUsage(data.data, "megabytes") : formatUsage(data.data, "milicores")
+
+  } catch (error) {
+    console.log(`Error in getUSAGE function: ERROR: ${error}`);
+    return { err: error };
   }
 });

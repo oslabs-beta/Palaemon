@@ -15,11 +15,15 @@ const WINDOW_API = {
   getEvents: async () => ipcRenderer.invoke('getEvents'),
   getNamespaces: async () => ipcRenderer.invoke('getNamespaces'),
   getMemoryUsageByPods: async () => ipcRenderer.invoke('getMemoryUsageByPods'),
-  getCPUUsageByPods: async () => ipcRenderer.invoke('getCPUUsageByPods'),
+  getCPUsage: async () => ipcRenderer.invoke('getCPUUsageByPods'),
   getAlerts: async () => ipcRenderer.invoke('getAlerts'),
   getLimits: async () => ipcRenderer.invoke('getLimits'),
   getAllInfo: async () => ipcRenderer.invoke('getAllInfo'),
   getOOMKills: async () => ipcRenderer.invoke('getOOMKills'),
+  getUsage: async (...args: any) => {
+
+    return ipcRenderer.invoke('getUsage', ...args)
+  }
 };
 
 // exposes WINDOW_API methods to the frontend under "window.api" object

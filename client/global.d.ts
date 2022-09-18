@@ -19,6 +19,7 @@ declare global {
       getAlerts: () => Promise<any>;
       getAllInfo: () => Promise<any>;
       getOOMKills: () => Promise<any>;
+      getUsage: (name: string, resource: string) => Promise<any>;
     };
   }
 }
