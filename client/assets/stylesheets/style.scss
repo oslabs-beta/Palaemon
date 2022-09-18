@@ -170,6 +170,42 @@ footer {
   }
 }
 
+.cluster-btns {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0 0 0.6rem 0.8rem;
+
+  .select-mem,
+  .select-cpu {
+    font-size: 0.6rem;
+    border-radius: 10px;
+    border: none;
+    background-color: $ugly-sewage-green;
+    color: $secondary-color;
+    min-width: 2.4rem;
+    padding: 0.4rem 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .select-mem {
+    top: 0.4rem;
+    left: 4.3rem;
+  }
+  .select-cpu {
+    top: 1.8rem;
+    left: 4.3rem;
+  }
+
+  .select-mem:hover,
+  .select-cpu:hover {
+    background-color: white;
+    color: $font-color;
+    cursor: pointer;
+    filter: drop-shadow(2px 2px 3px $font-color);
+  }
+}
+
 .modal {
   animation-name: opac;
   animation-fill-mode: both;
@@ -177,17 +213,26 @@ footer {
 
   position: absolute;
   top: 100;
-  background-color: #82ada9;
+  background-color: whitesmoke;
 
-  .modalHeading {
+  box-shadow: 10px 10px 10px 6px rgb(64 0 0 / 20%);
+  margin: 16px 20px 16px 20px;
+  border-radius: 10px;
+  padding: 0.4rem 1rem;
+
+  .modalClose {
     position: relative;
-    // right: 0px;
-    top: 100px;
-    // display: flex;
-    // justify-content: flex-end;
-    // #modalhead{
+    display: flex;
+    justify-content: flex-end;
 
-    // }
+    #modalCloseBtn {
+      cursor: pointer;
+    }
+  }
+
+  .modalList {
+    list-style: none;
+    padding-left: 0;
   }
 }
 
@@ -362,7 +407,9 @@ footer {
 }
 
 select:hover,
-select:focus-visible {
+select:focus-visible,
+button:hover,
+button:focus-visible {
   outline: 2px solid $p-light-color;
 }
 
