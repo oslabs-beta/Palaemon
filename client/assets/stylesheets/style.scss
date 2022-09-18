@@ -98,13 +98,14 @@ body {
 
 #sidebar {
   width: $sidebar-width;
-  background-color: $ugly-sewage-green;
+  background-color: #004941;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 
   a {
-    &> img {
+    & > img {
       margin-top: 50px;
     }
   }
@@ -115,10 +116,28 @@ body {
       &,
       * {
         text-decoration: none;
-        margin: 20px 0;
-        font-size: 1.5rem;
+        margin: 0.6rem 0;
+        font-size: 1.2rem;
         color: whitesmoke;
       }
+    }
+  }
+
+  .menu-close-icon {
+    width: 1.4rem;
+    position: absolute;
+    top: -2rem;
+    right: 0.4rem;
+  }
+
+  .sidebar-page-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .sidebar-icon {
+      width: 2.4rem;
+      color: white;
     }
   }
 }
@@ -388,10 +407,34 @@ footer {
 }
 
 #graph {
+  color: $font-color;
   background-color: white;
   box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
   border-radius: 10px;
-  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0rem 2rem;
+
+  .legend-btn-main {
+    background-color: $ugly-sewage-green;
+    color: white;
+    box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+    border-radius: 10px;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 10px;
+    width: fit-content;
+    align-self: center;
+    transition: all 0.2s;
+  }
+  .legend-btn-main:hover {
+    background-color: white;
+    color: $font-color;
+    cursor: pointer;
+    border: none;
+    // filter: drop-shadow(2px 2px 3px $font-color);
+  }
 }
 
 .loader {
@@ -599,7 +642,6 @@ button:focus-visible {
   }
 }
 
-
 #page {
   flex-grow: 1;
   display: flex;
@@ -647,10 +689,10 @@ button:focus-visible {
   flex-direction: column;
   justify-content: flex-start;
 
-  & > * {
-    margin: 8px;
-    padding: 12px;
-  }
+  // & > * {
+  //   margin: 10px;
+  //   padding: 12px;
+  // }
 }
 
 #tagline {
@@ -715,7 +757,7 @@ footer {
     border-radius: 10px;
     border: none;
     background-color: $ugly-sewage-green;
-    color: $secondary-color;
+    color: white;
     min-width: 2.4rem;
     padding: 0.4rem 0.8rem;
     font-weight: 500;
@@ -785,12 +827,13 @@ footer {
   display: flex;
   flex-direction: column;
   height: 100%;
+  margin-right: 2rem;
   // background-color: $tertiary-color;
 
-  & > * {
-    padding: 12px;
-    margin: 8px;
-  }
+  // & > * {
+  //   padding: 12px;
+  //   margin: 8px;
+  // }
 }
 
 #container-event-logs {
@@ -862,13 +905,6 @@ footer {
   background-color: $font-color;
   color: white;
   cursor: pointer;
-}
-
-#graph {
-  background-color: white;
-  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-  border-radius: 10px;
-  margin: 2rem;
 }
 
 .loader {

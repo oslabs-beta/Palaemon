@@ -16,17 +16,45 @@ const App = () => {
     <HashRouter>
       <nav id="sidebar">
         <Link to="/">
+          <div className="menu-close-container">
+            <img
+              className="menu-close-icon"
+              src="./assets/close-menu-icon.png"
+              alt=""
+            />
+          </div>
           <img id="logo" src="./assets/logo-hat.png" alt="" />
         </Link>
         <ul id="sidebar-list">
           <li>
-            <Link to="/">Namespace</Link>
+            <Link to="/">
+              <div className="sidebar-page-container">
+                <img className="sidebar-icon" src="./assets/ns-icon.png" />
+                <span>Namespace</span>
+              </div>
+            </Link>
           </li>
           <li>
-            <Link to="/home">Home</Link>
+            <Link to="/home">
+              <div className="sidebar-page-container">
+                <img
+                  className="sidebar-icon"
+                  src="./assets/dashboard-icon.png"
+                />
+                <span>Dashboard</span>
+              </div>
+            </Link>
           </li>
           <li>
-            <Link to="/analysis">Analysis</Link>
+            <Link to="/analysis">
+              <div className="sidebar-page-container">
+                <img
+                  className="sidebar-icon"
+                  src="./assets/analysis-icon.png"
+                />
+                <span>Analysis</span>
+              </div>
+            </Link>
           </li>
         </ul>
       </nav>

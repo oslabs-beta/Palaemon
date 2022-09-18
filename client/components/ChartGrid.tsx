@@ -23,6 +23,7 @@ ChartJS.register(
 );
 
 const ChartGrid = (props: any) => {
+  const [buttonClicked, setButtonClicked] = useState(false);
   const initData: GraphData = [
     {
       Port9090isClosed: {
@@ -82,6 +83,7 @@ const ChartGrid = (props: any) => {
     indexAxis: 'x',
     plugins: {
       legend: {
+        display: buttonClicked,
         position: 'bottom' as const,
       },
       title: {
@@ -130,6 +132,10 @@ const ChartGrid = (props: any) => {
   //   console.log('a');
   //   console.log('multiopt', multiOptions);
 
+  const handleLegendClick = () => {
+    setButtonClicked(prevCheck => !prevCheck);
+  };
+
   // first we iterate of the total number of graphs we want
   (Object.keys(graphState) as (keyof typeof graphState)[]).forEach(
     (key, index) => {
@@ -168,6 +174,9 @@ const ChartGrid = (props: any) => {
             width={300}
             height={300}
           />
+          <button className="legend-btn-grid" onClick={handleLegendClick}>
+            Show/Hide
+          </button>
         </div>
       );
       datasetData = [] as GraphableData[];
