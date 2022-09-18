@@ -8,6 +8,7 @@
     "rmdir": "node -e \"var fs = require('fs'); process.argv.slice(1).map((fpath) => fs.rmdirSync(fpath, { recursive: true })); process.exit(0);\"",
     "clean:prebuild": "npm run rmdir -- dist",
     "dev": "concurrently \"webpack --watch --config ./webpack.config.js\" \"wait-on ./dist/electron/main.js && electronmon ./dist/electron/main.js\"",
+    "electronmon": "electronmon ./dist/electron/main.js",
     "start": "npm run clean:prebuild && npm run dev",
     "start:production": "npm run build:production && electron ./dist/electron/main.js",
     "test": "jest",

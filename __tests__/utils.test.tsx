@@ -23,6 +23,7 @@ describe('setStartAnEndTime', () => {
     expect(result.startTime).toBe(startTime);
     expect(result.endTime).toBe(endTime);
   });
+
 });
 
-// test other functions that live in the utils file here!
+// test other functions that live in the utils file here
