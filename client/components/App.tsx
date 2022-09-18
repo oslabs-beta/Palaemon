@@ -57,9 +57,6 @@ const App = () => {
             }
           />
         </Routes>
-        {/* <footer className="puny">
-          Hello puny kubernetes pods! Tremble in front of the almighty Palaemon!
-        </footer> */}
       </main>
     </HashRouter>
   );

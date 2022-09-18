@@ -47,13 +47,70 @@ body {
   display: flex;
 }
 
+$ugly-sewage-green: #00695c;
+$p-light-color: #439889;
+$p-dark-color: #003d33;
+
+$font-color: #002a25;
+
+$secondary-color: #b2dfdb;
+$tertiary-color: #d1ece9;
+$s-light-color: #e5ffff;
+$s-dark-color: #82ada9;
+
+$sidebar-width: 240px;
+
+html {
+  height: 100vh;
+  // prevents the window from over-scrolling and bouncing beyond the 100% screen size
+  overflow: hidden;
+}
+
+body,
+#root,
+#sidebar,
+#contents,
+#landing-container {
+  height: 100%;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+* {
+  // border: 1px black solid;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#logo {
+  width: 180px;
+  margin: 8px;
+}
+
+#root {
+  height: 100vh;
+  padding: 0px;
+  display: flex;
+}
+
 #sidebar {
   width: $sidebar-width;
   background-color: $ugly-sewage-green;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
+  a {
+    &> img {
+      margin-top: 50px;
+    }
+  }
   ul {
     list-style-type: none;
-
+    padding: 0;
     li {
       &,
       * {
@@ -65,6 +122,483 @@ body {
     }
   }
 }
+
+#page {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#header {
+  display: flex;
+  justify-content: flex-end;
+  background-color: $ugly-sewage-green;
+
+  img {
+    display: block;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  h1 {
+    display: block;
+    height: max-content;
+    color: whitesmoke;
+    padding-right: 12px;
+    margin: 12px;
+    font-size: 1.7rem;
+  }
+}
+
+#contents {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  background-color: #b2dfdb;
+
+  & #left-side,
+  #right-side {
+    height: 100%;
+    width: calc((100vw - $sidebar-width) / 2);
+  }
+}
+
+#left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  & > * {
+    margin: 8px;
+    padding: 12px;
+  }
+}
+
+#tagline {
+  display: block;
+  margin: 0;
+  text-align: right;
+  background-color: $ugly-sewage-green;
+  font-weight: 100;
+  font-size: 1rem;
+  font-style: italic;
+  color: whitesmoke;
+  padding-right: 12px;
+}
+
+footer {
+  font-size: 0.75rem;
+  text-align: center;
+  color: $ugly-sewage-green;
+  padding: 4px 0;
+}
+
+// left side styling
+.cluster-chart-card {
+  background-color: white;
+  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  margin: 0px 10px 10px 10px;
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-weight: bold;
+  color: $font-color;
+
+  .cluster-chart-names {
+    display: inline-block;
+    width: 100px;
+  }
+
+  svg {
+    margin: 0px 5px;
+    // border: black 2px solid;
+  }
+
+  svg:hover {
+    filter: drop-shadow(2px 2px 3px $font-color);
+  }
+
+  .health-bar {
+    cursor: pointer;
+  }
+}
+
+.cluster-btns {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0 0 0.6rem 0.8rem;
+
+  .select-mem,
+  .select-cpu {
+    font-size: 0.6rem;
+    border-radius: 10px;
+    border: none;
+    background-color: $ugly-sewage-green;
+    color: $secondary-color;
+    min-width: 2.4rem;
+    padding: 0.4rem 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .select-mem {
+    top: 0.4rem;
+    left: 4.3rem;
+  }
+  .select-cpu {
+    top: 1.8rem;
+    left: 4.3rem;
+  }
+
+  .select-mem:hover,
+  .select-cpu:hover {
+    background-color: white;
+    color: $font-color;
+    cursor: pointer;
+    filter: drop-shadow(2px 2px 3px $font-color);
+  }
+}
+
+.modal {
+  animation-name: opac;
+  animation-fill-mode: both;
+  animation-duration: 0.5s;
+
+  position: absolute;
+  top: 100;
+  background-color: whitesmoke;
+
+  box-shadow: 10px 10px 10px 6px rgb(64 0 0 / 20%);
+  margin: 16px 20px 16px 20px;
+  border-radius: 10px;
+  padding: 0.4rem 1rem;
+
+  .modalClose {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+
+    #modalCloseBtn {
+      cursor: pointer;
+    }
+  }
+
+  .modalList {
+    list-style: none;
+    padding-left: 0;
+  }
+}
+
+@keyframes opac {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+// Right side event styling
+#container-event {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  // background-color: $tertiary-color;
+
+  & > * {
+    padding: 12px;
+    margin: 8px;
+  }
+}
+
+#container-event-logs {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // I thiiink flex-grow maxes out the height, but a fixed height is needed to make
+  // overflow-y scrolling feature working. I don't know why.
+  height: 100px;
+  color: $font-color;
+  background-color: whitesmoke;
+  // border: 4px solid $s-dark-color;
+  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+  margin: 16px 20px 16px 20px;
+  border-radius: 10px;
+
+  .event-card {
+    position: relative;
+    margin-bottom: 1rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+    background-color: white;
+    border-radius: 10px;
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+}
+
+#container-select {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  height: 50px;
+
+  & > select {
+    width: 140px;
+    font-size: 1.1rem;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+    border-radius: 10px;
+    border: none;
+  }
+}
+
+.analyze {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 1.1rem;
+  color: $font-color;
+  background-color: $secondary-color;
+  transition: all 0.3s;
+}
+
+.analyze:hover {
+  background-color: $font-color;
+  color: white;
+  cursor: pointer;
+}
+
+#graph {
+  background-color: white;
+  box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+  border-radius: 10px;
+  margin: 2rem;
+}
+
+.loader {
+  border: 6px solid $s-dark-color;
+  /* Light grey */
+  border-top: 6px solid $p-dark-color;
+  /*#3498db; /* Blue */
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  margin: 0px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// This is styling for Landing page
+#landing-container {
+  background-color: $secondary-color;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  #logo {
+    height: 48%;
+    width: auto;
+  }
+
+  #namespace-selector-form {
+    margin-top: 15vh;
+    height: fit-content;
+    width: 400px;
+    padding: 10px 30px 30px 30px;
+
+    // the code below will center the form absolutely
+    // position: absolute;
+    // margin-left: auto;
+    // margin-right: auto;
+    // left: 0;
+    // right: 0;
+
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
+
+    text-align: center;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+
+    #selector-namespace {
+      width: 320px;
+      height: 3rem;
+      padding: 10px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+    }
+  }
+}
+
+select:hover,
+select:focus-visible,
+button:hover,
+button:focus-visible {
+  outline: 2px solid $p-light-color;
+}
+
+// ANALYSIS PAGE
+
+#analysis-container {
+  background-color: $secondary-color;
+  .analysis-nav {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+
+    .analysis-nav-left {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background-color: #eee;
+      min-height: 4rem;
+      background-color: whitesmoke;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      margin: 0px 10px 10px 10px;
+      padding: 0rem 4rem;
+
+      #oomkill-selector {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+      }
+
+      .analysis-interval {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+      }
+
+      .analysis-delete-btn {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+        color: $font-color;
+        background-color: $secondary-color;
+        transition: all 0.3s;
+      }
+
+      .analysis-delete-btn:hover {
+        background-color: $font-color;
+        color: white;
+        cursor: pointer;
+      }
+    }
+
+    .analysis-oomkill-data {
+      min-height: 4rem;
+      background-color: white;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      margin: 0px 10px 10px 10px;
+      padding: 0rem 4rem;
+      font-size: 0.4rem;
+
+      .analysis-oomkill-data-container {
+        display: flex;
+        font-size: 1rem;
+        justify-content: center;
+        gap: 3rem;
+      }
+    }
+
+    .select-oomkill-msg {
+      font-size: 1.6rem;
+      text-align: center;
+    }
+  }
+
+  .analysis-main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+
+    .pod-overview {
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: white;
+      border-radius: 10px;
+      height: 14rem;
+    }
+
+    .filtered-log-container {
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: whitesmoke;
+      border-radius: 10px;
+      height: 30rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .event-card {
+        position: relative;
+        font-size: 0.6rem;
+        margin-bottom: 1rem;
+        padding: 1rem 1.5rem;
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        background-color: white;
+        border-radius: 10px;
+      }
+    }
+
+    // chart styling
+    #chartarea {
+      background-color: white;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      grid-auto-rows: minmax(100px, auto);
+
+      canvas {
+        width: 200px;
+        height: 200px;
+      }
+    }
+  }
+}
+
 
 #page {
   flex-grow: 1;
