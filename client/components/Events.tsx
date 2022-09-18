@@ -89,7 +89,7 @@ const Events = (props: EventProps): JSX.Element => {
           <select
             className="event-selector"
             id="selector-log-type"
-            name="log-type"
+            aria-label="log-type"
             defaultValue={'event'}
             onChange={e => {
               setLoading(true);
@@ -103,7 +103,7 @@ const Events = (props: EventProps): JSX.Element => {
           <select
             className="event-selector"
             id="selector-severity"
-            name="severity"
+            aria-label="severity-type"
             defaultValue={'Default'}
             onChange={e => {
               setLoading(true);
