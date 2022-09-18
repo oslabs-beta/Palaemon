@@ -14,12 +14,12 @@ const Events = (props: EventProps): JSX.Element => {
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
     setLogType(logTypeStr);
-    console.log(
-      'handleLogTypeChange is working and current logType state is ',
-      logType,
-      ' and e.target.value is ',
-      e.target.value
-    );
+    // console.log(
+    //   'handleLogTypeChange is working and current logType state is ',
+    //   logType,
+    //   ' and e.target.value is ',
+    //   e.target.value
+    // );
   };
 
   const handleSeverityChange = (e: any) => {
@@ -32,8 +32,6 @@ const Events = (props: EventProps): JSX.Element => {
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
     // window.api.getPods();
     const createLogs = async () => {
-      const oomkills: any = await window.api.getOOMKills();
-
       const logCards: JSX.Element[] = [];
       let logsData;
       if (logType === 'events') {
@@ -91,7 +89,7 @@ const Events = (props: EventProps): JSX.Element => {
           <select
             className="event-selector"
             id="selector-log-type"
-            name="log-type"
+            aria-label="log-type"
             defaultValue={'event'}
             onChange={e => {
               setLoading(true);
@@ -105,7 +103,7 @@ const Events = (props: EventProps): JSX.Element => {
           <select
             className="event-selector"
             id="selector-severity"
-            name="severity"
+            aria-label="severity-type"
             defaultValue={'Default'}
             onChange={e => {
               setLoading(true);

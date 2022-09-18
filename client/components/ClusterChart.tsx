@@ -1,5 +1,6 @@
-import { ClusterChartProps } from "../Types";
-import ClusterChartCard from "./ClusterChartCard";
+import { useState } from 'react';
+import { ClusterChartProps } from '../Types';
+import ClusterChartCard from './ClusterChartCard';
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {
 
@@ -29,7 +30,8 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
           key={10 + i}
         />
       );
-    }
+    } else generateCard();
+  }
 
     if (clusterCards.length > 0) {
       for (let i = 0; i < clusterCards.length; i++) {

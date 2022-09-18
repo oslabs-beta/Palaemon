@@ -45,6 +45,7 @@ const loadMainWindow = () => {
     width: 1200,
     height: 800,
     show: false,
+    icon: path.resolve(__dirname, '../client/assets/logo_hat.ico'),
     webPreferences: {
       nodeIntegration: true,
       // contextIsolation: false,

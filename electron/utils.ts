@@ -33,8 +33,8 @@ export const formatEvents = (data: any): {}[] => {
       lastSeen: event[1],
       severity: event[2],
       reason: event[3],
-      message: event[4],
-      object: event[5],
+      message: event[5],
+      object: event[4],
     };
   });
   return formattedEvents.slice(1, -1);
