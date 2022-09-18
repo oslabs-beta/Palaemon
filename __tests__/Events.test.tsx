@@ -17,7 +17,8 @@ beforeAll(() => {
     getMemoryUsageByPods: jest.fn(),
     getAlerts: jest.fn().mockReturnValue(Promise.resolve(mockAlerts)),
     getAllInfo: jest.fn(),
-    getOOMKills: jest.fn().mockReturnValue(Promise.resolve(mockOOMKills))
+    getOOMKills: jest.fn().mockReturnValue(Promise.resolve(mockOOMKills)),
+    getUsage: jest.fn()
   };
 });
 
