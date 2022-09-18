@@ -16,13 +16,6 @@ const App = () => {
     <HashRouter>
       <nav id="sidebar">
         <Link to="/">
-          <div className="menu-close-container">
-            <img
-              className="menu-close-icon"
-              src="./assets/close-menu-icon.png"
-              alt=""
-            />
-          </div>
           <img id="logo" src="./assets/logo-hat.png" alt="" />
         </Link>
         <ul id="sidebar-list">

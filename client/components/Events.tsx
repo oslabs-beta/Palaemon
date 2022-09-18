@@ -84,49 +84,48 @@ const Events = (props: EventProps): JSX.Element => {
 
   return (
     <div id="container-event" className="container events right-side">
+      <nav id="container-select" className="container events">
+        <select
+          className="event-selector"
+          id="selector-log-type"
+          aria-label="log-type"
+          defaultValue={'event'}
+          onChange={e => {
+            setLoading(true);
+            handleLogTypeChange(e);
+          }}
+        >
+          <option value="events">Events</option>
+          <option value="alerts">Alerts</option>
+          <option value="oomkills">OOMKills</option>
+        </select>
+        <select
+          className="event-selector"
+          id="selector-severity"
+          aria-label="severity-type"
+          defaultValue={'Default'}
+          onChange={e => {
+            setLoading(true);
+            handleSeverityChange(e);
+          }}
+        >
+          <option value="default">Default</option>
+          <option value="info">Info</option>
+          <option value="warning">Warning</option>
+          <option value="error">Error</option>
+          <option value="critical">Critical</option>
+          <option value="alert">Alert</option>
+          <option value="emergency">Emergency</option>
+          <option value="debug">Debug</option>
+        </select>
+        {loading && (
+          <>
+            <p>Loading </p>
+            <p className="loader"></p>
+          </>
+        )}
+      </nav>
       <div id="container-event-logs" className="container events">
-        <nav id="container-select" className="container events">
-          <select
-            className="event-selector"
-            id="selector-log-type"
-            aria-label="log-type"
-            defaultValue={'event'}
-            onChange={e => {
-              setLoading(true);
-              handleLogTypeChange(e);
-            }}
-          >
-            <option value="events">Events</option>
-            <option value="alerts">Alerts</option>
-            <option value="oomkills">OOMKills</option>
-          </select>
-          <select
-            className="event-selector"
-            id="selector-severity"
-            aria-label="severity-type"
-            defaultValue={'Default'}
-            onChange={e => {
-              setLoading(true);
-              handleSeverityChange(e);
-            }}
-          >
-            <option value="default">Default</option>
-            <option value="info">Info</option>
-            <option value="warning">Warning</option>
-            <option value="error">Error</option>
-            <option value="critical">Critical</option>
-            <option value="alert">Alert</option>
-            <option value="emergency">Emergency</option>
-            <option value="debug">Debug</option>
-          </select>
-          {loading && (
-            <>
-              <p>Loading </p>
-              <p className="loader"></p>
-            </>
-          )}
-        </nav>
-
         {logs.length ? logs : <p>No {logType} in current namespace</p>}
       </div>
     </div>
