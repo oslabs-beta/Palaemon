@@ -47,24 +47,32 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
 
     });
     //this is bytes/units - convert bytes to GB when unit type is bytes
-    
-    // if (unitType === 'milicores') {
-    //   output[podName].units = 'milicores'
-    //   output[podName].values = obj.values.map((el : [number, number]) => {  
-    //   // return in milicores unit      
-    //   el[1] * 1000
-    // })
-    // }
-      // output[podName].units = 'megabytes'
-      output[podName].values = obj.values.map((el: [number, number]) => {
+
+    output[podName].values = obj.values.map((el: [number, number]) => {
       // change to megabytes
-      // console.log(el[1])
+      // console.log('this is MEM usage', Number(el[1] / 1000000));
       return Number(el[1] / 1000000)
     });
-  
-
     arr.push(output);
   });
   // console.log(arr);
   return arr;
+}
+
+
+export function formatUsage(matrix: matrix, unitType?: string) {
+  let output;
+  // console.log('matrix THIS IS ', matrix)
+  matrix.result.forEach((obj: any) => {
+    output = obj.values.map((el: [number, number]) => {
+      // change to megabytes
+      // console.log('this is MEM usage', Number(el[1] / 1000000));
+      if (unitType === "megabytes") {
+        return Number(el[1] / 1000000)
+      } else {
+        return Number(el[1] * 1000)
+      }
+    });
+  })
+  return output;
 }

@@ -3,7 +3,7 @@ import { ClusterChartCardProps } from '../Types';
 const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
 
     const squares: JSX.Element[] = [];
-    const colors: string[] = ['#69B34C', '#ACB334', '#FAB733', '#FF8E15', '#FF4E11', '#FF0D0D']
+    const colors: string[] = ['#69B34C', '#ACB334', '#FAB733', '#FF8E15', '#FF4E11', '#FF0D0D', '#363636']
 
     let index: number = 0;
 
@@ -15,6 +15,7 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
         else if (usage < 0.4 * limit) index = 2;
         else if (usage < 0.6 * limit) index = 3;
         else if (usage < 0.8 * limit) index = 4;
+        else if (props.data[i].unit === undefined || props.data[i].unit=== null) index = 6;
         else index = 5;
         squares.push(
             <svg 

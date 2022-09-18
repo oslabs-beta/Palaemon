@@ -64,7 +64,7 @@ const Graph = (): JSX.Element => {
       window.api
         .getMemoryUsageByPods()
         .then((output: any) => {
-          console.log(output)
+          // console.log(output)
           if (!output.err) setGraphState(output);
           // console.log('itworks')
         })
