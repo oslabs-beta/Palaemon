@@ -24,3 +24,5 @@ describe('setStartAnEndTime', () => {
     expect(result.endTime).toBe(endTime);
   });
 });
+
+// test other functions that live in the utils file here!
