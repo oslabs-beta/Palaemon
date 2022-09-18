@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, session, BrowserWindow, ipcMain, dialog } from 'electron';
 import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
 import installExtension, {

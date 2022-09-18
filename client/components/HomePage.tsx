@@ -4,7 +4,12 @@ import Events from './Events';
 import Graph from './Graph';
 import DetailsModal from './Modal';
 
-import { ClusterChartProps, SvgInfo, ModalProps, ClusterAllInfo } from "../Types";
+import {
+  ClusterChartProps,
+  SvgInfo,
+  ModalProps,
+  ClusterAllInfo,
+} from '../Types';
 
 const tempData: SvgInfo[] = [
   {
@@ -29,15 +34,14 @@ const HomePage = (props: any): JSX.Element => {
   const [pods, setPods]: any = useState([]);
   const [nodes, setNodes]: any = useState(['node1']);
   const [portOpen, setPortOpen]: any = useState(false);
-  const [clusterChartData, setClusterChartData] = useState<ClusterAllInfo>(initalClusterChartData)
-  
-  // const updateShoppingCart = props.setShoppingCart;
+  const [resource, setResource]: any = useState('');
+  const [clusterChartData, setClusterChartData] = useState<ClusterAllInfo>(
+    initalClusterChartData
+  );
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
-  const [modalState, setModalState] = useState({
-    open: false,
-  });
+  const [modalState, setModalState] = useState(false);
   const [theModal, setTheModal] = useState(<p>help</p>);
 
   const openModal = (e: any, data: SvgInfo) => {
@@ -52,15 +56,11 @@ const HomePage = (props: any): JSX.Element => {
       close: closeModal,
     };
     setTheModal(<DetailsModal {...propData} key={50} />);
-    setModalState({
-      open: true,
-    });
+    setModalState(true);
   };
 
   const closeModal = (): void => {
-    setModalState({
-      open: false,
-    });
+    setModalState(false);
   };
 
   const gke: ClusterChartProps = {
@@ -71,17 +71,43 @@ const HomePage = (props: any): JSX.Element => {
 
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
-    setClusterChartData(allTheInfo);
+    console.log(allTheInfo);
+    if (resource === 'memory' || resource === 'cpu') {
+      allTheInfo.Pods = allTheInfo.Pods.filter(
+        (info: any) => info.resource === resource
+      );
+      setClusterChartData(allTheInfo);
+    } else setClusterChartData(allTheInfo);
+  };
+
+  const handleResourceChange = (e: any) => {
+    setResource(e.target.value);
   };
 
   useEffect(() => {
     renderData();
-  }, []);
+  }, [resource]);
 
   return (
     <div id="contents">
       <div id="left-side">
         <div id="cluster-chart">
+          <div className="cluster-btns">
+            <button
+              className="select-mem"
+              value="memory"
+              onClick={handleResourceChange}
+            >
+              MEM
+            </button>
+            <button
+              className="select-cpu"
+              value="cpu"
+              onClick={handleResourceChange}
+            >
+              CPU
+            </button>
+          </div>
           <ClusterChart
             Clusters={gke.Clusters}
             Nodes={gke.Nodes}
@@ -101,7 +127,7 @@ const HomePage = (props: any): JSX.Element => {
           setAnalyzedPod={props.setAnalyzedPod}
         />
       </div>
-      {modalState.open && theModal}
+      {modalState && theModal}
     </div>
   );
 };
