@@ -10,7 +10,7 @@ const config: PlaywrightTestConfig = {
 // 
   reporter:[
     ['list'],
-    ['html', {open: 'never'}]
+    ['html', {open: 'never', outputFolder:'./__tests__/playwright_reports'}]
   ],
   // timeout: 1 * 6 * 1000,
   
