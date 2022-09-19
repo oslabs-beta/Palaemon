@@ -79,10 +79,16 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             <option value="default">Select OOMKilled Pod</option>
             {OOMKillsList}
           </select>
-          <select className="analysis-interval">
-            <option>Interval</option>
+          <input
+            className="analysis-interval"
+            placeholder="Input Time Interval"
+          ></input>
+          <select className="interval-unit">
+            <option value="default">Select Unit</option>
+            <option value="s">Seconds</option>
+            <option value="m">Minutes</option>
+            <option value="h">Hours</option>
           </select>
-          <button className="analysis-delete-btn">Delete</button>
         </div>
         <div className="analysis-oomkill-data">
           {analyzedPod.podName ? (
@@ -105,24 +111,32 @@ const AnalysisPage = (props: AnalysisPageProps) => {
               </div>
             </div>
           ) : (
-            <p className="select-oomkill-msg">Select an OOMKilled pod</p>
+            <p className="no-data-msg">Select OOMKilled Pod to Display Data</p>
           )}
         </div>
       </nav>
       <div className="analysis-main">
         <div id="left-side">
           <div className="pod-overview">
-            {analyzedPod.podName ? (
+            {analyzedPod.podName && podOverviewData.length > 0 ? (
               podOverviewData
+            ) : analyzedPod.podName ? (
+              <p className="no-data-msg">No Data to Display</p>
             ) : (
-              <p>Select an OOMKilled pod</p>
+              <p className="no-data-msg">
+                Select OOMKilled Pod to Display Data
+              </p>
             )}
           </div>
           <div className="filtered-log-container">
-            {analyzedPod.podName ? (
+            {analyzedPod.podName && filteredLogs.length > 0 ? (
               filteredLogs
+            ) : analyzedPod.podName ? (
+              <p className="no-data-msg">No Events to Display</p>
             ) : (
-              <p>Select an OOMKilled pod</p>
+              <p className="no-data-msg">
+                Select OOMKilled Pod to Display Data
+              </p>
             )}
           </div>
         </div>

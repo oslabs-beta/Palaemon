@@ -157,10 +157,11 @@ const ChartGrid = (props: any) => {
       multiOptions[key].plugins.title.text = key;
       charts.push(
         <div
+          className="line-chart-div"
           style={{
             position: 'relative',
-            height: '40vh',
-            width: '30vw',
+            // height: '40vh',
+            // width: '30vw',
           }}
           key={70 + keyCounter++}
         >
@@ -171,8 +172,8 @@ const ChartGrid = (props: any) => {
               datasets: datasetData,
             }}
             key={70 + keyCounter++}
-            width={300}
-            height={300}
+            // width={300}
+            // height={300}
           />
           <button className="legend-btn-grid" onClick={handleLegendClick}>
             Show/Hide

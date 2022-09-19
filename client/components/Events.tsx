@@ -27,6 +27,8 @@ const Events = (props: EventProps): JSX.Element => {
     setSeverityType(severity);
   };
 
+  const handleNoEvents = () => {};
+
   useEffect(() => {
     // populate and set logCards according to what type of logs is requested.
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
@@ -126,7 +128,14 @@ const Events = (props: EventProps): JSX.Element => {
         )}
       </nav>
       <div id="container-event-logs" className="container events">
-        {logs.length ? logs : <p>No {logType} in current namespace</p>}
+        {logs.length ? (
+          logs
+        ) : (
+          <p className="no-logs-msg">
+            No {logType[0].toUpperCase() + logType.slice(1)} in Current
+            Namespace
+          </p>
+        )}
       </div>
     </div>
   );
