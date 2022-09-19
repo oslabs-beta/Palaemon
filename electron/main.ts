@@ -292,34 +292,6 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   }
 });
 
-// QUERY FOR CLUSTER CHART HEALTH
-ipcMain.handle('getCPUUsage', async () => {
-  const { startTime, endTime } = setStartAndEndTime();
-  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
-  const interval = '15s';
-  try {
-    const nsSelect = await mainWindow.webContents
-      .executeJavaScript('({...localStorage});', true)
-      /* check what type this is with team */ /* check what type this is with team */
-      .then((localStorage: any) => {
-        return localStorage.namespace;
-      });
-    // fetch time series data from prom api
-    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
-    const query = `${PROM_URL}query_range?query=sum(
-      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
-    // fetch request
-    const res = await fetch(query);
-    const data = await res.json();
-
-    // data.data.result returns matrix
-    return formatMatrix(data.data, 'milicores');
-  } catch (error) {
-    console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
-    return { err: error };
-  }
-});
-
 // get alerts
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
@@ -351,9 +323,7 @@ ipcMain.handle('getOOMKills', async (): Promise<any> => {
   }
 });
 
-
-
-// TEST FOR USAGE
+// TEST FOR USAGE ON HOMEPAGE AND ANALYSIS PAGE
 
 ipcMain.handle('getUsage', async (event, ...args) => {
   const time = new Date().toISOString()
@@ -367,7 +337,6 @@ ipcMain.handle('getUsage', async (event, ...args) => {
       .executeJavaScript('({...localStorage});', true)
       .then((localStorage: any) => {
         namespace = localStorage.namespace
-
       });
 
     // fetch time series data from prom api
