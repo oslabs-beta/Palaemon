@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 let electronApp: ElectronApplication;
 let page: Page;
 
-test.beforeAll(async () => {
+test.beforeEach(async () => {
   // open the app
   electronApp = await electron.launch({ args: ['dist/electron/main.js'] });
   electronApp.on('window', async (page) => {
@@ -17,9 +17,10 @@ test.beforeAll(async () => {
     // capture console messages
     page.on('console', (log) => console.log(log.text()));
   });
+  page = await electronApp.firstWindow();
 });
 
-test.afterAll(async () => {
+test.afterEach(async () => {
   // close the app
   await electronApp.close();
 });
@@ -29,7 +30,7 @@ test('launch app', async () => {
 
 test.describe('Rendering landing page:', () => {
   test('renders the first page', async () => {
-    page = await electronApp.firstWindow();
+    // page = await electronApp.firstWindow();
 
     await page.waitForSelector('h1');
     const text = await page.$eval('h1', (el) => el.textContent);
@@ -41,6 +42,7 @@ test.describe('Rendering landing page:', () => {
   });
 
   test('sidebar for navigation exists', async () => {
+    await page.waitForSelector('#sidebar');
     expect(await page.$('#sidebar')).toBeTruthy();
   });
 
@@ -53,6 +55,7 @@ test.describe('Rendering landing page:', () => {
 });
 
 test.describe('Routing and navigation around the app:', () => {
+
   test('clicking on hat logo routes back to landing page', async () => {
     await page.click('#sidebar #logo');
 
@@ -62,7 +65,7 @@ test.describe('Routing and navigation around the app:', () => {
   });
 
   test('clicking on logo text PALAEMON routes back to landing page', async () => {
-    await page.click('text=PALAEMON', { force: true });
+    await page.click('#company-name');
 
     expect(await page.$('#landing-container')).toBeTruthy();
     const hash = await page.evaluate(() => window.location.hash);
@@ -70,7 +73,7 @@ test.describe('Routing and navigation around the app:', () => {
   });
 
   test('clicking on "Namespace" on sidebar routes back to landing page', async () => {
-    await page.click('text=Namespace', { force: true });
+    await page.click('#link-namespace');
 
     expect(await page.$('#landing-container')).toBeTruthy();
     const hash = await page.evaluate(() => window.location.hash);
@@ -78,9 +81,9 @@ test.describe('Routing and navigation around the app:', () => {
   });
 
   // I don't think the clicking on link is working 
-  test.skip('clicking on "Home" on sidebar routes to home page', async () => {
-    await page.locator('text=Home').click({ force: true });
-    await page.waitForTimeout(1000);
+  test('clicking on "Home" on sidebar routes to home page', async () => {
+    await page.click('#link-dashboard');
+    await page.waitForSelector('#contents');
 
     const hash = await page.evaluate(() => window.location.hash);
     expect(hash).toBe('#/home');

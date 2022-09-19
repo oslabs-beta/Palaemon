@@ -20,6 +20,6 @@ const config: PlaywrightTestConfig = {
   
   // directroy to be scanned for test files. Defaults to directory of the config file
   testDir: './__tests__',
-  outputDir: './__tests__/playwright_reports'
+  // outputDir: './__tests__/playwright_reports'
 };
 export default config;
