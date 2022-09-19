@@ -43,7 +43,7 @@ const LandingPage = (): JSX.Element => {
           ))}
         </select>
       </form>
-      <img id="logo" src="./assets/logo.png" alt="" />
+      <img id="logo-large" src="./assets/logo.png" alt="" />
     </div>
   );
 };
