@@ -80,16 +80,33 @@ test.describe('Routing and navigation around the app:', () => {
     expect(hash).toBe('#/');
   });
 
-  // I don't think the clicking on link is working 
-  test('clicking on "Home" on sidebar routes to home page', async () => {
+  test('clicking on "Dashboard" on sidebar routes to homepage', async () => {
     await page.click('#link-dashboard');
+
+    // wait for react router to load
     await page.waitForSelector('#contents');
 
     const hash = await page.evaluate(() => window.location.hash);
     expect(hash).toBe('#/home');
+
+    //landing container from previous page should no longer exist
     expect(await page.$('#landing-container')).toBeNull();
     expect(await page.$('#contents')).toBeTruthy();
     // form should no longer exist on the page
-    page.pause();
+  });
+
+  test('clicking on "Analysis" on sidebar routes to analysis page', async () => {
+    await page.click('#link-analysis');
+
+    // wait for react router to load
+    await page.waitForSelector('#analysis-container');
+
+    const hash = await page.evaluate(() => window.location.hash);
+    expect(hash).toBe('#/analysis');
+
+    //landing container from previous page should no longer exist
+    expect(await page.$('#landing-container')).toBeNull();
+    expect(await page.$('#analysis-container')).toBeTruthy();
+    // form should no longer exist on the page
   });
 });

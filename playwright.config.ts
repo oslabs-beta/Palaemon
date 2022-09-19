@@ -12,8 +12,13 @@ const config: PlaywrightTestConfig = {
     ['list'],
     ['html', {open: 'never', outputFolder:'./__tests__/playwright_reports'}]
   ],
-  // timeout: 1 * 6 * 1000,
-  
+
+  // Each test is given 10 seconds
+  timeout: 10 * 1000,
+
+  // two retries for each test
+  retries: 2,
+
   // only the files matching one of these patterns are executed as test files
   // default is  .*(test|spec)\.(js|ts|mjs)
   testMatch: /.*\.e2e\.(js|ts|jsx|tsx)/,
