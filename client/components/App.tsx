@@ -13,9 +13,9 @@ const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
 
   return (
-    <HashRouter>
+    <HashRouter basename='/'>
       <nav id="sidebar">
-        <Link to="/">
+        <Link to="">
           <img id="logo" src="./assets/logo-hat.png" alt="" />
         </Link>
         <ul id="sidebar-list">
