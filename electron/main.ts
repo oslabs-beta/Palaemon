@@ -136,7 +136,7 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
 
     const memData = await Promise.all(
       getPods.body.items.map(pod => {
-        console.log('this is all pods fom k8s', pod)
+        // console.log('this is all pods fom k8s', pod)
         return fetchMem(pod);
       })
     );

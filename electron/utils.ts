@@ -117,6 +117,8 @@ export async function fetchMem(obj: any) {
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
+    console.log('request',requestData.data.result);
+    console.log('limit',limitData.data);
 
     // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {

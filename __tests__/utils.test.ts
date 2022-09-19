@@ -35,13 +35,8 @@ describe('fetchMem should return the memory usage of a pod', () => {
     const mockObj = {
       metadata: {
         annotations: { 'cluster-autoscaler.kubernetes.io/safe-to-evict': 'true' },
-        clusterName: undefined,
-        creationTimestamp: 2022 - 09 - 08T17: 08: 33.000Z,
-        deletionGracePeriodSeconds: undefined,
-        deletionTimestamp: undefined,
-        finalizers: undefined,
-        generateName: 'stack-prometheus-node-exporter-',
-        generation: undefined,
+        creationTimestamp: '2022 - 09 - 08T17: 08: 33.000Z',
+        generateName: 'mockPodname',
         labels: {
           app: 'prometheus-node-exporter',
           chart: 'prometheus-node-exporter-3.3.1',
@@ -51,53 +46,43 @@ describe('fetchMem should return the memory usage of a pod', () => {
           'pod-template-generation': '1',
           release: 'stack'
         },
-        managedFields: [[V1ManagedFieldsEntry], [V1ManagedFieldsEntry]],
-        name: 'stack-prometheus-node-exporter-lj4cm',
-        namespace: 'default',
-        ownerReferences: [[V1OwnerReference]],
-        resourceVersion: '237912',
-        selfLink: undefined,
-        uid: '4c59d75e-01c7-422f-ad13-5047c8800eff'
+        name: 'mockPodname',
+        namespace: 'mockNamepsace',
       },
       spec: {
-        activeDeadlineSeconds: undefined,
-        affinity: V1Affinity {
-          nodeAffinity: [V1NodeAffinity],
-          podAffinity: undefined,
-          podAntiAffinity: undefined
-          }
-        }
-  }
-    
-    
-    
+        nodeName: 'mockNodeName'
+      },
+    }
+
     const mockLimit = {
+      json: jest.fn().mockReturnValue(Promise.resolve(this))
+      
+    }
+    const mockRequest = {
+      json: jest.fn().mockReturnValue(Promise.resolve(this))
 
-}
-const mockRequest = {
-
-}
-const fetch = jest.fn()
-  .mockReturnValueOnce(Promise.resolve('limitdata'))
-  .mockReturnValueOnce(Promise.resolve('requestdata'));
+    }
+    const fetch = jest.fn()
+      .mockReturnValueOnce(Promise.resolve('limitdata'))
+      .mockReturnValueOnce(Promise.resolve('requestdata'));
   })
 
-test('It should return an error if port 9090 is closed', () => {
+  test('It should return an error if port 9090 is closed', () => {
 
-})
-test('It should accept an object with the correct information, or return an error', () => {
+  })
+  test('It should accept an object with the correct information, or return an error', () => {
 
-})
-test('It should return a default object with port 9090 closed', () => {
+  })
+  test('It should return a default object with port 9090 closed', () => {
 
-})
-test('It returns memory usage and data about pods', () => {
+  })
+  test('It returns memory usage and data about pods', () => {
 
-  fetchMem('pod')
-})
-test('', () => {
+    fetchMem('pod')
+  })
+  test('', () => {
 
-})
+  })
 
 })
 
