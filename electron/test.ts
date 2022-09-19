@@ -1,22 +1,67 @@
 // import * as cp from 'child_process';
-// // // import { app, BrowserWindow, ipcMain } from 'electron';
+// import { app, BrowserWindow, ipcMain } from 'electron';
 // import * as k8s from '@kubernetes/client-node';
-// // // import fetch from 'node-fetch';
-
 // const fetch: any = (...args: any) =>
 //   import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
-// import { oomObject } from '../client/Types';
-// import { filter } from '../webpack.config';
-// // // import { setStartAndEndTime } from './utils';
-// // // import path from 'path';
-
+// import { setStartAndEndTime } from './utils';
+// import path from 'path';
 // const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
-// // // K8S API BOILERPLATE
 // const kc = new k8s.KubeConfig();
 // kc.loadFromDefault();
 // const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api);
 // const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
+// // import fetch from 'node-fetch';
+// // import { oomObject } from '../client/Types';
+// // import { filter } from '../webpack.config';
+
+// var now = new Date();
+// var copyNow = new Date(now.getTime());
+// copyNow.setHours(copyNow.getHours() - 1);
+// var startTime = copyNow.toISOString();
+// var endTime = new Date().toISOString();
+
+// const query = `${PROM_URL}query_range?query=(avg by (node) (irate(node_cpu_seconds_total{mode!="idle"}[1m]))*100)
+//   &start=${startTime}&end=${endTime}&step=10m`;
+
+// const getCPUUsageByNode = async () => {
+//   // Get Data
+//   const response = await fetch(query);
+//   const data = await response.json();
+//   console.log(data);
+
+//   // Format Data
+//   const output: any = {};
+
+//   data.data.result.forEach((obj: any) => {
+//     const group: string = obj.metric[Object.keys(obj.metric)[0]];
+//     output[group] = {
+//       time: [],
+//       values: [],
+//     };
+
+//     output[group].time = obj.values.map((el: [number, string]) => {
+//       return new Date(el[0] * 1000).toISOString();
+//     });
+
+//     //convert bytes to GB when unit type is bytes
+//     output[group].values =
+//       'bytes' === 'bytes'
+//         ? obj.values.map((el: [number, string]) => {
+//             if (Number(el[1]) === 0) return 0;
+//             const k = 1024;
+//             const i = Math.floor(Math.log(Number(el[1])) / Math.log(k));
+//             return Number(el[1]) / Math.pow(k, i);
+//           })
+//         : obj.values.map((el: [number, string]) => Number(el[1]));
+//   });
+
+//   console.log(output);
+// };
+
+// console.log(getCPUUsageByNode());
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 // // OOMKILL POD DESCRIBE
 // const getPodDesc = async () => {
 //   // query for pods' last terminated reasons

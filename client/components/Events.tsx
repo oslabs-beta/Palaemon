@@ -27,6 +27,8 @@ const Events = (props: EventProps): JSX.Element => {
     setSeverityType(severity);
   };
 
+  const handleNoEvents = () => {};
+
   useEffect(() => {
     // populate and set logCards according to what type of logs is requested.
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
@@ -84,22 +86,22 @@ const Events = (props: EventProps): JSX.Element => {
 
   return (
     <div id="container-event" className="container events right-side">
-      <div id="container-event-logs" className="container events">
-        <nav id="container-select" className="container events">
-          <select
-            className="event-selector"
-            id="selector-log-type"
-            aria-label="log-type"
-            defaultValue={'event'}
-            onChange={e => {
-              setLoading(true);
-              handleLogTypeChange(e);
-            }}
-          >
-            <option value="events">Events</option>
-            <option value="alerts">Alerts</option>
-            <option value="oomkills">OOMKills</option>
-          </select>
+      <nav id="container-select" className="container events">
+        <select
+          className="event-selector"
+          id="selector-log-type"
+          aria-label="log-type"
+          defaultValue={'event'}
+          onChange={e => {
+            setLoading(true);
+            handleLogTypeChange(e);
+          }}
+        >
+          <option value="events">Events</option>
+          <option value="alerts">Alerts</option>
+          <option value="oomkills">OOMKills</option>
+        </select>
+        {logType !== 'oomkills' ? (
           <select
             className="event-selector"
             id="selector-severity"
@@ -119,15 +121,23 @@ const Events = (props: EventProps): JSX.Element => {
             <option value="emergency">Emergency</option>
             <option value="debug">Debug</option>
           </select>
-          {loading && (
-            <>
-              <p>Loading </p>
-              <p className="loader"></p>
-            </>
-          )}
-        </nav>
-
-        {logs.length ? logs : <p>No {logType} in current namespace</p>}
+        ) : null}
+        {loading && (
+          <>
+            <p>Loading </p>
+            <p className="loader"></p>
+          </>
+        )}
+      </nav>
+      <div id="container-event-logs" className="container events">
+        {logs.length ? (
+          logs
+        ) : (
+          <p className="no-logs-msg">
+            No {logType[0].toUpperCase() + logType.slice(1)} in Current
+            Namespace
+          </p>
+        )}
       </div>
     </div>
   );
