@@ -33,6 +33,13 @@ kubectl get services -A
 
 3. Launch the app using `npm start`
 
+## How to Run Tests
+`npm run test:watch` will start the jest test suite with the `--watch` flag enabled, which allows for immediate retests upon save. The jest config in `jest.config.js` is set up to only look for and run test files within the `__test__` folder and with file names that include ".test." in them, such as "Events.test.tsx". 
+
+Units tests are set up using Jest testing suite and react-testing-library to test react components in the front end. 
+
+
+
 ## Features
 
 * Realtime Pod memory usage, sorted by namespaces
@@ -73,8 +80,3 @@ curl https://sdk.cloud.google.com | bash
 - Patrick Hu [Github](https://github.com/pathu91) [LinkedIn](https://www.linkedin.com/in/patrickhu91/)
 - Thang Thai [Github](https://github.com/thang-thai) [LinkedIn](https://www.linkedin.com/in/thang-thai/)
 - Raivyno Lenny Sutrisno [Github](https://github.com/FrozenStove) [LinkedIn](https://www.linkedin.com/in/raivyno-sutrisno/)
-## How to Run Tests
-`npm run test:watch` will start the jest test suite with the `--watch` flag enabled, which allows for immediate retests upon save. The jest config in `jest.config.js` is set up to only look for and run test files within the `__test__` folder and with file names that include ".test." in them, such as "Events.test.tsx". 
-
-Units tests are set up using Jest testing suite and react-testing-library to test react components in the front end. 
-
