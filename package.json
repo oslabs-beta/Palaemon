@@ -8,10 +8,12 @@
     "rmdir": "node -e \"var fs = require('fs'); process.argv.slice(1).map((fpath) => fs.rmdirSync(fpath, { recursive: true })); process.exit(0);\"",
     "clean:prebuild": "npm run rmdir -- dist",
     "dev": "concurrently \"webpack --watch --config ./webpack.config.js\" \"wait-on ./dist/electron/main.js && electronmon ./dist/electron/main.js\"",
+    "electronmon": "electronmon ./dist/electron/main.js",
     "start": "npm run clean:prebuild && npm run dev",
     "start:production": "npm run build:production && electron ./dist/electron/main.js",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@kubernetes/client-node": "^0.17.0",
+    "@playwright/test": "^1.25.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.0.3",
@@ -36,7 +39,6 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "ajv": "^7.2.4",
-    "babel-jest": "^29.0.3",
     "chart.js": "^3.9.1",
     "child_process": "^1.0.2",
     "concurrently": "^7.3.0",
@@ -51,6 +53,7 @@
     "jest-dom": "^4.0.0",
     "jest-environment-jsdom": "^29.0.3",
     "node-fetch": "^2.2.10",
+    "playwright": "^1.25.2",
     "postcss-loader": "^7.0.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
@@ -71,7 +74,11 @@
     "patterns": [
       "dist/**/*",
       "!client/**/*",
-      "!electron/**/*"
+      "!electron/**/*",
+      "!__tests__/**/*",
+      "!__mocks__/**/*",
+      "!journal/**/*",
+      "!node_modules/**/*"
     ]
   }
 }

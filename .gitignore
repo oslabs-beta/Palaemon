@@ -109,3 +109,6 @@ QUERIES.TXT
 test.js
 
 package-lock.json
+
+# playwright testing reports
+__tests__/playwright-reports
