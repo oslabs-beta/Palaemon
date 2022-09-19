@@ -13,8 +13,8 @@ const config: PlaywrightTestConfig = {
     ['html', {open: 'never', outputFolder:'./__tests__/playwright_reports'}]
   ],
 
-  // Each test is given 10 seconds
-  timeout: 10 * 1000,
+  // Each test is given 15 seconds
+  timeout: 15 * 1000,
 
   // two retries for each test
   retries: 2,

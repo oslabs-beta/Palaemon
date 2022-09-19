@@ -8,7 +8,7 @@ const fetch: any = (...args: any) =>
 export const setStartAndEndTime = () => {
   var now = new Date();
   var copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 1);
+  copyNow.setHours(copyNow.getHours() - 24);
   var startTime = copyNow.toISOString();
   var endTime = new Date().toISOString();
   return {
@@ -117,12 +117,16 @@ export async function fetchMem(obj: any) {
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
-    console.log('request',requestData.data.result);
-    console.log('limit',limitData.data);
-
+    // console.log('request1',requestData);
+    // console.log('limit1',limitData);
+    // console.log('request',requestData.data.result);
+    // console.log('limitdata.res.vals',limitData.data.result[0].values[0][1]);
+    // console.log('number1', limitData.data.result[0])
     // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {
+      console.log('metricresousece', limitData.data.result[0].metric.resource)
       if (limitData.data.result[0].metric.resource === 'memory') {
+        console.log('number1', limitData.data.result[0].values[0][1])
         output.resource = 'memory';
         output.limit =
           parseInt(limitData.data.result[0].values[0][1]) / 1000000;
@@ -210,11 +214,6 @@ export const formatOOMKills = (data: string[]) => {
     const nsColonIdx: any = namespaceStr.indexOf(':');
     const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
 
-    const nodeStr: string = updatedPodData[4];
-    const nodeColonIdx: any = nodeStr.indexOf(':');
-    const nodeSlashIdx: any = nodeStr.indexOf('/');
-    const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
-
     const limitIdx: any = filteredPodData.indexOf('Limits:');
     const limitCpu = filteredPodData[limitIdx + 1];
     const limitMemory = filteredPodData[limitIdx + 2];
@@ -232,7 +231,6 @@ export const formatOOMKills = (data: string[]) => {
     };
 
     oomObject.namespace = namespace;
-    oomObject.node = node;
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
@@ -250,7 +248,6 @@ export const formatOOMKills = (data: string[]) => {
     });
 
     OOMKills.push(oomObject);
-    console.log(oomObject);
   });
 
   return OOMKills;
