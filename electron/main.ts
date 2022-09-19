@@ -278,7 +278,7 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
     const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
@@ -305,7 +305,7 @@ ipcMain.handle('getCPUUsage', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
     const query = `${PROM_URL}query_range?query=sum(
       rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
@@ -371,7 +371,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
       });
 
     // fetch time series data from prom api
-      // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
     const query = resource === "memory" ? `${PROM_URL}query_range?query=
     container_memory_working_set_bytes{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
     &start=${time}&end=${time}&step=${interval}` : `${PROM_URL}query_range?query=
