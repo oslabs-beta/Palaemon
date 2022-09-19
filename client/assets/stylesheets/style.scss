@@ -11,6 +11,8 @@ $s-dark-color: #82ada9;
 
 $sidebar-width: 240px;
 
+$grey: #ddd;
+
 html {
   height: 100vh;
   // prevents the window from over-scrolling and bouncing beyond the 100% screen size
@@ -252,13 +254,14 @@ footer {
   animation-duration: 0.5s;
 
   position: absolute;
-  // top: 100;
-  background-color: red;
+  color: white;
+  background-color: $ugly-sewage-green;
 
   box-shadow: 10px 10px 10px 6px rgb(64 0 0 / 20%);
   margin: 16px 20px 16px 20px;
   border-radius: 10px;
   padding: 0.4rem 1rem;
+  z-index: 999;
 
   .modalClose {
     position: relative;
@@ -336,7 +339,7 @@ footer {
   .no-logs-msg {
     font-size: 1rem;
     text-align: center;
-    background-color: #ddd;
+    background-color: $grey;
     border-radius: 10px;
     padding: 1rem;
     color: $font-color;
@@ -496,6 +499,8 @@ button:focus-visible {
 
 #analysis-container {
   background-color: $secondary-color;
+  height: 100vh;
+
   .analysis-nav {
     display: flex;
     justify-content: flex-start;
@@ -537,6 +542,30 @@ button:focus-visible {
         border-radius: 10px;
         border: none;
         height: fit-content;
+      }
+
+      .query-btn {
+        font-size: 1.1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+        background-color: $ugly-sewage-green;
+        color: white;
+        transition: all 0.3s;
+        height: fit-content;
+      }
+
+      .query-btn:hover {
+        background-color: white;
+        color: $font-color;
+        cursor: pointer;
+        filter: drop-shadow(2px 2px 3px $font-color);
+      }
+
+      .tooltip {
+        cursor: pointer;
       }
 
       // .analysis-delete-btn {

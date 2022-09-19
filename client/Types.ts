@@ -147,3 +147,7 @@ export type AnalysisPageProps = {
   setAnalyzedPod: (input: any) => void;
   analyzedPod: any[];
 };
+
+export type TooltipProps = {
+  position: { left: string; top: string };
+};
