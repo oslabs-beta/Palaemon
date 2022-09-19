@@ -208,6 +208,11 @@ export const formatOOMKills = (data: string[]) => {
     const nsColonIdx: any = namespaceStr.indexOf(':');
     const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
 
+    const nodeStr: string = updatedPodData[4];
+    const nodeColonIdx: any = nodeStr.indexOf(':');
+    const nodeSlashIdx: any = nodeStr.indexOf('/');
+    const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
+
     const limitIdx: any = filteredPodData.indexOf('Limits:');
     const limitCpu = filteredPodData[limitIdx + 1];
     const limitMemory = filteredPodData[limitIdx + 2];
@@ -225,6 +230,7 @@ export const formatOOMKills = (data: string[]) => {
     };
 
     oomObject.namespace = namespace;
+    oomObject.node = node;
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
@@ -242,6 +248,7 @@ export const formatOOMKills = (data: string[]) => {
     });
 
     OOMKills.push(oomObject);
+    console.log(oomObject);
   });
 
   return OOMKills;
