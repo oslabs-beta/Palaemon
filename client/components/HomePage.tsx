@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import ClusterChart from './ClusterChart';
 import Events from './Events';
 import Graph from './Graph';
@@ -35,17 +35,17 @@ const HomePage = (props: any): JSX.Element => {
   const [nodes, setNodes]: any = useState(['node1']);
   const [portOpen, setPortOpen]: any = useState(false);
   const [resource, setResource]: any = useState('');
-  const [clusterChartData, setClusterChartData] = useState<ClusterAllInfo>(
+  const [clusterChartData, setClusterChartData]: any = useState<ClusterAllInfo>(
     initalClusterChartData
   );
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
   const [modalState, setModalState] = useState(false);
-  const [theModal, setTheModal] = useState(<p>help</p>);
+  const [theModal, setTheModal] = useState(<p>No Modal Info</p>);
 
-  const openModal = (e: any, data: SvgInfo) => {
-    console.log('I am modal and I am opening!');
+  const openModal = (e: MouseEvent, data: SvgInfo) => {
+    console.log('Opening Modal');
     const position = {
       top: e.pageY.toString() + 'px',
       left: e.pageX.toString() + 'px',
@@ -60,6 +60,11 @@ const HomePage = (props: any): JSX.Element => {
   };
 
   const closeModal = (): void => {
+    setModalState(false);
+  };
+
+  const closeModalFromAnywhere = (e: MouseEvent): void => {
+    if(e.target instanceof HTMLDivElement)
     setModalState(false);
   };
 
@@ -89,7 +94,9 @@ const HomePage = (props: any): JSX.Element => {
   }, [resource]);
 
   return (
-    <div id="contents">
+    <div id="contents" 
+    onClick={closeModalFromAnywhere}
+    >
       <div id="left-side">
         <div id="cluster-chart">
           <div className="cluster-btns">
