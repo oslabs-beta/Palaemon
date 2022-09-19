@@ -36,7 +36,7 @@ const LandingPage = (): JSX.Element => {
           }}
         >
           <option value="" disabled hidden>
-            Choose a namespace
+            ...
           </option>
           {namespaces.map(namespace => (
             <option value={namespace}>{namespace}</option>

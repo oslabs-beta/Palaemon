@@ -26,34 +26,31 @@ ChartJS.register(
 
 const Graph = (): JSX.Element => {
   const [portOpen, setPortOpen] = useState(false);
-  const [graphState, setGraphState] = useState<GraphData>(
-    [
-      {
-        Port9090isClosed: {
-          times: ['a', 'b', 'c'],
-          values: [1, 2, 3],
-        },
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [graphState, setGraphState] = useState<GraphData>([
+    {
+      Port9090isClosed: {
+        times: ['a', 'b', 'c'],
+        values: [1, 2, 3],
       },
-      {
-        Port9090isClosed: {
-          times: ['a', 'b', 'c'],
-          values: [3, 2, 1],
-        },
+    },
+    {
+      Port9090isClosed: {
+        times: ['a', 'b', 'c'],
+        values: [3, 2, 1],
       },
-    ]
-  )
+    },
+  ]);
 
   if (!portOpen)
-  fetch('http://localhost:9090/')
-    .then((response) => {
+    fetch('http://localhost:9090/').then(response => {
       // console.log('status code', response.status)
       if (response.status === 200) {
-        console.log('Port 9090 is Open')
-        setPortOpen(true)
+        console.log('Port 9090 is Open');
+        setPortOpen(true);
       } else {
-
       }
-    })
+    });
 
   useEffect(() => {
     doMeBabyOneMoreTime();
@@ -109,12 +106,12 @@ const Graph = (): JSX.Element => {
     indexAxis: 'x',
     plugins: {
       legend: {
-        // display: buttonClicked,
+        display: buttonClicked,
         position: 'bottom' as const,
       },
       title: {
         display: true,
-        text: 'Current Memory Usage by Pods'
+        text: 'Current Memory Usage by Pods',
       },
       // tooltip: {
       //   mode: 'label'
@@ -134,8 +131,8 @@ const Graph = (): JSX.Element => {
         },
         title: {
           display: true,
-          text: new Date().toDateString()
-        }
+          text: new Date().toDateString(),
+        },
       },
       y: {
         grid: {
@@ -146,12 +143,15 @@ const Graph = (): JSX.Element => {
         },
         title: {
           display: true,
-          text: 'Megabytes'
-        }
+          text: 'Megabytes',
+        },
       },
     },
   };
 
+  const handleLegendClick = () => {
+    setButtonClicked(prevCheck => !prevCheck);
+  };
 
   // console.log('chartjs', ChartJS.defaults.plugins.tooltip)
   const data = {
@@ -162,6 +162,9 @@ const Graph = (): JSX.Element => {
   return (
     <>
       <Line options={options} data={data} />
+      <button className="legend-btn-main" onClick={handleLegendClick}>
+        {!buttonClicked ? 'Show Pods' : 'Hide Pods'}
+      </button>
     </>
   );
 };
