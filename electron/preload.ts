@@ -21,7 +21,6 @@ const WINDOW_API = {
   getAllInfo: async () => ipcRenderer.invoke('getAllInfo'),
   getOOMKills: async () => ipcRenderer.invoke('getOOMKills'),
   getUsage: async (...args: any) => {
-
     return ipcRenderer.invoke('getUsage', ...args)
   }
 };
