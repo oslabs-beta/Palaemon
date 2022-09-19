@@ -96,10 +96,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             <option value="default">Select OOMKilled Pod</option>
             {OOMKillsList}
           </select>
-          <input
-            className="analysis-interval"
-            placeholder="Input Time Interval"
-          ></input>
+          <input className="analysis-interval" placeholder="Time"></input>
           <select className="interval-unit">
             <option value="default">Select Unit</option>
             <option value="s">Seconds</option>

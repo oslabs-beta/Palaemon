@@ -101,25 +101,27 @@ const Events = (props: EventProps): JSX.Element => {
           <option value="alerts">Alerts</option>
           <option value="oomkills">OOMKills</option>
         </select>
-        <select
-          className="event-selector"
-          id="selector-severity"
-          aria-label="severity-type"
-          defaultValue={'Default'}
-          onChange={e => {
-            setLoading(true);
-            handleSeverityChange(e);
-          }}
-        >
-          <option value="default">Default</option>
-          <option value="info">Info</option>
-          <option value="warning">Warning</option>
-          <option value="error">Error</option>
-          <option value="critical">Critical</option>
-          <option value="alert">Alert</option>
-          <option value="emergency">Emergency</option>
-          <option value="debug">Debug</option>
-        </select>
+        {logType !== 'oomkills' ? (
+          <select
+            className="event-selector"
+            id="selector-severity"
+            aria-label="severity-type"
+            defaultValue={'Default'}
+            onChange={e => {
+              setLoading(true);
+              handleSeverityChange(e);
+            }}
+          >
+            <option value="default">Default</option>
+            <option value="info">Info</option>
+            <option value="warning">Warning</option>
+            <option value="error">Error</option>
+            <option value="critical">Critical</option>
+            <option value="alert">Alert</option>
+            <option value="emergency">Emergency</option>
+            <option value="debug">Debug</option>
+          </select>
+        ) : null}
         {loading && (
           <>
             <p>Loading </p>
