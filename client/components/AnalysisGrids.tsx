@@ -1,6 +1,11 @@
 import { Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-import { GraphData, ChartGraphData, GraphableData } from "../Types";
+import {
+  GraphData,
+  ChartGraphData,
+  GraphableData,
+  AnalysisGraphData,
+} from "../Types";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,7 +27,7 @@ ChartJS.register(
   Legend
 );
 
-const ChartGrid = (props: any) => {
+const AnalysisGrids = (props: any) => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const initData: GraphData = [
     {
@@ -54,11 +59,11 @@ const ChartGrid = (props: any) => {
     },
   ];
 
-  const [graphState, setGraphState] = useState<ChartGraphData>({
+  const [graphState, setGraphState] = useState<AnalysisGraphData>({
     podMem: initData,
     podCPU: initData,
-    nodeMem: initData,
-    nodeCPU: initData1,
+    networkRead: initData,
+    networkWrite: initData1,
   });
 
   const colorArray = [
@@ -74,7 +79,7 @@ const ChartGrid = (props: any) => {
   ];
 
   const xLabels: string[] =
-    graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
+    graphState.networkRead[0][Object.keys(graphState.networkRead[0])[0]].times;
 
   let options: string = JSON.stringify({
     responsive: true,
@@ -120,10 +125,10 @@ const ChartGrid = (props: any) => {
   });
 
   const multiOptions = {
-    nodeMem: JSON.parse(options),
-    nodeCPU: JSON.parse(options),
     podMem: JSON.parse(options),
     podCPU: JSON.parse(options),
+    networkRead: JSON.parse(options),
+    networkWrite: JSON.parse(options),
   };
 
   const charts: JSX.Element[] = [];
@@ -187,4 +192,4 @@ const ChartGrid = (props: any) => {
   return <>{charts}</>;
 };
 
-export default ChartGrid;
+export default AnalysisGrids;

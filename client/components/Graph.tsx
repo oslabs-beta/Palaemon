@@ -1,6 +1,6 @@
-import { GraphData } from '../Types';
-import { Line } from 'react-chartjs-2';
-import { useState, useEffect } from 'react';
+import { GraphData } from "../Types";
+import { Line } from "react-chartjs-2";
+import { useState, useEffect } from "react";
 
 // I dont know why, but you need all this ChartJS stuff to make the react-chartjs-2 to work
 import {
@@ -12,7 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -30,33 +30,33 @@ const Graph = (): JSX.Element => {
   const [graphState, setGraphState] = useState<GraphData>([
     {
       Port9090isClosed: {
-        times: ['a', 'b', 'c'],
+        times: ["a", "b", "c"],
         values: [1, 2, 3],
       },
     },
     {
       Port9090isClosed: {
-        times: ['a', 'b', 'c'],
+        times: ["a", "b", "c"],
         values: [3, 2, 1],
       },
     },
   ]);
 
   if (!portOpen)
-    fetch('http://localhost:9090/').then(response => {
+    fetch("http://localhost:9090/").then((response) => {
       // console.log('status code', response.status)
       if (response.status === 200) {
-        console.log('Port 9090 is Open');
+        console.log("Port 9090 is Open");
         setPortOpen(true);
       } else {
       }
     });
 
   useEffect(() => {
-    doMeBabyOneMoreTime();
+    refreshGraphData();
   }, [portOpen]);
 
-  const doMeBabyOneMoreTime = () => {
+  const refreshGraphData = () => {
     if (portOpen) {
       window.api
         .getMemoryUsageByPods()
@@ -68,21 +68,21 @@ const Graph = (): JSX.Element => {
         .catch((err: any) => {
           return { err: err };
         });
-      setTimeout(doMeBabyOneMoreTime, 5000);
+      setTimeout(refreshGraphData, 5000);
     }
   };
 
   const datasetData = [];
   const colorArray = [
-    'red',
-    'blue',
-    'green',
-    'black',
-    'purple',
-    'cyan',
-    'yellow',
-    'orange',
-    '#003d33',
+    "red",
+    "blue",
+    "green",
+    "black",
+    "purple",
+    "cyan",
+    "yellow",
+    "orange",
+    "#003d33",
   ];
 
   // let keyname: keyof typeof graphState[0] = Object.keys(graphState[0])[0]
@@ -103,15 +103,15 @@ const Graph = (): JSX.Element => {
     responsive: true,
     responsiveAnimationDuration: 1000,
     pointRadius: 0,
-    indexAxis: 'x',
+    indexAxis: "x",
     plugins: {
       legend: {
         display: buttonClicked,
-        position: 'bottom' as const,
+        position: "bottom" as const,
       },
       title: {
         display: true,
-        text: 'Current Memory Usage by Pods',
+        text: "Current Memory Usage by Pods",
       },
       // tooltip: {
       //   mode: 'label'
@@ -124,10 +124,10 @@ const Graph = (): JSX.Element => {
     scales: {
       x: {
         grid: {
-          color: 'rgb(240, 240, 240)',
+          color: "rgb(240, 240, 240)",
         },
         ticks: {
-          color: '#797676',
+          color: "#797676",
         },
         title: {
           display: true,
@@ -136,21 +136,21 @@ const Graph = (): JSX.Element => {
       },
       y: {
         grid: {
-          color: 'rgb(240, 240, 240)',
+          color: "rgb(240, 240, 240)",
         },
         ticks: {
-          color: '#797676',
+          color: "#797676",
         },
         title: {
           display: true,
-          text: 'Megabytes',
+          text: "Megabytes",
         },
       },
     },
   };
 
   const handleLegendClick = () => {
-    setButtonClicked(prevCheck => !prevCheck);
+    setButtonClicked((prevCheck) => !prevCheck);
   };
 
   // console.log('chartjs', ChartJS.defaults.plugins.tooltip)
@@ -163,7 +163,7 @@ const Graph = (): JSX.Element => {
     <>
       <Line options={options} data={data} />
       <button className="legend-btn-main" onClick={handleLegendClick}>
-        {!buttonClicked ? 'Show Pods' : 'Hide Pods'}
+        {!buttonClicked ? "Show Pods" : "Hide Pods"}
       </button>
     </>
   );
