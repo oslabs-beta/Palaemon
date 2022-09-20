@@ -1,4 +1,11 @@
-import { app, session, BrowserWindow, ipcMain, dialog, IpcMainEvent } from 'electron';
+import {
+  app,
+  session,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  IpcMainEvent,
+} from 'electron';
 import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
 import installExtension, {
@@ -248,7 +255,6 @@ ipcMain.handle('getNamespaces', async () => {
   }
 });
 
-
 // COMMAND LINE //
 // get events
 ipcMain.handle('getEvents', async () => {
@@ -351,38 +357,38 @@ ipcMain.handle('getOOMKills', async (): Promise<any> => {
   }
 });
 
-
-
 // TEST FOR USAGE
 
 ipcMain.handle('getUsage', async (event, ...args) => {
-  const time = new Date().toISOString()
+  const time = new Date().toISOString();
   const interval = '15s';
   const podName = args[0];
   const resource = args[1];
   let namespace;
   try {
-
     await mainWindow.webContents
       .executeJavaScript('({...localStorage});', true)
       .then((localStorage: any) => {
-        namespace = localStorage.namespace
-
+        namespace = localStorage.namespace;
       });
 
     // fetch time series data from prom api
     // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
-    const query = resource === "memory" ? `${PROM_URL}query_range?query=
+    const query =
+      resource === 'memory'
+        ? `${PROM_URL}query_range?query=
     container_memory_working_set_bytes{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
-    &start=${time}&end=${time}&step=${interval}` : `${PROM_URL}query_range?query=
-    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]))
     &start=${time}&end=${time}&step=${interval}`
+        : `${PROM_URL}query_range?query=
+    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]))
+    &start=${time}&end=${time}&step=${interval}`;
 
-    const res = await fetch(query)
+    const res = await fetch(query);
     const data = await res.json();
 
-    return resource === "memory" ? formatUsage(data.data, "megabytes") : formatUsage(data.data, "milicores")
-
+    return resource === 'memory'
+      ? formatUsage(data.data, 'megabytes')
+      : formatUsage(data.data, 'milicores');
   } catch (error) {
     console.log(`Error in getUSAGE function: ERROR: ${error}`);
     return { err: error };

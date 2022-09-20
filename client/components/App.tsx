@@ -13,7 +13,7 @@ const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
 
   return (
-    <HashRouter basename='/'>
+    <HashRouter basename="/">
       <nav id="sidebar">
         <Link to="">
           <img id="logo" src="./assets/logo-hat.png" alt="" />

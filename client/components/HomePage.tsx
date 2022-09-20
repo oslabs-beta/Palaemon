@@ -64,8 +64,7 @@ const HomePage = (props: any): JSX.Element => {
   };
 
   const closeModalFromAnywhere = (e: MouseEvent): void => {
-    if(e.target instanceof HTMLDivElement)
-    setModalState(false);
+    if (e.target instanceof HTMLDivElement) setModalState(false);
   };
 
   const gke: ClusterChartProps = {
@@ -94,9 +93,7 @@ const HomePage = (props: any): JSX.Element => {
   }, [resource]);
 
   return (
-    <div id="contents" 
-    onClick={closeModalFromAnywhere}
-    >
+    <div id="contents" onClick={closeModalFromAnywhere}>
       <div id="left-side">
         <div id="cluster-chart">
           <div className="cluster-btns">

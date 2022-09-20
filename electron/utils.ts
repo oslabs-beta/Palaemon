@@ -193,7 +193,7 @@ export const formatOOMKills = (data: string[]) => {
     const updatedPodData = podData.map(pod =>
       pod.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
     );
-    // console.log(updatedPodData);
+    console.log('this is updated pods ', updatedPodData);
     const indexOfTerm = updatedPodData.indexOf('Last State: Terminated');
     // console.log(indexOfTerm);
     const filteredPodData: string[] = updatedPodData.slice(
@@ -208,7 +208,7 @@ export const formatOOMKills = (data: string[]) => {
     const nsColonIdx: any = namespaceStr.indexOf(':');
     const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
 
-    const nodeStr: string = updatedPodData[4];
+    const nodeStr: any = updatedPodData.filter(str => str.includes('Node:'))[0];
     const nodeColonIdx: any = nodeStr.indexOf(':');
     const nodeSlashIdx: any = nodeStr.indexOf('/');
     const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
