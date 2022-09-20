@@ -1,7 +1,7 @@
 import Graph from "./Graph";
 
 import { useState, useEffect } from "react";
-import AnalysisGrids from "./AnalysisGrids";
+import ChartGrid from "./ChartGrid";
 import { AnalysisPageProps } from "../Types";
 import LogCard from "./LogCard";
 import { filter } from "../../webpack.config";
@@ -173,7 +173,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           </div>
         </div>
         <div id="chartarea">
-          <AnalysisGrids />
+          <ChartGrid />
         </div>
       </div>
     </div>

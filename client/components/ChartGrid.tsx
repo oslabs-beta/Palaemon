@@ -124,6 +124,8 @@ const ChartGrid = (props: any) => {
     nodeCPU: JSON.parse(options),
     podMem: JSON.parse(options),
     podCPU: JSON.parse(options),
+    netRead: JSON.parse(options),
+    netWrite: JSON.parse(options),
   };
 
   const charts: JSX.Element[] = [];
