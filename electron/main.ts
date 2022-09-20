@@ -369,3 +369,23 @@ ipcMain.handle("getUsage", async (event, ...args) => {
     return { err: error };
   }
 });
+
+/* -------------- Analysis Page -------------- */
+
+ipcMain.handle("getAnalysis", async () => {
+  const startTime = new Date().toISOString();
+  const endTime = new Date().toISOString();
+  const interval = '15s'
+  const namespace = await mainWindow.webContents
+  .executeJavaScript("({...localStorage});", true)
+  .then((localStorage: any) => {
+    return localStorage.namespace;
+  });
+
+  const memQuery = `${PROM_URL}query_range?query=
+  container_memory_working_set_bytes{namespace="${namespace}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+  const podCPUQuery = `${PROM_URL}query_range?query=
+  rate(container_cpu_usage_seconds_total{namespace="${namespace}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+})
