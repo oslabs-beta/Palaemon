@@ -74,11 +74,12 @@ const loadMainWindow = () => {
       .catch((err: Error) => {
         console.log("fetch to 9090 has failed in main.ts in loadMainWindow");
         const num = dialog.showMessageBoxSync({
-          message: "Please make sure port-forwarding to 9090 is set up.",
+          message:
+            "PALAEMON: Please make sure port-forwarding to 9090 is set up.",
           type: "warning",
           // Cancel returns 0, OK returns 1
           buttons: ["Cancel", "OK"],
-          title: "Port 9090 missing",
+          title: "PALAEMON: Port 9090 missing",
           detail: "Open Port 9090 for prometheus, then click OK.",
         });
         if (num === 1) checkPort();
@@ -139,6 +140,7 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
     }); // end of nodeData
 
     const getPods = await k8sApiCore.listNamespacedPod(`${nsSelect}`);
+    // console.log('this is getPods: ',getPods.body.items[0]);
 
     const memData = await Promise.all(
       getPods.body.items.map((pod) => {

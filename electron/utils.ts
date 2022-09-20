@@ -8,7 +8,7 @@ const fetch: any = (...args: any) =>
 export const setStartAndEndTime = () => {
   var now = new Date();
   var copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 1);
+  copyNow.setHours(copyNow.getHours() - 24);
   var startTime = copyNow.toISOString();
   var endTime = new Date().toISOString();
   return {
@@ -231,7 +231,6 @@ export const formatOOMKills = (data: string[]) => {
     };
 
     oomObject.namespace = namespace;
-    oomObject.node = node;
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
@@ -249,7 +248,6 @@ export const formatOOMKills = (data: string[]) => {
     });
 
     OOMKills.push(oomObject);
-    console.log("OOM OBJECT: ", oomObject);
   });
 
   return OOMKills;
