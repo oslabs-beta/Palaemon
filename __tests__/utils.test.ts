@@ -1,10 +1,24 @@
+const globalAny:any = global;
+
 beforeAll(() => { });
 beforeEach(() => { });
 afterAll(() => { });
 afterEach(() => { });
 
+// import { enableFetchMocks } from 'jest-fetch-mock'
+// enableFetchMocks()
+
+// import fetchMock from "jest-fetch-mock"
+
+// import fetch from 'node-fetch';
+
 import { SvgInfoObj } from '../client/Types';
 import { setStartAndEndTime, fetchMem } from '../electron/utils'
+
+// jest.mock('node-fetch');
+
+// let mockedFetch: jest.Mocked<typeof fetch>;
+
 
 describe('setStartAnEndTime', () => {
   test('returns and object with keys startTime and endTime', () => {
@@ -54,7 +68,7 @@ describe('fetchMem should return the memory usage of a pod', () => {
       nodeName: 'mockNodeName'
     },
   }
-
+  // limitData.data.result[0].metric.resource
   const mockRequest = {
     status: 'success',
     data: {
@@ -70,7 +84,7 @@ describe('fetchMem should return the memory usage of a pod', () => {
             namespace: 'default',
             node: 'minikube',
             pod: 'alertmanager-stack-kube-prometheus-stac-alertmanager-0',
-            resource: 'memory', // we use this line
+            resource: 'request', // we use this line
             service: 'stack-kube-state-metrics',
             uid: '863f4c04-580e-4b7f-923b-f1dd52fd1c07',
             unit: 'byte'
@@ -78,8 +92,7 @@ describe('fetchMem should return the memory usage of a pod', () => {
           values: [[1663624864.753, '52428800']] // this string of numbers is what we need
         }
       ]
-    },
-    json: jest.fn().mockReturnValue(Promise.resolve(this))
+    },    
   }
   const mockLimit = {
     status: 'success',
@@ -101,49 +114,91 @@ describe('fetchMem should return the memory usage of a pod', () => {
             uid: '863f4c04-580e-4b7f-923b-f1dd52fd1c07',
             unit: 'byte'
           },
-          values: [[1663624864.753, '52428800']] // this string of numbers is what we need
+          values: [[1663624864.753, '102428800']] // this string of numbers is what we need
         }
       ]
-    },
-    json: jest.fn().mockReturnValue(Promise.resolve(this))
+    },    
+  };
+
+
+  const jsonLimObj = {
+    json: jest.fn().mockReturnValue(Promise.resolve(mockLimit))
   }
-  const fetch = jest.fn()
-    .mockReturnValueOnce(Promise.resolve(mockLimit))
-    .mockReturnValueOnce(Promise.resolve(mockRequest));
-  // })
+  const jsonReqObj = {
+    json: jest.fn().mockReturnValue(Promise.resolve(mockRequest))
+  }
 
-  test('It should return an error if port 9090 is closed', () => {
+  let returnValue: any;
+  let returnValueOnce: any;
 
+
+
+
+  // jest.mock('node-fetch', ()=>jest.fn().mockReturnValue(Promise.resolve(jsonReqObj)).mockReturnValueOnce(Promise.resolve(jsonLimObj)))
+
+afterEach(() => {
+  // console.log('afterEach')
+  jest.resetModules() 
+})
+
+beforeEach(() => {
+  // console.log('beforeEach')
+  jest.mock('node-fetch', ()=>jest.fn()
+  .mockReturnValue(Promise.resolve(returnValue))
+  .mockReturnValueOnce(Promise.resolve(returnValueOnce))
+  )
+})
+
+  test('It should return a default object with port 9090 closed', async () => {
+
+    const defaultData = {
+      name: '',
+      usage: 1,
+      resource: '',
+      limit: 1,
+      request: 1,
+      parent: '',
+      namespace: '',
+    }
+
+    const pod1: SvgInfoObj = await fetchMem(mockObj)
+    console.log('mypod9090', pod1)
+    expect(pod1).toStrictEqual(defaultData)
   })
-  test('It should accept an object with the correct information, or return an error', () => {
 
-  })
-  test('It should return a default object with port 9090 closed', () => {
 
+  test('It should accept an object with the correct information, or return an error', async () => {
+    const defaultData = {
+      name: '',
+      usage: 1,
+      resource: '',
+      limit: 1,
+      request: 1,
+      parent: '',
+      namespace: '',
+    }
+
+    const pod1: SvgInfoObj = await fetchMem('string')
+    console.log('mypod9090', pod1)
+    expect(pod1).toStrictEqual(defaultData)
   })
+
   test('It returns memory usage and data about pods', async () => {
-    const memObj = new SvgInfoObj(
-      )
-    //   {
-    //   name: 'mockPodname',
-    //   usage: 1,
-    //   resource: 'memory',
-    //   request: 1,
-    //   limit: 1,
-    //   parent: 'mockNodeName',
-    //   namespace: 'mockNamepsace'
-    // }
-    // console.log(memObj instanceof SvgInfoObj)
-    const pod = await fetchMem(mockObj)
-    console.log('mypod', pod)
-    expect(pod).toHaveProperty('name');
-    expect(pod).toBeInstanceOf(SvgInfoObj);
-    expect(pod.request).toBe(52428800);
-    // expect(pod).toBe(memObj)
-  })
-  test('', () => {
 
+    returnValue = jsonReqObj;
+    returnValueOnce = jsonLimObj;
+
+    const pod: SvgInfoObj = await fetchMem(mockObj)
+
+    console.log('mypodTrue', pod)
+    expect(pod).toHaveProperty('name');
+    expect(pod.request).toBe(52.4288);
+    expect(pod.limit).toBe(102.4288);
+    expect(pod).toBeInstanceOf(SvgInfoObj);
   })
+  // test('', () => {
+
+  // })
 
 })
 
