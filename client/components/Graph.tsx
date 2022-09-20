@@ -1,7 +1,7 @@
 import { GraphData } from "../Types";
 import { Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 // I dont know why, but you need all this ChartJS stuff to make the react-chartjs-2 to work
 import {
   Chart as ChartJS,
@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { ProgressPlugin } from "webpack";
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +25,7 @@ ChartJS.register(
   Legend
 );
 
-const Graph = (): JSX.Element => {
+const Graph = (props: any): JSX.Element => {
   const [portOpen, setPortOpen] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
   const [graphState, setGraphState] = useState<GraphData>([
@@ -42,6 +43,8 @@ const Graph = (): JSX.Element => {
     },
   ]);
 
+  const navigate = useNavigate();
+
   if (!portOpen)
     fetch("http://localhost:9090/").then((response) => {
       // console.log('status code', response.status)
@@ -49,6 +52,7 @@ const Graph = (): JSX.Element => {
         console.log("Port 9090 is Open");
         setPortOpen(true);
       } else {
+        //optional place to throw error when port 9090 is closed
       }
     });
 
@@ -62,7 +66,11 @@ const Graph = (): JSX.Element => {
         .getMemoryUsageByPods()
         .then((output: any) => {
           // console.log(output)
-          if (!output.err) setGraphState(output);
+          if (output.length < 1) {
+            console.log("returning out without setGraphState");
+            props.setResourceError("No resources found in this namespace");
+            return navigate("/");
+          } else if (!output.err) setGraphState(output);
           // console.log('itworks')
         })
         .catch((err: any) => {
