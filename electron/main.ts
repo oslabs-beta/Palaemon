@@ -6,7 +6,7 @@ import {
   dialog,
   IpcMainEvent,
 } from "electron";
-import { ClusterAllInfo } from "../client/Types";
+import { ClusterAllInfo, ChartGraphData } from "../client/Types";
 import path from "path";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
@@ -30,7 +30,7 @@ import {
 } from "./utils";
 
 // metrics modules
-import { formatMatrix, formatUsage } from "./metricsData/formatMatrix";
+import { formatMatrix, formatUsage, formatAnalysis } from "./metricsData/formatMatrix";
 import { SvgInfo, SvgInfoObj } from "../client/Types";
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
@@ -372,20 +372,77 @@ ipcMain.handle("getUsage", async (event, ...args) => {
 
 /* -------------- Analysis Page -------------- */
 
-ipcMain.handle("getAnalysis", async () => {
+ipcMain.handle("getAnalysis", async (event, parentNode, interval = '15s') => {
+  console.log('parentnode from mainWindow.ts',parentNode)
+  console.log('this is interval', interval)
   const startTime = new Date().toISOString();
   const endTime = new Date().toISOString();
-  const interval = '15s'
-  const namespace = await mainWindow.webContents
-  .executeJavaScript("({...localStorage});", true)
-  .then((localStorage: any) => {
-    return localStorage.namespace;
-  });
+  // const interval = '15s'
+  // const namespace = await mainWindow.webContents
+  // .executeJavaScript("({...localStorage});", true)
+  // .then((localStorage: any) => {
+  //   return localStorage.namespace;
+  // });
+  try {
 
-  const memQuery = `${PROM_URL}query_range?query=
-  container_memory_working_set_bytes{namespace="${namespace}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
+  // build mem usage by PODS graph
+  const podMEMQuery = `${PROM_URL}query_range?query=
+  container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
   &start=${startTime}&end=${endTime}&step=${interval}`;
+  const podMEMRes = await fetch(podMEMQuery);
+  const podMEMData = await podMEMRes.json();
+  const podMem = await formatAnalysis(podMEMData.data, "megabytes")
+  console.log('this is podMem', podMem)
+  // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
-  rate(container_cpu_usage_seconds_total{namespace="${namespace}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
+  rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
   &start=${startTime}&end=${endTime}&step=${interval}`;
+  const podCPURes = await fetch(podCPUQuery);
+  const podCPUData = await podCPURes.json();
+  const podCPU = await formatAnalysis(podCPUData.data, "milicores")
+
+  // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
+  const nodeMEMQuery = `${PROM_URL}query_range?query=
+  sum(container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}) by (node)
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+  const nodeMEMRes = await fetch(nodeMEMQuery);
+  const nodeMEMData = await nodeMEMRes.json();
+  const nodeMEM = await formatAnalysis(nodeMEMData.data, "megabytes")
+
+  // build node usage by CPU graph
+  const nodeCPUQuery = `${PROM_URL}query_range?query=
+  sum(rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])) by (node)
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+  const nodeCPURes = await fetch(nodeCPUQuery);
+  const nodeCPUData = await nodeCPURes.json();
+  const nodeCPU = await formatAnalysis(nodeCPUData.data, "milicores")
+
+    return {
+      podMem,
+      podCPU,
+      nodeMEM,
+      nodeCPU
+    }
+  }
+  catch (error) {
+    console.log(`Error in getAnalysis function: ERROR: ${error}`);
+    return { err: error };
+  }
+
 })
+
+// export type GraphData = {
+//   [podName: string]: {
+//     times: string[];
+//     values: number[];
+//   };
+// }[];
+
+// export type ChartGraphData = {
+//   nodeMem: GraphData;
+//   nodeCPU: GraphData;
+//   podMem: GraphData;
+//   podCPU: GraphData;
+//   netRead: GraphData;
+//   netWrite: GraphData;
+// };

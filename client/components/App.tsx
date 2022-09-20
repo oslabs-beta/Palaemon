@@ -12,7 +12,7 @@ import "../assets/stylesheets/style.scss";
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
   const [resourceError, setResourceError]: any = React.useState("");
-
+  const [analyzedData, setAnalyzedData]: any = React.useState({});
   return (
     <HashRouter basename="/">
       <nav id="sidebar">
@@ -75,6 +75,7 @@ const App = () => {
                 analyzedPod={analyzedPod}
                 setAnalyzedPod={setAnalyzedPod}
                 setResourceError={setResourceError}
+                setAnalyzedData={setAnalyzedData}
               />
             }
           />
@@ -84,6 +85,8 @@ const App = () => {
               <AnalysisPage
                 analyzedPod={analyzedPod}
                 setAnalyzedPod={setAnalyzedPod}
+                analyzedData={analyzedData}
+                setAnalyzedData={setAnalyzedData}
               />
             }
           />

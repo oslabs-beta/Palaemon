@@ -56,6 +56,7 @@ const Events = (props: EventProps): JSX.Element => {
             logType={logType}
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
+            setAnalyzedData={props.setAnalyzedData}
           />
         );
       }

@@ -134,6 +134,7 @@ const HomePage = (props: any): JSX.Element => {
         <Events
           analyzedPod={props.analyzedPod}
           setAnalyzedPod={props.setAnalyzedPod}
+          setAnalyzedData={props.setAnalyzedData}
         />
       </div>
       {modalState && theModal}

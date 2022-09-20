@@ -59,7 +59,11 @@ const ChartGrid = (props: any) => {
     podCPU: initData,
     nodeMem: initData,
     nodeCPU: initData1,
+    netRead: initData,
+    netWrite: initData,
   });
+
+
 
   const colorArray = [
     "red",
