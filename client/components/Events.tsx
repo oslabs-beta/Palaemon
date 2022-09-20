@@ -45,7 +45,7 @@ const Events = (props: EventProps): JSX.Element => {
       } else if (logType === 'oomkills') {
         logsData = await window.api.getOOMKills();
       }
-
+      setLoading(false);
       for (let i = 0; i < logsData.length; i++) {
         logCards.push(
           <LogCard
@@ -60,9 +60,6 @@ const Events = (props: EventProps): JSX.Element => {
         );
       }
 
-      if (logCards.length > 0) {
-        setLoading(false);
-      }
 
       if (severityType !== 'Default') {
         const filteredLogs = logCards.filter((log: any) => {

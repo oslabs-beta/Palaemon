@@ -97,6 +97,7 @@ export type AlertObject = {
 
 export type oomObject = {
   namespace: string;
+  node: string;
   podName: string;
   laststate: string;
   restartcount: string;
