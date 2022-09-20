@@ -24,7 +24,13 @@ After the initial build, you can now just do `npm start` which will first delete
 4. Follow the steps here to deploy the Prometheus UI, and you can forward the prometheus UI to local port 9090 : https://cloud.google.com/stackdriver/docs/managed-prometheus/query
 
 ## How to Run Tests
+### Unit and Integration tests using Jest
 `npm run test:watch` will start the jest test suite with the `--watch` flag enabled, which allows for immediate retests upon save. The jest config in `jest.config.js` is set up to only look for and run test files within the `__test__` folder and with file names that include ".test." in them, such as "Events.test.tsx". 
 
 Units tests are set up using Jest testing suite and react-testing-library to test react components in the front end. 
+
+### End-to-End testing with Playwright Test Runner
+`npm run test:e2e` will execute the playwright test runner and run any test files in the `__test__` folder with the name format ".e2e." in them, such as "playwright.e2e.ts". 
+
+There are settings to enable HTML report and video, snapshot, trace recordings that can be configured in the `playwright.config.ts` file is fo desired. 
 

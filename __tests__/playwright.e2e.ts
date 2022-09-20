@@ -113,7 +113,7 @@ test.describe('01. Launch app', async () => {
 });
 
 // Testing Namespace page
-test.describe.only('02. Namespace page ', async () => {
+test.describe('02. Namespace page ', async () => {
   test.beforeEach(async () => {
     // open the app
     electronApp = await electron.launch({ args: ['dist/electron/main.js'] });
