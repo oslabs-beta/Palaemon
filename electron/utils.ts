@@ -8,7 +8,7 @@ const fetch: any = (...args: any) =>
 export const setStartAndEndTime = () => {
   var now = new Date();
   var copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 1);
+  copyNow.setHours(copyNow.getHours() - 24);
   var startTime = copyNow.toISOString();
   var endTime = new Date().toISOString();
   return {
@@ -102,7 +102,7 @@ export async function fetchMem(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
   const podName = obj.metadata.name;
   const { startTime, endTime } = setStartAndEndTime();
-
+  
   if (obj?.metadata?.name) {
     output.name = obj.metadata.name;
     output.parent = obj.spec.nodeName;
@@ -117,8 +117,6 @@ export async function fetchMem(obj: any) {
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
-
-    // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {
       if (limitData.data.result[0].metric.resource === 'memory') {
         output.resource = 'memory';
@@ -139,7 +137,8 @@ export async function fetchMem(obj: any) {
       request: 1,
       parent: '',
       namespace: '',
-    };
+    }
+
   }
 }
 
@@ -208,11 +207,6 @@ export const formatOOMKills = (data: string[]) => {
     const nsColonIdx: any = namespaceStr.indexOf(':');
     const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
 
-    const nodeStr: string = updatedPodData[4];
-    const nodeColonIdx: any = nodeStr.indexOf(':');
-    const nodeSlashIdx: any = nodeStr.indexOf('/');
-    const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
-
     const limitIdx: any = filteredPodData.indexOf('Limits:');
     const limitCpu = filteredPodData[limitIdx + 1];
     const limitMemory = filteredPodData[limitIdx + 2];
@@ -230,7 +224,6 @@ export const formatOOMKills = (data: string[]) => {
     };
 
     oomObject.namespace = namespace;
-    oomObject.node = node;
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
@@ -248,7 +241,6 @@ export const formatOOMKills = (data: string[]) => {
     });
 
     OOMKills.push(oomObject);
-    console.log(oomObject);
   });
 
   return OOMKills;

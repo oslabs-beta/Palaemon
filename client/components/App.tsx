@@ -20,7 +20,7 @@ const App = () => {
         </Link>
         <ul id="sidebar-list">
           <li>
-            <Link to="/">
+            <Link to="/" id='link-namespace'>
               <div className="sidebar-page-container">
                 <img className="sidebar-icon" src="./assets/ns-icon.png" />
                 <span>Namespace</span>
@@ -28,7 +28,7 @@ const App = () => {
             </Link>
           </li>
           <li>
-            <Link to="/home">
+            <Link to="/home" id='link-dashboard'>
               <div className="sidebar-page-container">
                 <img
                   className="sidebar-icon"
@@ -39,7 +39,7 @@ const App = () => {
             </Link>
           </li>
           <li>
-            <Link to="/analysis">
+            <Link to="/analysis" id='link-analysis'>
               <div className="sidebar-page-container">
                 <img
                   className="sidebar-icon"
@@ -54,7 +54,7 @@ const App = () => {
       <main id="page">
         <div id="header">
           <Link to="/">
-            <h1>PALAEMON</h1>
+            <h1 id='company-name'>PALAEMON</h1>
           </Link>
         </div>
         <Routes>
