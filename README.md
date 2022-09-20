@@ -65,7 +65,7 @@ npm start:production
   
 
 # Kubernetes Requirements
-Palaemon utilizes the kubernetes command line tool (kubectl) to gather data on your nodes and clusters. kubectl can be downloaded and installed [here](https://kubernetes.io/docs/tasks/tools/).
+Palaemon utilizes the kubernetes command line tool (kubectl) to gather data on your nodes and clusters. Kubectl can be downloaded and installed [here](https://kubernetes.io/docs/tasks/tools/).
 
 Minikube can also be used to test out Palaemon. More can be found on their official documentation [here](https://minikube.sigs.k8s.io/docs/start/).
 
@@ -122,6 +122,7 @@ Units tests are set up using Jest testing suite and react-testing-library to tes
 ## Built With
 
 - [Electron](https://www.electronjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/)
 - [React Router](https://reactrouter.com/)
 - [Jest](https://jestjs.io/)
