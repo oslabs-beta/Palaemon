@@ -74,11 +74,12 @@ const loadMainWindow = () => {
       .catch((err: Error) => {
         console.log('fetch to 9090 has failed in main.ts in loadMainWindow');
         const num = dialog.showMessageBoxSync({
-          message: 'Please make sure port-forwarding to 9090 is set up.',
+          message:
+            'PALAEMON: Please make sure port-forwarding to 9090 is set up.',
           type: 'warning',
           // Cancel returns 0, OK returns 1
           buttons: ['Cancel', 'OK'],
-          title: 'Port 9090 missing',
+          title: 'PALAEMON: Port 9090 missing',
           detail: 'Open Port 9090 for prometheus, then click OK.',
         });
         if (num === 1) checkPort();
@@ -134,12 +135,12 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
         return localStorage.namespace;
       });
     const getNodes = await k8sApiCore.listNode(`${nsSelect}`);
-
     const nodeData = getNodes.body.items.map(node => {
       return parseNode(node);
     }); // end of nodeData
 
     const getPods = await k8sApiCore.listNamespacedPod(`${nsSelect}`);
+    // console.log('this is getPods: ',getPods.body.items[0]);
 
     const memData = await Promise.all(
       getPods.body.items.map(pod => {
@@ -298,34 +299,6 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   }
 });
 
-// QUERY FOR CLUSTER CHART HEALTH
-ipcMain.handle('getCPUUsage', async () => {
-  const { startTime, endTime } = setStartAndEndTime();
-  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
-  const interval = '15s';
-  try {
-    const nsSelect = await mainWindow.webContents
-      .executeJavaScript('({...localStorage});', true)
-      /* check what type this is with team */ /* check what type this is with team */
-      .then((localStorage: any) => {
-        return localStorage.namespace;
-      });
-    // fetch time series data from prom api
-    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
-    const query = `${PROM_URL}query_range?query=sum(
-      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
-    // fetch request
-    const res = await fetch(query);
-    const data = await res.json();
-
-    // data.data.result returns matrix
-    return formatMatrix(data.data, 'milicores');
-  } catch (error) {
-    console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
-    return { err: error };
-  }
-});
-
 // get alerts
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
@@ -357,7 +330,7 @@ ipcMain.handle('getOOMKills', async (): Promise<any> => {
   }
 });
 
-// TEST FOR USAGE
+// TEST FOR USAGE ON HOMEPAGE AND ANALYSIS PAGE
 
 ipcMain.handle('getUsage', async (event, ...args) => {
   const time = new Date().toISOString();

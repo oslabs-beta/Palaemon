@@ -1,25 +1,26 @@
-import { useState, useEffect, MouseEvent } from 'react';
-import ClusterChart from './ClusterChart';
-import Events from './Events';
-import Graph from './Graph';
-import DetailsModal from './Modal';
+import { useState, useEffect, MouseEvent } from "react";
+import ClusterChart from "./ClusterChart";
+import Events from "./Events";
+import Graph from "./Graph";
+import DetailsModal from "./Modal";
 
 import {
   ClusterChartProps,
   SvgInfo,
   ModalProps,
   ClusterAllInfo,
-} from '../Types';
+} from "../Types";
+import { useNavigate } from "react-router-dom";
 
 const tempData: SvgInfo[] = [
   {
-    name: 'string',
+    name: "string",
     usage: 1,
-    resource: 'hello',
+    resource: "hello",
     request: 0.9,
     limit: Math.random() + 1,
-    parent: 'string',
-    namespace: 'string',
+    parent: "string",
+    namespace: "string",
   },
 ];
 
@@ -32,12 +33,13 @@ const initalClusterChartData: ClusterAllInfo = {
 
 const HomePage = (props: any): JSX.Element => {
   const [pods, setPods]: any = useState([]);
-  const [nodes, setNodes]: any = useState(['node1']);
+  const [nodes, setNodes]: any = useState(["node1"]);
   const [portOpen, setPortOpen]: any = useState(false);
-  const [resource, setResource]: any = useState('');
+  const [resource, setResource]: any = useState("");
   const [clusterChartData, setClusterChartData]: any = useState<ClusterAllInfo>(
     initalClusterChartData
   );
+  const navigate = useNavigate();
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
@@ -45,10 +47,10 @@ const HomePage = (props: any): JSX.Element => {
   const [theModal, setTheModal] = useState(<p>No Modal Info</p>);
 
   const openModal = (e: MouseEvent, data: SvgInfo) => {
-    console.log('Opening Modal');
+    console.log("Opening Modal");
     const position = {
-      top: e.pageY.toString() + 'px',
-      left: e.pageX.toString() + 'px',
+      top: e.pageY.toString() + "px",
+      left: e.pageX.toString() + "px",
     };
     const propData: ModalProps = {
       ...data,
@@ -75,13 +77,16 @@ const HomePage = (props: any): JSX.Element => {
 
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
-    console.log(allTheInfo);
-    if (resource === 'memory' || resource === 'cpu') {
+    console.log("this is all info", allTheInfo);
+
+    if (resource === "memory" || resource === "cpu") {
       allTheInfo.Pods = allTheInfo.Pods.filter(
         (info: any) => info.resource === resource
       );
       setClusterChartData(allTheInfo);
-    } else setClusterChartData(allTheInfo);
+    } else {
+      setClusterChartData(allTheInfo);
+    }
   };
 
   const handleResourceChange = (e: any) => {
@@ -122,7 +127,7 @@ const HomePage = (props: any): JSX.Element => {
           />
         </div>
         <div id="graph">
-          <Graph />
+          <Graph setResourceError={props.setResourceError} />
         </div>
       </div>
       <div id="right-side">

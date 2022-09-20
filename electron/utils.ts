@@ -8,7 +8,7 @@ const fetch: any = (...args: any) =>
 export const setStartAndEndTime = () => {
   var now = new Date();
   var copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 1);
+  copyNow.setHours(copyNow.getHours() - 24);
   var startTime = copyNow.toISOString();
   var endTime = new Date().toISOString();
   return {
@@ -118,7 +118,6 @@ export async function fetchMem(obj: any) {
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
 
-    // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {
       if (limitData.data.result[0].metric.resource === 'memory') {
         output.resource = 'memory';
@@ -193,7 +192,7 @@ export const formatOOMKills = (data: string[]) => {
     const updatedPodData = podData.map(pod =>
       pod.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
     );
-    console.log('this is updated pods ', updatedPodData);
+    // console.log("this is updated pod data", updatedPodData);
     const indexOfTerm = updatedPodData.indexOf('Last State: Terminated');
     // console.log(indexOfTerm);
     const filteredPodData: string[] = updatedPodData.slice(
@@ -230,7 +229,6 @@ export const formatOOMKills = (data: string[]) => {
     };
 
     oomObject.namespace = namespace;
-    oomObject.node = node;
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
@@ -248,7 +246,6 @@ export const formatOOMKills = (data: string[]) => {
     });
 
     OOMKills.push(oomObject);
-    console.log(oomObject);
   });
 
   return OOMKills;
