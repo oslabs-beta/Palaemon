@@ -1,3 +1,10 @@
+// Types for APP
+
+export type SidebarProps = {
+  menuOpen: string;
+  setMenuOpen: (input: boolean) => void;
+};
+
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
   name: string; // name of pod, node, or cluster, or deployment

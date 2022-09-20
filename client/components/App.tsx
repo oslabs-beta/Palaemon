@@ -12,10 +12,11 @@ import Sidebar from './Sidebar';
 
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
+  const [menuOpen, setMenuOpen]: any = React.useState(true);
 
   return (
     <HashRouter basename="/">
-      <Sidebar />
+      <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main id="page">
         <div id="header">
           <Link to="/">
@@ -30,6 +31,8 @@ const App = () => {
               <HomePage
                 analyzedPod={analyzedPod}
                 setAnalyzedPod={setAnalyzedPod}
+                menuOpen={menuOpen}
+                setMenuOpen={setMenuOpen}
               />
             }
           />

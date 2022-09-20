@@ -121,22 +121,23 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           </div>
         </div>
         <div className="analysis-oomkill-data">
+          <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
           {analyzedPod.podName ? (
             <div className="analysis-oomkill-data-container">
               <div className="analysis-oomkill-data-left">
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Pod:</strong> {analyzedPod.podName}
                 </p>
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Restarts:</strong> {analyzedPod.restartcount}
                 </p>
               </div>
               <div className="analysis-oomkill-data-right">
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Terminated at:</strong>{' '}
                   {analyzedPod.started.slice(0, -6)}
                 </p>
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Restarted at:</strong>{' '}
                   {analyzedPod.finished.slice(0, -6)}
                 </p>
@@ -150,6 +151,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       <div className="analysis-main">
         <div id="left-side">
           <div className="pod-overview">
+            <span className="summary">Summary</span>
             {analyzedPod.podName && podOverviewData.length > 0 ? (
               podOverviewData
             ) : analyzedPod.podName ? (
@@ -161,6 +163,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             )}
           </div>
           <div className="filtered-log-container">
+            <span className="filtered-events-heading">Events</span>
             {analyzedPod.podName && filteredLogs.length > 0 ? (
               filteredLogs
             ) : analyzedPod.podName ? (

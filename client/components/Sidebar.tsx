@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SidebarProps } from '../Types';
 
-const Sidebar = () => {
-  const [menuOpen, setMenuOpen] = useState(true);
+const Sidebar = (props: SidebarProps) => {
+  const { menuOpen, setMenuOpen } = props;
 
   const toggleMenu = () => {
     setMenuOpen(menuOpen ? false : true);

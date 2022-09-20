@@ -38,6 +38,7 @@ const HomePage = (props: any): JSX.Element => {
   const [clusterChartData, setClusterChartData]: any = useState<ClusterAllInfo>(
     initalClusterChartData
   );
+  const { menuOpen, setMenuOpen } = props;
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
@@ -64,8 +65,7 @@ const HomePage = (props: any): JSX.Element => {
   };
 
   const closeModalFromAnywhere = (e: MouseEvent): void => {
-    if(e.target instanceof HTMLDivElement)
-    setModalState(false);
+    if (e.target instanceof HTMLDivElement) setModalState(false);
   };
 
   const gke: ClusterChartProps = {
@@ -94,10 +94,8 @@ const HomePage = (props: any): JSX.Element => {
   }, [resource]);
 
   return (
-    <div id="contents" 
-    onClick={closeModalFromAnywhere}
-    >
-      <div id="left-side">
+    <div id="contents" onClick={closeModalFromAnywhere}>
+      <div id={menuOpen ? 'left-side' : 'left-side-closed'}>
         <div id="cluster-chart">
           <div className="cluster-btns">
             <button
@@ -128,7 +126,7 @@ const HomePage = (props: any): JSX.Element => {
           <Graph />
         </div>
       </div>
-      <div id="right-side">
+      <div id={menuOpen ? 'right-side' : 'right-side-closed'}>
         <Events
           analyzedPod={props.analyzedPod}
           setAnalyzedPod={props.setAnalyzedPod}
