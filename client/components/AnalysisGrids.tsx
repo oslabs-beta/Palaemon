@@ -44,26 +44,11 @@ const AnalysisGrids = (props: any) => {
     },
   ];
 
-  const initData1: GraphData = [
-    {
-      TempPodInfo: {
-        times: ["a", "b", "c"],
-        values: [1, 2, 3],
-      },
-    },
-    {
-      OtherFakePods: {
-        times: ["a", "b", "c"],
-        values: [3, 2, 1],
-      },
-    },
-  ];
-
   const [graphState, setGraphState] = useState<AnalysisGraphData>({
     podMem: initData,
     podCPU: initData,
     networkRead: initData,
-    networkWrite: initData1,
+    networkWrite: initData,
   });
 
   const colorArray = [
@@ -79,7 +64,7 @@ const AnalysisGrids = (props: any) => {
   ];
 
   const xLabels: string[] =
-    graphState.networkRead[0][Object.keys(graphState.networkRead[0])[0]].times;
+    graphState.podMem[0][Object.keys(graphState.podMem[0])[0]].times;
 
   let options: string = JSON.stringify({
     responsive: true,
