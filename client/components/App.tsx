@@ -1,19 +1,20 @@
-import * as React from 'react';
-import { HashRouter, Link, Route, Routes } from 'react-router-dom';
+import * as React from "react";
+import { HashRouter, Link, Route, Routes } from "react-router-dom";
 
 // page containers for React Router
-import HomePage from './HomePage';
-import LandingPage from './LandingPage';
-import AnalysisPage from './AnalysisPage';
+import HomePage from "./HomePage";
+import LandingPage from "./LandingPage";
+import AnalysisPage from "./AnalysisPage";
 
 // import styles sheet here
-import '../assets/stylesheets/style.scss';
+import "../assets/stylesheets/style.scss";
 
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
+  const [resourceError, setResourceError]: any = React.useState("");
 
   return (
-    <HashRouter basename='/'>
+    <HashRouter basename="/">
       <nav id="sidebar">
         <Link to="">
           <img id="logo" src="./assets/logo-hat.png" alt="" />
@@ -58,13 +59,22 @@ const App = () => {
           </Link>
         </div>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/"
+            element={
+              <LandingPage
+                setResourceError={setResourceError}
+                resourceError={resourceError}
+              />
+            }
+          />
           <Route
             path="/home"
             element={
               <HomePage
                 analyzedPod={analyzedPod}
                 setAnalyzedPod={setAnalyzedPod}
+                setResourceError={setResourceError}
               />
             }
           />

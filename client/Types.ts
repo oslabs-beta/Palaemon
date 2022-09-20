@@ -14,13 +14,13 @@ export class SvgInfoObj implements SvgInfo {
   constructor() {
     // set default values for each prop
     // number defaults are set to 1 (instead of) to avoid divide by 0 issues
-    this.name = '';
+    this.name = "";
     this.usage = 1;
-    this.resource = 'memory';
+    this.resource = "memory";
     this.request = 1;
     this.limit = 1;
-    this.parent = '';
-    this.namespace = '';
+    this.parent = "";
+    this.namespace = "";
   }
 
   name: string; // name of pod, node, or cluster, or deployment
@@ -151,4 +151,18 @@ export type AnalysisPageProps = {
 
 export type TooltipProps = {
   position: { left: string; top: string };
+};
+
+export type AnalysisData = {
+  [podName: string]: {
+    times: string[];
+    values: number[];
+  };
+}[];
+
+export type AnalysisGraphData = {
+  networkRead: GraphData;
+  networkWrite: GraphData;
+  podMem: GraphData;
+  podCPU: GraphData;
 };

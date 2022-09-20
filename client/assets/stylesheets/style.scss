@@ -473,6 +473,12 @@ footer {
 
     text-align: center;
 
+    #error {
+      color: red;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
+
     h2 {
       font-size: 1.25rem;
     }

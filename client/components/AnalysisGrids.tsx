@@ -1,6 +1,11 @@
 import { Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-import { GraphData, ChartGraphData, GraphableData } from "../Types";
+import {
+  GraphData,
+  ChartGraphData,
+  GraphableData,
+  AnalysisGraphData,
+} from "../Types";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,7 +27,7 @@ ChartJS.register(
   Legend
 );
 
-const ChartGrid = (props: any) => {
+const AnalysisGrids = (props: any) => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const initData: GraphData = [
     {
@@ -39,26 +44,11 @@ const ChartGrid = (props: any) => {
     },
   ];
 
-  const initData1: GraphData = [
-    {
-      TempPodInfo: {
-        times: ["a", "b", "c"],
-        values: [1, 2, 3],
-      },
-    },
-    {
-      OtherFakePods: {
-        times: ["a", "b", "c"],
-        values: [3, 2, 1],
-      },
-    },
-  ];
-
-  const [graphState, setGraphState] = useState<ChartGraphData>({
+  const [graphState, setGraphState] = useState<AnalysisGraphData>({
     podMem: initData,
     podCPU: initData,
-    nodeMem: initData,
-    nodeCPU: initData1,
+    networkRead: initData,
+    networkWrite: initData,
   });
 
   const colorArray = [
@@ -74,7 +64,7 @@ const ChartGrid = (props: any) => {
   ];
 
   const xLabels: string[] =
-    graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
+    graphState.podMem[0][Object.keys(graphState.podMem[0])[0]].times;
 
   let options: string = JSON.stringify({
     responsive: true,
@@ -120,10 +110,10 @@ const ChartGrid = (props: any) => {
   });
 
   const multiOptions = {
-    nodeMem: JSON.parse(options),
-    nodeCPU: JSON.parse(options),
     podMem: JSON.parse(options),
     podCPU: JSON.parse(options),
+    networkRead: JSON.parse(options),
+    networkWrite: JSON.parse(options),
   };
 
   const charts: JSX.Element[] = [];
@@ -139,7 +129,7 @@ const ChartGrid = (props: any) => {
   // first we iterate of the total number of graphs we want
   (Object.keys(graphState) as (keyof typeof graphState)[]).forEach(
     (key, index) => {
-      console.log("whats this ", key, graphState[key], index);
+      // console.log('whats this ', key, graphState[key], index);
 
       // then we iterate over all of the lines in that graph
       for (let i = 0; i < graphState[key].length; i++) {
@@ -187,4 +177,4 @@ const ChartGrid = (props: any) => {
   return <>{charts}</>;
 };
 
-export default ChartGrid;
+export default AnalysisGrids;
