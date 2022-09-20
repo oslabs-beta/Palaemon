@@ -102,7 +102,7 @@ export async function fetchMem(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
   const podName = obj.metadata.name;
   const { startTime, endTime } = setStartAndEndTime();
-
+  
   if (obj?.metadata?.name) {
     output.name = obj.metadata.name;
     output.parent = obj.spec.nodeName;
@@ -117,16 +117,8 @@ export async function fetchMem(obj: any) {
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
-    // console.log('request1',requestData);
-    // console.log('limit1',limitData);
-    // console.log('request',requestData.data.result);
-    // console.log('limitdata.res.vals',limitData.data.result[0].values[0][1]);
-    // console.log('number1', limitData.data.result[0])
-    // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {
-      console.log('metricresousece', limitData.data.result[0].metric.resource)
       if (limitData.data.result[0].metric.resource === 'memory') {
-        console.log('number1', limitData.data.result[0].values[0][1])
         output.resource = 'memory';
         output.limit =
           parseInt(limitData.data.result[0].values[0][1]) / 1000000;
@@ -145,7 +137,8 @@ export async function fetchMem(obj: any) {
       request: 1,
       parent: '',
       namespace: '',
-    };
+    }
+
   }
 }
 
