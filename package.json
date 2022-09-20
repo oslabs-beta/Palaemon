@@ -1,19 +1,22 @@
 {
   "name": "palaemon",
   "version": "1.0.0",
+  "main": "dist/electron/main.js",
   "description": "- A gentle, euthanization and diagnosis tool for out-of-memory (OOM) kubernetes pods.  - Palaemon is a Greek, childe sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of shrimp.",
   "scripts": {
     "build": "webpack --watch --config ./webpack.config.js",
     "build:production": "webpack --config ./webpack.production.js",
     "rmdir": "node -e \"var fs = require('fs'); process.argv.slice(1).map((fpath) => fs.rmdirSync(fpath, { recursive: true })); process.exit(0);\"",
     "clean:prebuild": "npm run rmdir -- dist",
-    "dev": "concurrently \"webpack --watch --config ./webpack.config.js\" \"wait-on ./dist/electron/main.js && electronmon ./dist/electron/main.js\"",
     "electronmon": "electronmon ./dist/electron/main.js",
-    "start": "npm run clean:prebuild && npm run dev",
+    "dev": "npm run clean:prebuild && npm run dev",
+    "start": "electron dist/electron/main.js",
     "start:production": "npm run build:production && electron ./dist/electron/main.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "pack": "electron-builder -mwl",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -45,6 +48,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "electron": "^20.1.0",
+    "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
     "electronmon": "^2.0.2",
     "html-webpack-plugin": "^5.5.0",
