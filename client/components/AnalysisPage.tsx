@@ -107,8 +107,8 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           <div className="tooltip-container">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
+              width="16"
+              height="16"
               fill="#00695c"
               className="bi bi-question-circle-fill tooltip"
               viewBox="0 0 16 16"

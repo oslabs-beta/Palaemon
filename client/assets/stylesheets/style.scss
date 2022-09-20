@@ -41,6 +41,12 @@ body {
 #logo {
   width: 180px;
   margin: 8px;
+  transition: all 0.6s;
+}
+
+#logo-menu-closed {
+  width: 60px;
+  margin: 8px;
 }
 
 #root {
@@ -61,6 +67,7 @@ $s-light-color: #e5ffff;
 $s-dark-color: #82ada9;
 
 $sidebar-width: 240px;
+$sidebar-width-closed: 80px;
 
 #sidebar {
   width: $sidebar-width;
@@ -69,6 +76,7 @@ $sidebar-width: 240px;
   flex-direction: column;
   align-items: center;
   position: relative;
+  transition: all 0.6s;
 
   a {
     & > img {
@@ -89,11 +97,13 @@ $sidebar-width: 240px;
     }
   }
 
-  .menu-close-icon {
-    width: 1.4rem;
+  #close-menu-icon,
+  #open-menu-icon {
+    width: 1.2rem;
     position: absolute;
-    top: -2rem;
+    top: 0.4rem;
     right: 0.4rem;
+    cursor: pointer;
   }
 
   .sidebar-page-container {
@@ -104,8 +114,23 @@ $sidebar-width: 240px;
     .sidebar-icon {
       width: 2.4rem;
       color: white;
+      transition: all 0.6s;
+    }
+
+    .sidebar-icon-closed {
+      @extend .sidebar-icon;
+      width: 2rem;
+    }
+
+    .sidebar-names {
+      transition: all 0.6s;
     }
   }
+}
+
+#sidebar-closed {
+  @extend #sidebar;
+  width: $sidebar-width-closed;
 }
 
 #page {
@@ -503,7 +528,7 @@ button:focus-visible {
   .analysis-nav {
     display: flex;
     justify-content: flex-start;
-    margin: 2rem 2rem;
+    margin: 1rem 2rem;
     color: $font-color;
 
     .analysis-nav-left {
@@ -514,17 +539,7 @@ button:focus-visible {
       min-height: 4rem;
 
       #oomkill-selector {
-        font-size: 1.1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-      }
-
-      .interval-unit {
-        font-size: 1.1rem;
+        font-size: 0.8rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
@@ -534,7 +549,7 @@ button:focus-visible {
       }
 
       .analysis-interval {
-        font-size: 1.1rem;
+        font-size: 0.8rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
@@ -544,8 +559,18 @@ button:focus-visible {
         width: 3rem;
       }
 
+      .interval-unit {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+        height: fit-content;
+      }
+
       .query-btn {
-        font-size: 1.1rem;
+        font-size: 0.8rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
@@ -607,7 +632,7 @@ button:focus-visible {
     }
   }
   .no-data-msg {
-    font-size: 1rem;
+    font-size: 0.8rem;
     text-align: center;
     background-color: #ddd;
     border-radius: 10px;
@@ -617,7 +642,7 @@ button:focus-visible {
 
   .analysis-main {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
 
     .pod-overview {
       padding: 1rem 1.5rem;
@@ -659,11 +684,6 @@ button:focus-visible {
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
       margin: 0 2rem 0rem 1rem;
-
-      canvas {
-        width: 200px;
-        height: 200px;
-      }
     }
 
     .line-chart-div {

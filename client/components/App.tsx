@@ -8,49 +8,14 @@ import AnalysisPage from './AnalysisPage';
 
 // import styles sheet here
 import '../assets/stylesheets/style.scss';
+import Sidebar from './Sidebar';
 
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
 
   return (
-    <HashRouter basename='/'>
-      <nav id="sidebar">
-        <Link to="">
-          <img id="logo" src="./assets/logo-hat.png" alt="" />
-        </Link>
-        <ul id="sidebar-list">
-          <li>
-            <Link to="/">
-              <div className="sidebar-page-container">
-                <img className="sidebar-icon" src="./assets/ns-icon.png" />
-                <span>Namespace</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/home">
-              <div className="sidebar-page-container">
-                <img
-                  className="sidebar-icon"
-                  src="./assets/dashboard-icon.png"
-                />
-                <span>Dashboard</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/analysis">
-              <div className="sidebar-page-container">
-                <img
-                  className="sidebar-icon"
-                  src="./assets/analysis-icon.png"
-                />
-                <span>Analysis</span>
-              </div>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+    <HashRouter basename="/">
+      <Sidebar />
       <main id="page">
         <div id="header">
           <Link to="/">
