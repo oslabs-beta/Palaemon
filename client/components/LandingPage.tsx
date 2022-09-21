@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const LandingPage = (props: any): JSX.Element => {
   const [namespaces, setNamespaces] = useState([]);
   const navigate = useNavigate();
+  let j = 150;
 
   const error = props.resourceError;
 
@@ -53,7 +54,7 @@ const LandingPage = (props: any): JSX.Element => {
             ...
           </option>
           {namespaces.map((namespace) => (
-            <option value={namespace}>{namespace}</option>
+            <option value={namespace} key={j++}>{namespace}</option>
           ))}
         </select>
         <div id="ns-error" >{error} </div>

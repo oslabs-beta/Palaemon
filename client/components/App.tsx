@@ -29,6 +29,8 @@ import Sidebar from './Sidebar';
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
   const [resourceError, setResourceError]: any = React.useState('');
+  const [menuOpen, setMenuOpen]: any = React.useState(true);
+  const [showGraphs, setShowGraphs]: any = React.useState(false);
   const [analyzedData, setAnalyzedData]: any = React.useState({
     podMem: initData,
     podCPU: initData,
@@ -37,7 +39,6 @@ const App = () => {
     netRead: initData,
     netWrite: initData,
   });
-  const [menuOpen, setMenuOpen]: any = React.useState(true);
 
   return (
     <HashRouter basename="/">
@@ -68,6 +69,7 @@ const App = () => {
                 setAnalyzedData={setAnalyzedData}
                 menuOpen={menuOpen}
                 setMenuOpen={setMenuOpen}
+                setShowGraphs={setShowGraphs}
               />
             }
           />
@@ -79,6 +81,9 @@ const App = () => {
                 setAnalyzedPod={setAnalyzedPod}
                 analyzedData={analyzedData}
                 setAnalyzedData={setAnalyzedData}
+                clusterChartData={[]}
+                showGraphs={showGraphs}
+                setShowGraphs={setShowGraphs}
               />
             }
           />

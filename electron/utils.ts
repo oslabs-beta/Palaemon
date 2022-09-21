@@ -86,11 +86,13 @@ export function parseNode(obj: any) {
 
   if (obj.status?.allocatable !== undefined) {
     const memRequest: number = parseMem(obj.status.allocatable.memory);
-    output.request = memRequest;
+    output.request = memRequest / 1000;
+    output.unit = 'megabytes'
   }
   if (obj.status?.capacity !== undefined) {
     const memLimit: number = parseMem(obj.status.capacity.memory);
-    output.limit = memLimit;
+    output.limit = memLimit / 1000;
+    output.unit = 'megabytes'
   }
 
   // (if node is truthy, and if node.metadata is truthy, and if node.metadat.name is truthy)

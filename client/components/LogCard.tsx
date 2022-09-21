@@ -4,22 +4,25 @@ import { useNavigate } from 'react-router-dom';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
   const navigate = useNavigate();
-  const { analyzedPod, setAnalyzedPod }: any = props;
+  const { analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
 
   const handleAnalyze = async () => {
     setAnalyzedPod({ ...props.oomObj });
-    console.log('this is oomobj', props.oomObj)
     try {
-      if (props.oomObj){
-      const analyzeData = await window.api.getAnalysis(props.oomObj.node)
-      console.log('this should give us arrobjs ', analyzeData);
-      props.setAnalyzedData(analyzeData);
+      if (props.oomObj) {
+        // console.log('props oom obj', typeof props.oomObj.started)
+        const timeOfDeath = new Date(props.oomObj.started).toISOString();
+        const analyzeData = await window.api.getAnalysis(props.oomObj.node, '15s', timeOfDeath);
+        //access to cluster chart data which shows limits/requests
+        console.log('inside handle analyze cluster chard data', props.clusterChartData.node)
+        setShowGraphs(true);
+        props.setAnalyzedData(analyzeData);
+      }
+      navigate('/analysis');
+    } catch (err) {
+      return console.log('error: ', err);
     }
-    navigate('/analysis');
-    } catch(err) {
-      return console.log('error: ', err)
-    }
-  }
+  };
 
   // create the header elements
   let headerObj: { [key: string]: string } = {};
