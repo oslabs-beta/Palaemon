@@ -22,7 +22,19 @@ const LandingPage = (props: any): JSX.Element => {
 
   const handleNamespaceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     localStorage.setItem("namespace", e.target.value);
-    navigate("/home");
+    // the below fetch can end up being slow due to the time length
+    props.setResourceError(<p style={{}} className="loader"></p>);
+    
+    window.api.getMemoryUsageByPods().then((output: any) => {
+      if (output.length < 1) {
+        // console.log("returning out without setGraphState");
+        props.setResourceError(<p id="error">No resources found in this namespace</p>);
+        return navigate("/");
+      } else {
+        props.setResourceError(<></>);
+        navigate("/home");
+      }
+    });
   };
 
   return (
@@ -44,7 +56,7 @@ const LandingPage = (props: any): JSX.Element => {
             <option value={namespace}>{namespace}</option>
           ))}
         </select>
-        <p id="error">{error}</p>
+        <div id="ns-error" >{error} </div>
       </form>
       <img id="logo-large" src="./assets/logo.png" alt="" />
     </div>

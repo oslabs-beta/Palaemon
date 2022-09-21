@@ -59,7 +59,16 @@ const ChartGrid = (props: any) => {
     podCPU: initData,
     nodeMem: initData,
     nodeCPU: initData1,
+    netRead: initData,
+    netWrite: initData,
   });
+
+  useEffect(() => {
+    // console.log("THIS IS PROPS DATA ", props.analyzedData);
+    // console.log("useeffect on [], before the set", graphState);
+    setGraphState(props.analyzedData);
+    // console.log("after it gets set", graphState);
+  }, []);
 
   const colorArray = [
     "red",
@@ -71,7 +80,12 @@ const ChartGrid = (props: any) => {
     "yellow",
     "orange",
     "#003d33",
+    "#003d33",
+    "#003d33",
+    "#003d33",
   ];
+
+  // console.log("before a crash", graphState);
 
   const xLabels: string[] =
     graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
@@ -124,6 +138,8 @@ const ChartGrid = (props: any) => {
     nodeCPU: JSON.parse(options),
     podMem: JSON.parse(options),
     podCPU: JSON.parse(options),
+    netRead: JSON.parse(options),
+    netWrite: JSON.parse(options),
   };
 
   const charts: JSX.Element[] = [];
