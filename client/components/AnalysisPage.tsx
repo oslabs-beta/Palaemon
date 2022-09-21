@@ -101,7 +101,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     renderOOMKills();
     createLogs();
 
-    console.log("ANALYZED POD CHANGED", analyzedPod);
+    //console.log("ANALYZED POD CHANGED", analyzedPod);
   }, [analyzedPod]);
 
   return (

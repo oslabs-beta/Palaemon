@@ -104,7 +104,7 @@ export function formatAnalysis(matrix: matrix, unitType?: string) {
     output[name].values = obj.values.map((el: [number, number]) => {
       // change to megabytes
 
-      if (unitType === "memory") return Number(el[1] / 1000000);
+      if (unitType === "megabytes") return Number(el[1] / 1000000);
       else if (unitType === "milicores") return Number(el[1]*1000)
       else if (unitType === "kilobytes") return Number(el[1]/1000)
       return;

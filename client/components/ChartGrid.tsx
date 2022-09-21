@@ -63,7 +63,12 @@ const ChartGrid = (props: any) => {
     netWrite: initData,
   });
 
-
+  useEffect(() => {
+    // console.log("THIS IS PROPS DATA ", props.analyzedData);
+    // console.log("useeffect on [], before the set", graphState);
+    setGraphState(props.analyzedData);
+    // console.log("after it gets set", graphState);
+  }, []);
 
   const colorArray = [
     "red",
@@ -76,6 +81,8 @@ const ChartGrid = (props: any) => {
     "orange",
     "#003d33",
   ];
+
+  // console.log("before a crash", graphState);
 
   const xLabels: string[] =
     graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;

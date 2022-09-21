@@ -9,10 +9,35 @@ import AnalysisPage from "./AnalysisPage";
 // import styles sheet here
 import "../assets/stylesheets/style.scss";
 
+const initData: any = [
+  {
+    Port9090isClosed: {
+      times: ["a", "b", "c"],
+      values: [1, 2, 3],
+    },
+  },
+  {
+    Port9090isClosedOpenIt: {
+      times: ["a", "b", "c"],
+      values: [3, 2, 1],
+    },
+  },
+];
+
+
+
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
   const [resourceError, setResourceError]: any = React.useState("");
-  const [analyzedData, setAnalyzedData]: any = React.useState({});
+  const [analyzedData, setAnalyzedData]: any = React.useState({
+    podMem: initData,
+    podCPU: initData,
+    nodeMem: initData,
+    nodeCPU: initData,
+    netRead: initData,
+    netWrite: initData,
+  });
+
   return (
     <HashRouter basename="/">
       <nav id="sidebar">

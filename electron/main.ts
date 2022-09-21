@@ -375,8 +375,7 @@ ipcMain.handle("getUsage", async (event, ...args) => {
 ipcMain.handle("getAnalysis", async (event, parentNode, interval = '15s') => {
   console.log('parentnode from mainWindow.ts',parentNode)
   console.log('this is interval', interval)
-  const startTime = new Date().toISOString();
-  const endTime = new Date().toISOString();
+  const { startTime, endTime } = setStartAndEndTime();
   // const interval = '15s'
   // const namespace = await mainWindow.webContents
   // .executeJavaScript("({...localStorage});", true)
@@ -407,7 +406,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '15s') => {
   &start=${startTime}&end=${endTime}&step=${interval}`;
   const nodeMEMRes = await fetch(nodeMEMQuery);
   const nodeMEMData = await nodeMEMRes.json();
-  const nodeMEM = await formatAnalysis(nodeMEMData.data, "megabytes")
+  const nodeMem = await formatAnalysis(nodeMEMData.data, "megabytes")
 
   // build node usage by CPU graph
   const nodeCPUQuery = `${PROM_URL}query_range?query=
@@ -417,11 +416,28 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '15s') => {
   const nodeCPUData = await nodeCPURes.json();
   const nodeCPU = await formatAnalysis(nodeCPUData.data, "milicores")
 
+  const initData: any = [
+    {
+      Port9090isClosed: {
+        times: ["a", "b", "c"],
+        values: [1, 2, 3],
+      },
+    },
+    {
+      Port9090isClosedOpenIt: {
+        times: ["a", "b", "c"],
+        values: [3, 2, 1],
+      },
+    },
+  ];
+
     return {
       podMem,
       podCPU,
-      nodeMEM,
-      nodeCPU
+      nodeMem,
+      nodeCPU,
+      netRead: initData,
+      netWrite: initData,
     }
   }
   catch (error) {
