@@ -1,7 +1,7 @@
-import { GraphData } from "../Types";
-import { Line } from "react-chartjs-2";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { GraphData } from '../Types';
+import { Line } from 'react-chartjs-2';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // I dont know why, but you need all this ChartJS stuff to make the react-chartjs-2 to work
 import {
   Chart as ChartJS,
@@ -12,8 +12,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import { ProgressPlugin } from "webpack";
+} from 'chart.js';
+import { ProgressPlugin } from 'webpack';
 
 ChartJS.register(
   CategoryScale,
@@ -31,13 +31,13 @@ const Graph = (props: any): JSX.Element => {
   const [graphState, setGraphState] = useState<GraphData>([
     {
       Port9090isClosed: {
-        times: ["a", "b", "c"],
+        times: ['a', 'b', 'c'],
         values: [1, 2, 3],
       },
     },
     {
       Port9090isClosed: {
-        times: ["a", "b", "c"],
+        times: ['a', 'b', 'c'],
         values: [3, 2, 1],
       },
     },
@@ -46,10 +46,10 @@ const Graph = (props: any): JSX.Element => {
   const navigate = useNavigate();
 
   if (!portOpen)
-    fetch("http://localhost:9090/").then((response) => {
+    fetch('http://localhost:9090/').then(response => {
       // console.log('status code', response.status)
       if (response.status === 200) {
-        console.log("Port 9090 is Open");
+        console.log('Port 9090 is Open');
         setPortOpen(true);
       } else {
         //optional place to throw error when port 9090 is closed
@@ -69,7 +69,7 @@ const Graph = (props: any): JSX.Element => {
           if (output.length < 1) {
             // console.log("returning out without setGraphState");
             // props.setResourceError("No resources found in this namespace");
-            return navigate("/");
+            return navigate('/');
           } else if (!output.err) setGraphState(output);
           // console.log('itworks')
         })
@@ -82,15 +82,15 @@ const Graph = (props: any): JSX.Element => {
 
   const datasetData = [];
   const colorArray = [
-    "red",
-    "blue",
-    "green",
-    "black",
-    "purple",
-    "cyan",
-    "yellow",
-    "orange",
-    "#003d33",
+    'red',
+    'blue',
+    'green',
+    'black',
+    'purple',
+    'cyan',
+    'yellow',
+    'orange',
+    '#003d33',
   ];
 
   // let keyname: keyof typeof graphState[0] = Object.keys(graphState[0])[0]
@@ -111,15 +111,15 @@ const Graph = (props: any): JSX.Element => {
     responsive: true,
     responsiveAnimationDuration: 1000,
     pointRadius: 0,
-    indexAxis: "x",
+    indexAxis: 'x',
     plugins: {
       legend: {
         display: buttonClicked,
-        position: "bottom" as const,
+        position: 'bottom' as const,
       },
       title: {
         display: true,
-        text: "Current Memory Usage by Pods",
+        text: 'Current Memory Usage by Pods',
       },
       // tooltip: {
       //   mode: 'label'
@@ -132,10 +132,10 @@ const Graph = (props: any): JSX.Element => {
     scales: {
       x: {
         grid: {
-          color: "rgb(240, 240, 240)",
+          color: 'rgb(240, 240, 240)',
         },
         ticks: {
-          color: "#797676",
+          color: '#797676',
         },
         title: {
           display: true,
@@ -144,21 +144,21 @@ const Graph = (props: any): JSX.Element => {
       },
       y: {
         grid: {
-          color: "rgb(240, 240, 240)",
+          color: 'rgb(240, 240, 240)',
         },
         ticks: {
-          color: "#797676",
+          color: '#797676',
         },
         title: {
           display: true,
-          text: "Megabytes",
+          text: 'Megabytes',
         },
       },
     },
   };
 
   const handleLegendClick = () => {
-    setButtonClicked((prevCheck) => !prevCheck);
+    setButtonClicked(prevCheck => !prevCheck);
   };
 
   // console.log('chartjs', ChartJS.defaults.plugins.tooltip)
@@ -171,7 +171,7 @@ const Graph = (props: any): JSX.Element => {
     <>
       <Line options={options} data={data} />
       <button className="legend-btn-main" onClick={handleLegendClick}>
-        {!buttonClicked ? "Show Pods" : "Hide Pods"}
+        {!buttonClicked ? 'Show' : 'Hide'}
       </button>
     </>
   );

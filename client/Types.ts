@@ -1,3 +1,10 @@
+// Types for APP
+
+export type SidebarProps = {
+  menuOpen: string;
+  setMenuOpen: (input: boolean) => void;
+};
+
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
   name: string; // name of pod, node, or cluster, or deployment
@@ -14,13 +21,13 @@ export class SvgInfoObj implements SvgInfo {
   constructor() {
     // set default values for each prop
     // number defaults are set to 1 (instead of) to avoid divide by 0 issues
-    this.name = "";
+    this.name = '';
     this.usage = 1;
-    this.resource = "memory";
+    this.resource = 'memory';
     this.request = 1;
     this.limit = 1;
-    this.parent = "";
-    this.namespace = "";
+    this.parent = '';
+    this.namespace = '';
   }
 
   name: string; // name of pod, node, or cluster, or deployment
@@ -65,6 +72,7 @@ export type EventProps = {
   analyzedPod: any[];
   clusterChartData: any[];
   setAnalyzedData: (input: any) => void;
+  setShowGraphs: (input: any) => void;
 };
 
 export type AnalyzeCount = any[];
@@ -78,6 +86,7 @@ export interface LogCardProps {
   setAnalyzedPod: (input: any) => void;
   clusterChartData: any;
   setAnalyzedData: (input: any) => void;
+  setShowGraphs: (input: any) => void;
 }
 
 export type EventObject = {
@@ -150,6 +159,8 @@ export type AnalysisPage = {
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
   setAnalyzedData: (input: any) => void;
+  showGraphs: boolean;
+  setShowGraphs: (input: boolean) => void;
 };
 
 export type AnalysisPageProps = {
@@ -158,6 +169,8 @@ export type AnalysisPageProps = {
   setAnalyzedPod: (input: any) => void;
   clusterChartData: any;
   setAnalyzedData: (input: any) => void;
+  showGraphs: boolean;
+  setShowGraphs: (input: boolean) => void;
 };
 
 export type TooltipProps = {

@@ -1,34 +1,36 @@
-import * as React from "react";
-import { HashRouter, Link, Route, Routes } from "react-router-dom";
+import * as React from 'react';
+import { HashRouter, Link, Route, Routes } from 'react-router-dom';
 
 // page containers for React Router
-import HomePage from "./HomePage";
-import LandingPage from "./LandingPage";
-import AnalysisPage from "./AnalysisPage";
+import HomePage from './HomePage';
+import LandingPage from './LandingPage';
+import AnalysisPage from './AnalysisPage';
 
 // import styles sheet here
-import "../assets/stylesheets/style.scss";
+import '../assets/stylesheets/style.scss';
 
 const initData: any = [
   {
     Port9090isClosed: {
-      times: ["a", "b", "c"],
+      times: ['a', 'b', 'c'],
       values: [1, 2, 3],
     },
   },
   {
     Port9090isClosedOpenIt: {
-      times: ["a", "b", "c"],
+      times: ['a', 'b', 'c'],
       values: [3, 2, 1],
     },
   },
 ];
 
-
+import Sidebar from './Sidebar';
 
 const App = () => {
   const [analyzedPod, setAnalyzedPod]: any = React.useState({});
-  const [resourceError, setResourceError]: any = React.useState("");
+  const [resourceError, setResourceError]: any = React.useState('');
+  const [menuOpen, setMenuOpen]: any = React.useState(true);
+  const [showGraphs, setShowGraphs]: any = React.useState(false);
   const [analyzedData, setAnalyzedData]: any = React.useState({
     podMem: initData,
     podCPU: initData,
@@ -40,47 +42,11 @@ const App = () => {
 
   return (
     <HashRouter basename="/">
-      <nav id="sidebar">
-        <Link to="">
-          <img id="logo" src="./assets/logo-hat.png" alt="" />
-        </Link>
-        <ul id="sidebar-list">
-          <li>
-            <Link to="/" id='link-namespace'>
-              <div className="sidebar-page-container">
-                <img className="sidebar-icon" src="./assets/ns-icon.png" />
-                <span>Namespace</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/home" id='link-dashboard'>
-              <div className="sidebar-page-container">
-                <img
-                  className="sidebar-icon"
-                  src="./assets/dashboard-icon.png"
-                />
-                <span>Dashboard</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/analysis" id='link-analysis'>
-              <div className="sidebar-page-container">
-                <img
-                  className="sidebar-icon"
-                  src="./assets/analysis-icon.png"
-                />
-                <span>Analysis</span>
-              </div>
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main id="page">
         <div id="header">
           <Link to="/">
-            <h1 id='company-name'>PALAEMON</h1>
+            <h1 id="company-name">PALAEMON</h1>
           </Link>
         </div>
         <Routes>
@@ -101,6 +67,9 @@ const App = () => {
                 setAnalyzedPod={setAnalyzedPod}
                 setResourceError={setResourceError}
                 setAnalyzedData={setAnalyzedData}
+                menuOpen={menuOpen}
+                setMenuOpen={setMenuOpen}
+                setShowGraphs={setShowGraphs}
               />
             }
           />
@@ -113,6 +82,8 @@ const App = () => {
                 analyzedData={analyzedData}
                 setAnalyzedData={setAnalyzedData}
                 clusterChartData={[]}
+                showGraphs={showGraphs}
+                setShowGraphs={setShowGraphs}
               />
             }
           />
