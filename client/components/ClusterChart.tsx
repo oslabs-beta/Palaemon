@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ClusterChartProps } from '../Types';
 import ClusterChartCard from './ClusterChartCard';
 

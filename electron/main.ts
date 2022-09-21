@@ -4,14 +4,9 @@ import {
   BrowserWindow,
   ipcMain,
   dialog,
-  IpcMainEvent,
 } from 'electron';
-import { ClusterAllInfo, ChartGraphData } from '../client/Types';
+import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} from 'electron-devtools-installer';
 
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
@@ -20,7 +15,6 @@ const fetch: any = (...args: any) =>
 
 import {
   setStartAndEndTime,
-  formatClusterData,
   formatEvents,
   formatAlerts,
   parseNode,
@@ -36,6 +30,7 @@ import {
   formatAnalysis,
 } from './metricsData/formatMatrix';
 import { SvgInfo, SvgInfoObj } from '../client/Types';
+
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -116,7 +111,7 @@ app.on('window-all-closed', () => {
 
 // K8S API //
 
-// get all info function for initial load and reloads
+// populates cluster chart cards
 
 ipcMain.handle('getAllInfo', async (): Promise<any> => {
   // nodes
@@ -167,20 +162,8 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
 
     if (filteredPods) {
       const newObj: ClusterAllInfo = {
-        Clusters: [
-          {
-            name: '',
-            usage: 1,
-            resource: 'memory',
-            limit: 1,
-            request: 1,
-            parent: '',
-            namespace: '',
-          },
-        ],
         Nodes: nodeData,
         Pods: filteredPods,
-        Deployments: [tempData],
       };
       return newObj;
     }
@@ -189,7 +172,7 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
   }
 });
 
-// get nodes in cluster
+// get names of nodes in cluster related to selected namespace
 ipcMain.handle('getNodes', async (): Promise<any> => {
   // dynamically get this from frontend later
   try {
@@ -207,49 +190,7 @@ ipcMain.handle('getNodes', async (): Promise<any> => {
   }
 });
 
-// get deployments in cluster
-// ipcMain.handle('getDeployments', async (): Promise<any> => {
-//   try {
-//     const data = await k8sApiApps.listDeploymentForAllNamespaces();
-//     const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-//     // console.log("THIS IS DATA ", formattedData);
-//     return formattedData;
-//   } catch (error) {
-//     console.log(`Error in getDeployments function: ERROR: ${error}`);
-//   }
-// });
-
-// // get pods in cluster
-// ipcMain.handle('getPods', async (): Promise<any> => {
-//   try {
-//     const nsSelect = await mainWindow.webContents
-//       .executeJavaScript('({...localStorage});', true)
-//         /* check what type this is with team */        /* check what type this is with team */
-//       .then((localStorage: any) => {
-//         return localStorage.namespace
-//       });
-//     // const data = await k8sApiCore.listPodForAllNamespaces();
-//     const data = await k8sApiCore.listNamespacedPod('default')
-//     console.log('HERES THE PODS', data)
-//     // const data = await k8sApiCore.listPodForAllNamespaces();
-//     // console.log('THIS OS BODY.ITEMS ', data.body.items);
-//     const podNames: (string | undefined)[] = data.body.items.map(
-//       pod => pod?.metadata?.name
-//     );
-//     const node: (string | undefined)[] = data.body.items.map(
-//       pod => pod?.spec?.nodeName
-//     );
-//     const namespace: (string | undefined)[] = data.body.items.map(
-//       pod => pod?.metadata?.namespace
-//     );
-//     // console.log('I AM INEVITABLSDFSDFSDFSDFS: ', data.body.items[0])
-//     return { podNames, node, namespace };
-//   } catch (error) {
-//     return console.log(`Error in getPods function: ERROR: ${error}`);
-//   }
-// });
-
-// get namespaces
+// get namespaces in cluster. used for multiple queries and to display relevant data
 ipcMain.handle('getNamespaces', async () => {
   try {
     const data = await k8sApiCore.listNamespace();
@@ -261,7 +202,7 @@ ipcMain.handle('getNamespaces', async () => {
 });
 
 // COMMAND LINE //
-// get events
+// get all events in all namespaces
 ipcMain.handle('getEvents', async () => {
   try {
     const response: string = cp
@@ -275,21 +216,19 @@ ipcMain.handle('getEvents', async () => {
   }
 });
 
-// HOMEPAGE CHART QUERY FOR MEMORY //
+// HOMEPAGE CHART QUERY FOR MEMORY
 
 ipcMain.handle('getMemoryUsageByPods', async () => {
   const { startTime, endTime } = setStartAndEndTime();
-  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
+
   const interval = '15s';
   try {
     const nsSelect = await mainWindow.webContents
       .executeJavaScript('({...localStorage});', true)
-      /* check what type this is with team */ /* check what type this is with team */
       .then((localStorage: any) => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-
     const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image=""}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
@@ -433,23 +372,6 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
     const networkWriteRes = await fetch(networkWriteQuery);
     const networkWriteData = await networkWriteRes.json();
     const netWrite = await formatAnalysis(networkWriteData.data, 'kilobytes')
-
-    const initData: any = [
-      {
-        Port9090isClosed: {
-          times: ['a', 'b', 'c'],
-          values: [1, 2, 3],
-        },
-      },
-      {
-        Port9090isClosedOpenIt: {
-          times: ['a', 'b', 'c'],
-          values: [3, 2, 1],
-        },
-      },
-    ];
-    
-    // console.log('podmem part2', podMem)
 
     return {
       podMem,

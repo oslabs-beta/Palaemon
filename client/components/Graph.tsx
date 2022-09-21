@@ -13,7 +13,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { ProgressPlugin } from 'webpack';
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +46,6 @@ const Graph = (props: any): JSX.Element => {
 
   if (!portOpen)
     fetch('http://localhost:9090/').then(response => {
-      // console.log('status code', response.status)
       if (response.status === 200) {
         console.log('Port 9090 is Open');
         setPortOpen(true);
@@ -65,13 +63,9 @@ const Graph = (props: any): JSX.Element => {
       window.api
         .getMemoryUsageByPods()
         .then((output: any) => {
-          // console.log(output)
           if (output.length < 1) {
-            // console.log("returning out without setGraphState");
-            // props.setResourceError("No resources found in this namespace");
             return navigate('/');
           } else if (!output.err) setGraphState(output);
-          // console.log('itworks')
         })
         .catch((err: any) => {
           return { err: err };
@@ -92,8 +86,6 @@ const Graph = (props: any): JSX.Element => {
     'orange',
     '#003d33',
   ];
-
-  // let keyname: keyof typeof graphState[0] = Object.keys(graphState[0])[0]
 
   const xLabels: string[] = graphState[0][Object.keys(graphState[0])[0]].times;
 
@@ -121,13 +113,6 @@ const Graph = (props: any): JSX.Element => {
         display: true,
         text: 'Current Memory Usage by Pods',
       },
-      // tooltip: {
-      //   mode: 'label'
-      // }
-      // datalabels: {
-      //   // hide datalabels for all datasets
-      //   display: true,
-      // },
     },
     scales: {
       x: {
@@ -161,12 +146,11 @@ const Graph = (props: any): JSX.Element => {
     setButtonClicked(prevCheck => !prevCheck);
   };
 
-  // console.log('chartjs', ChartJS.defaults.plugins.tooltip)
   const data = {
     labels: xLabels,
     datasets: datasetData,
   };
-  // console.log('THIS IS final DATA OBJECT ', data)
+
   return (
     <>
       <Line options={options} data={data} />

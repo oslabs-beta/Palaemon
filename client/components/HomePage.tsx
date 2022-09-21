@@ -25,10 +25,8 @@ const tempData: SvgInfo[] = [
 ];
 
 const initalClusterChartData: ClusterAllInfo = {
-  Clusters: tempData,
   Nodes: tempData,
   Pods: tempData,
-  Deployments: tempData,
 };
 
 const HomePage = (props: any): JSX.Element => {
@@ -78,7 +76,6 @@ const HomePage = (props: any): JSX.Element => {
 
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
-    // console.log('this is all info', allTheInfo);
 
     if (resource === 'memory' || resource === 'cpu') {
       allTheInfo.Pods = allTheInfo.Pods.filter(
@@ -119,10 +116,8 @@ const HomePage = (props: any): JSX.Element => {
             </button>
           </div>
           <ClusterChart
-            Clusters={gke.Clusters}
             Nodes={gke.Nodes}
             Pods={gke.Pods}
-            Deployments={gke.Deployments}
             click={gke.click}
             close={gke.close}
           />

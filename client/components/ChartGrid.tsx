@@ -58,10 +58,8 @@ const ChartGrid = (props: any) => {
   });
 
   useEffect(() => {
-    // console.log("THIS IS PROPS DATA ", props.analyzedData);
-    // console.log("useeffect on [], before the set", graphState);
+    // set state with the data received from props object
     setGraphState(analyzedData);
-    // console.log("after it gets set", graphState);
   }, [props.analyzedData]);
 
   const colorArray: string[] = [
@@ -74,8 +72,6 @@ const ChartGrid = (props: any) => {
     'yellow',
     'orange',
   ];
-
-  // console.log("before a crash", graphState);
 
   const xLabels: string[] =
     graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
@@ -136,9 +132,8 @@ const ChartGrid = (props: any) => {
   const charts: JSX.Element[] = [];
   let datasetData = [] as GraphableData[];
   let keyCounter: number = 0;
-  //   console.log('a');
-  //   console.log('multiopt', multiOptions);
 
+  // handles open legend for specific graph instead of all of them
   const handleLegendClick = (keyName: 'podCPU' | 'podMem' | 'nodeMem' | 'nodeCPU' | 'netRead' | 'netWrite') => {
     const newButton = { ...buttonClicked }
     newButton[keyName] = !newButton[keyName]
@@ -147,8 +142,7 @@ const ChartGrid = (props: any) => {
 
   // first we iterate of the total number of graphs we want
   (Object.keys(graphState) as (keyof typeof graphState)[]).forEach(
-    (key, index) => {
-      // console.log("whats this ", key, graphState[key], index);
+    (key) => {
 
       // then we iterate over all of the lines in that graph
       for (let i = 0; i < graphState[key].length; i++) {
@@ -197,11 +191,10 @@ const ChartGrid = (props: any) => {
           console.log('Default Case Hit');
           break;
       }
-      // multiOptions[key].plugins.title.text = key;
+
       charts.push(
         <div
           className="line-chart-div"
-          // style={{ height: '30rem', width: '30rem', margin: '2rem' }}
           key={70 + keyCounter++}
         >
           <Line
@@ -211,8 +204,6 @@ const ChartGrid = (props: any) => {
               datasets: datasetData,
             }}
             key={70 + keyCounter++}
-          // width={'300px'}
-          // height={'300px'}
           />
           <button className="legend-btn-grid" onClick={() => handleLegendClick(key)}>
             {!buttonClicked[key] ? 'Show Legend' : 'Hide Legend'}
