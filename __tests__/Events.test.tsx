@@ -19,12 +19,19 @@ beforeAll(() => {
     getAllInfo: jest.fn(),
     getOOMKills: jest.fn().mockReturnValue(Promise.resolve(mockOOMKills)),
     getUsage: jest.fn(),
-    getAnalysis: jest.fn()
+    getAnalysis: jest.fn(),
   };
 });
 
 beforeEach(() => {
-  render(<Events setAnalyzedPod={() => {}} analyzedPod={[]} setAnalyzedData={() => {}}  />);
+  render(
+    <Events
+      setAnalyzedPod={() => {}}
+      analyzedPod={[]}
+      setAnalyzedData={() => {}}
+      setShowGraphs={() => {}}
+    />
+  );
 });
 
 const mockEvents = [

@@ -513,7 +513,7 @@ footer {
     box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
 
     text-align: center;
-    #ns-error{
+    #ns-error {
       margin-top: 1rem;
       display: flex;
       align-items: center;
@@ -563,67 +563,69 @@ button:focus-visible {
     color: $font-color;
 
     .analysis-nav-left {
-      display: grid;
-      grid-template-columns: repeat(5, auto);
-      flex: 1;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      min-height: 4rem;
+      .analysis-form {
+        display: grid;
+        grid-template-columns: repeat(5, auto);
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
 
-      #oomkill-selector {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-      }
+        #oomkill-selector {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          height: fit-content;
+        }
 
-      .analysis-interval {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-        width: 3rem;
-      }
+        .analysis-interval {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          height: fit-content;
+          width: 3rem;
+        }
 
-      .interval-unit {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-      }
+        .interval-unit {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          height: fit-content;
+        }
 
-      .query-btn {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        background-color: $ugly-sewage-green;
-        color: white;
-        transition: all 0.3s;
-        height: fit-content;
-      }
+        .query-btn {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          background-color: $ugly-sewage-green;
+          color: white;
+          transition: all 0.3s;
+          height: fit-content;
+        }
 
-      .query-btn:hover {
-        background-color: white;
-        color: $font-color;
-        cursor: pointer;
-        filter: drop-shadow(2px 2px 3px $font-color);
-      }
+        .query-btn:hover {
+          background-color: white;
+          color: $font-color;
+          cursor: pointer;
+          filter: drop-shadow(2px 2px 3px $font-color);
+        }
 
-      .tooltip {
-        cursor: pointer;
+        .tooltip {
+          cursor: pointer;
+        }
       }
     }
 
@@ -681,6 +683,13 @@ button:focus-visible {
     .pod-overview {
       display: flex;
       flex-direction: column;
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: white;
+      border-radius: 10px;
+      height: 14rem;
+      margin: 0rem 1rem 2rem 1rem;
+
       .summary {
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -689,17 +698,19 @@ button:focus-visible {
         text-align: center;
         margin-bottom: 1rem;
       }
-      padding: 1rem 1.5rem;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      background-color: white;
-      border-radius: 10px;
-      height: 14rem;
-      margin: 0rem 1rem 2rem 2rem;
     }
 
     .filtered-log-container {
       display: flex;
       flex-direction: column;
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: whitesmoke;
+      border-radius: 10px;
+      height: 30rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin: 0rem 1rem 0rem 1rem;
 
       .filtered-events-heading {
         text-transform: uppercase;
@@ -709,16 +720,6 @@ button:focus-visible {
         text-align: center;
         margin-bottom: 1rem;
       }
-
-      padding: 1rem 1.5rem;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      background-color: whitesmoke;
-      border-radius: 10px;
-      height: 30rem;
-      overflow-y: auto;
-      overflow-x: hidden;
-      margin: 0rem 1rem 0rem 2rem;
-
       .event-card {
         position: relative;
         font-size: 0.6rem;
@@ -735,23 +736,60 @@ button:focus-visible {
       background-color: white;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
       grid-auto-rows: minmax(100px, auto);
+      justify-content: center;
+      justify-items: center;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
-      margin: 0 2rem 0rem 1rem;
-      height: 100%;
+      margin: 0 1rem 0rem 1rem;
+      height: 78vh;
       width: 70vw;
+      overflow-y: scroll;
+      overflow-x: hidden;
     }
 
     .line-chart-div {
-      padding: 2rem;
+      display: flex;
+      // border: 1px solid black;
+      flex-direction: column;
+      margin-top: 1rem;
+      padding: 0.4rem;
+      width: 40rem;
+    }
+
+    .legend-btn-grid {
+      background-color: $ugly-sewage-green;
+      color: white;
+      box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 10px;
+      width: fit-content;
+      align-self: center;
+      transition: all 0.2s;
+      font-size: 0.6rem;
+    }
+
+    .legend-btn-grid:hover {
+      background-color: white;
+      color: $font-color;
+      cursor: pointer;
+      border: none;
+      // filter: drop-shadow(2px 2px 3px $font-color);
+    }
+
+    .no-data-msg.graph-msg {
+      grid-column: 1/-1;
+      margin-top: 2rem;
+      max-height: 2rem;
+      width: 80%;
     }
   }
 }
 
 // MEDIA QUERIES
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 1300px) {
   #logo {
     width: 10rem;
   }
@@ -766,12 +804,6 @@ button:focus-visible {
     }
   }
 
-  .analysis-nav-left {
-    grid-template-columns: repeat(3, auto);
-    grid-template-rows: repeat(2, auto);
-    width: fit-content;
-    font-size: 0.6rem;
-  }
   .interval-unit,
   .query-btn,
   .tooltip-container {
@@ -782,8 +814,15 @@ button:focus-visible {
 
   #analysis-container {
     .analysis-nav {
+      .analysis-nav-left {
+        .analysis-form {
+          grid-template-columns: repeat(3, auto);
+          grid-template-rows: repeat(2, auto);
+          width: fit-content;
+        }
+      }
       .analysis-oomkill-data {
-        min-width: 48vw;
+        min-width: 30vw;
       }
       .analysis-oomkill-data-msg {
         font-size: 0.7rem;
