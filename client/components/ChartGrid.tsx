@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { watchPlugins } from '../../jest.config';
 
 ChartJS.register(
   CategoryScale,
@@ -23,7 +24,14 @@ ChartJS.register(
 );
 
 const ChartGrid = (props: any) => {
-  const [buttonClicked, setButtonClicked] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState({
+    podMem: false,
+    podCPU: false,
+    nodeMem: false,
+    nodeCPU: false,
+    netRead: false,
+    netWrite: false,
+  });
   const { analyzedData } = props;
   const initData: GraphData = [
     {
@@ -41,8 +49,8 @@ const ChartGrid = (props: any) => {
   ];
 
   const [graphState, setGraphState] = useState<ChartGraphData>({
-    podMem: initData,
     podCPU: initData,
+    podMem: initData,
     nodeMem: initData,
     nodeCPU: initData,
     netRead: initData,
@@ -57,15 +65,14 @@ const ChartGrid = (props: any) => {
   }, [props.analyzedData]);
 
   const colorArray: string[] = [
-    // 'red',
-    // 'blue',
-    // 'green',
-    // 'black',
-    // 'purple',
-    // 'cyan',
-    // 'yellow',
-    // 'orange',
-    // '#003d33',
+    'red',
+    'blue',
+    'green',
+    'black',
+    'purple',
+    'cyan',
+    'yellow',
+    'orange',
   ];
 
   // console.log("before a crash", graphState);
@@ -81,7 +88,7 @@ const ChartGrid = (props: any) => {
     indexAxis: 'x',
     plugins: {
       legend: {
-        display: buttonClicked,
+        display: false,
         position: 'bottom' as const,
       },
       title: {
@@ -132,8 +139,10 @@ const ChartGrid = (props: any) => {
   //   console.log('a');
   //   console.log('multiopt', multiOptions);
 
-  const handleLegendClick = () => {
-    setButtonClicked(prevCheck => !prevCheck);
+  const handleLegendClick = (keyName: 'podCPU' | 'podMem' | 'nodeMem' | 'nodeCPU' | 'netRead' | 'netWrite') => {
+    const newButton = { ...buttonClicked }
+    newButton[keyName] = !newButton[keyName]
+    setButtonClicked(newButton);
   };
 
   // first we iterate of the total number of graphs we want
@@ -155,6 +164,7 @@ const ChartGrid = (props: any) => {
           data: graphState[key][i][podName].values,
         });
       }
+      multiOptions[key].plugins.legend.display = buttonClicked[key];
 
       // this is part of the each individual graphs
       // multiOptions[key].scales.y.title.text = 'y-axis label';
@@ -201,10 +211,10 @@ const ChartGrid = (props: any) => {
               datasets: datasetData,
             }}
             key={70 + keyCounter++}
-            // width={'300px'}
-            // height={'300px'}
+          // width={'300px'}
+          // height={'300px'}
           />
-          <button className="legend-btn-grid" onClick={handleLegendClick}>
+          <button className="legend-btn-grid" onClick={() => handleLegendClick(key)}>
             {!buttonClicked ? 'Show Pods' : 'Hide Pods'}
           </button>
         </div>
