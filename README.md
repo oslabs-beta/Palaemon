@@ -73,14 +73,17 @@ Palaemon has not yet been tested with Amazon Elastic Kubernetes Service (EKS) or
 ## How to Connect to Google Kubernetes Engine
 
 1. Install gcloud CLI on your local machine from [here](https://cloud.google.com/sdk/docs/install)
-  - If you have having problems with the gcloud CLI, try using the command below and make sure to update your $PATH
+  - If you have having problems with the gcloud CLI, try using the command below in your home directory, and make sure to update your $PATH in the process.
 ```
 curl https://sdk.cloud.google.com | bash
 ```
   - If you are still having issues, trying restarting your terminal.
 2. Initialize the gcloud CLI following the steps [here](https://cloud.google.com/sdk/docs/initializing)
 3. Connect your gcloud CLI to your GKE cluster [here](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
-4. Follow the steps [here](https://cloud.google.com/stackdriver/docs/managed-prometheus/query) to deploy the Prometheus UI, and you can forward the prometheus UI to local port 9090
+  - Make sure to get the credentials of your cluster (see below) or you will not be able to connect to your cluster
+  ```
+  gcloud container clusters get-credentials [CLUSTER_NAME]
+  ```
 
 # Prometheus Requirements
 Palaemon utilizes Prometheus to scrape for data on your pods. Therefore, please ensure you have Prometheus installed on your node.
@@ -91,9 +94,9 @@ Once you have Prometheus installed into your Kubernetes cluster, follow the step
 
 ## Connecting Prometheus to Palaemon
 
- Make sure a Prometheus pod is installed onto your node/cluster, and forward its port (default 9090) to your localhost. The following command is a *sample* of how you can forward the port.
+ Make sure a Prometheus pod is installed onto your node/cluster, and forward its port (default 9090) to your localhost through the command below.
 ```
-kubectl port-forward -n monitoring service/operator-kube-prometheus-s-prometheus 9090
+kubectl port-forward -n [NAMESPACE] service/[PROMETHEUS] 9090
 ```
 
   - The -n flag indicates the namespace that the pod is assigned to.
@@ -101,10 +104,24 @@ kubectl port-forward -n monitoring service/operator-kube-prometheus-s-prometheus
 ```
 kubectl get services -A
 ```
-   Find the service with a 9090/TCP Port assigned, and forward that service to your local 9090.
-    
+ Find the service with a 9090/TCP Port assigned, and forward that service to your local 9090.
+
+![Get All Services](./client/assets/All-Services.png)
+
+In the example above, the command would be :
+```
+kubectl port-forward -n monitoring service/operator-kube-prometheus-s-prometheus 9090
+```
+
 Once you have port-forwarded the service, you should now be able to access the Palaemon application. If you are still getting an error with port 9090 being closed, double-check that you are exposing the correct service: It should be listening on port 9090 (see picture below).
 
+ - A more detailed set of instructions can be found on Google's Documentations [here](https://cloud.google.com/stackdriver/docs/managed-prometheus/query)
+
+ ![Forward Success](./client/assets/Forward-Success.png)
+
+ ### NOTE: While you *can* forward Prometheus to a local port that is **not** 9090, Palaemon is not yet setup to handle any other port besides 9090.
+
+<br></br>
 ## How to Run Tests
 ### Unit and Integration tests using Jest
 The jest testing suite will start with the command below. The `--watch` flag is enabled, which allows for immediate retests upon save. The jest config in `jest.config.js` is set up to only look for and run test files within the `__test__` folder and with file names that include ".test." in them, such as "Events.test.tsx". 
@@ -123,9 +140,11 @@ There are settings to enable HTML report and video, snapshot, trace recordings t
 
 * Realtime Pod memory usage, sorted by namespaces
 
-## In Progress Features
+## Planned Features
 
-1. Populate the remaining in-progress features.
+1. Provide custom alerts for OOMKill events with specific termination reasons such as “Limit Overcommit” or “Container Limit Reached”
+2. Allow for early, graceful termination of pods
+3. Automatic reconfiguration of YAML files to adjust memory limits and requests
 
 ## Built With
 
