@@ -393,7 +393,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
   const podMEMRes = await fetch(podMEMQuery);
   const podMEMData = await podMEMRes.json();
   const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime);
-
+  
   // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
   rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])

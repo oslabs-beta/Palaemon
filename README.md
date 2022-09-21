@@ -85,8 +85,14 @@ curl https://sdk.cloud.google.com | bash
 # Prometheus Requirements
 Palaemon utilizes Prometheus to scrape for data on your pods. Therefore, please ensure you have Prometheus installed on your node.
 ```
-PATRICK, PLEASE INCLUDE HOW TO INSTALL PROMETHEUS HERE
+Cloud hosting platforms such as GCP and AWS already have managed Prometheus services. If you are new to Prometheus, we recommend installing the Prometheus monitoring package, Prometheus Operator. This includes a full monitoring stack: Prometheus, Alert Manager, Node Exporter, Grafana, and Kube State Metrics. See link [here](https://artifacthub.io/packages/helm/choerodon/prometheus-operator) to deploy Prometheus Operator via Helm.
+
+Once you have Prometheus installed into your Kubernetes cluster, utilize kubectl to port-forward or expose your Prometheus operator service to port: 9090.
+
+You should now be able to access the Palaemon application. If you are still getting an error with port 9090 being closed, double-check that you are exposing the correct service: It should be listening on port 9090 (see picture below).
+
 ```
+
 ## Connecting Prometheus to Palaemon:
 
  Make sure a Prometheus pod is installed onto your node/cluster, and forward its port (default 9090) to your localhost. The following command is a *sample* of how you can forward the port.
