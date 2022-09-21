@@ -8,7 +8,7 @@ import { filter } from '../../webpack.config';
 import DetailsModal from './Modal';
 import Tooltip from './Tooltip';
 
-const AnalysisPage = (props: AnalysisPageProps) => {
+const AnalysisPage =  (props: AnalysisPageProps) => {
   const [OOMKillsList, setOOMKillsList]: any = useState([]);
   const [allOOMKills, setAllOOMKills]: any = useState([]);
   const [podOverviewData, setPodOverviewData]: any = useState([]);
@@ -16,6 +16,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
   const [logType, setLogType]: any = useState<string>('events');
   const [tooltipState, setTooltipState]: any = useState(false);
   const [tooltip, setTooltip]: any = useState(<></>);
+  const [hiddenInputs, setHiddenInputs]: any = useState([])
   const {
     analyzedPod,
     setAnalyzedPod,
@@ -25,23 +26,32 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     setShowGraphs,
   }: any = props;
 
-  const handleQuery = (e: any) => {
-    // console.log('this is the event and data ', e)
-    // console.log('formtarget', e.target['interval-unit'].value)
-    const timeInterval =
-      e.target['analysis-interval'].value + e.target['interval-unit'].value;
-    const nodeName = 'undefined';
-    // setAnalyzedData(e.target.value)
+  const handleQuery = async (e: any) => {
+    let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
+    const podName = e.target['oomkill-selector'].value;    
+    const nodeName = e.target[podName].value;
+    const timeOfDeath = new Date(analyzedPod.started).toISOString();
+    console.log('analyzed pod', analyzedPod.started)
+    console.log('Query button pressed with: ', nodeName, timeInterval)
+    // console.log('what time is it', new Date(analyzedPod.started).toISOString())
+    // console.log(e.target['oomkill-selector'].label)
+    // console.log(e.target['oomkill-selector'])    
+    
+    if (nodeName === 'default' ) return;
+    if (timeInterval === 'default' ) timeInterval = '5m'
+    try {
+      const analyzeData1 = await window.api.getAnalysis(nodeName, timeInterval, timeOfDeath)
+      console.log('this should give us arrobjs ', analyzeData1);
+      props.setAnalyzedData(analyzeData1);
+      setShowGraphs(true)
+    } catch(err) {
+      return console.log('error: ', err)
+    }
+  }
 
-    // window.api.getAnalysis(nodeName, timeInterval)
-    // .then((data) => {
-    //   console.log('getanalysis', data)
-
-    // })
-  };
-  console.log('DATA', analyzedData);
   const updateAnalyzedPod = (e: any) => {
     const podName = e.target.value;
+    console.log('targval',e.target.value)
     const newAnalysis = allOOMKills.filter(
       (oomkill: any) => oomkill.podName === podName
     );
@@ -66,11 +76,14 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     // 1) oomKillOptions - array of pod names used for drop down list
     // 2) allOomKills - array of oomkilled objects
     const renderOOMKills = async () => {
+      const hiddenInps: any[] = []
       const oomkillData = await window.api.getOOMKills();
       const oomKillOptions: JSX.Element[] = oomkillData.map(
         (oomkill: any, i: number): JSX.Element => {
-          return (
-            <option key={oomkill.podName + i} value={oomkill.podName}>
+          // console.log('oomkill obj',oomkill)
+          hiddenInps.push(<input type='hidden' name={oomkill.podName} value={oomkill.node} key={i + 700}></input>)
+          return (           
+            <option key={oomkill.podName + i} label={oomkill.podName} value={oomkill.podName} >
               {oomkill.podName}
             </option>
           );
@@ -78,6 +91,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       );
       setOOMKillsList([...oomKillOptions]);
       setAllOOMKills([...oomkillData]);
+      setHiddenInputs([...hiddenInps]);
     };
 
     // Queries and generates filtered logs of events for pod being analyzed
@@ -97,6 +111,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             logType={logType}
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
+            clusterChartData={props.clusterChartData}
             setAnalyzedData={setAnalyzedData}
             setShowGraphs={setShowGraphs}
           />
@@ -116,11 +131,12 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     <div id="analysis-container">
       <nav className="analysis-nav">
         <div className="analysis-nav-left">
+          {/* -------------------- START OF FORM -------------------- */}
           <form
             className="analysis-form"
             onSubmit={event => {
               event.preventDefault();
-              // handleQuery(event)
+              handleQuery(event)
             }}
           >
             <select
@@ -131,9 +147,9 @@ const AnalysisPage = (props: AnalysisPageProps) => {
               <option value="default">Select OOMKilled Pod</option>
               {OOMKillsList}
             </select>
-
+            {hiddenInputs}
             <input
-              type={'text'}
+              type='number'
               className="analysis-interval"
               name="analysis-interval"
               placeholder="Time"
@@ -160,7 +176,9 @@ const AnalysisPage = (props: AnalysisPageProps) => {
               {tooltipState ? tooltip : null}
             </div>
           </form>
+          {/* -------------------- END OF FORM -------------------- */}
         </div>
+          {/* -------------------- START OF TOP RIGHT -------------------- */}
         <div className="analysis-oomkill-data">
           <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
           {analyzedPod.podName ? (
@@ -189,7 +207,9 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           )}
         </div>
       </nav>
+      {/* -------------------- END OF TOP AREA -------------------- */}
       <div className="analysis-main">
+        {/* -------------------- START OF LEFT AREA -------------------- */}
         <div id="left-side">
           <div className="pod-overview">
             <span className="summary">Summary</span>
@@ -216,12 +236,13 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             )}
           </div>
         </div>
+        {/* -------------------- CHART AREA -------------------- */}
         <div id="chartarea">
           {showGraphs ? (
             <ChartGrid analyzedData={analyzedData} />
           ) : (
             <p className="no-data-msg graph-msg">
-              Select OOMKilled Pod to Display Data
+              Please Query an OOMKilled Pod to Display Charts
             </p>
           )}
         </div>

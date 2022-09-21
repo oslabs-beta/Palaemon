@@ -30,6 +30,7 @@ beforeEach(() => {
       analyzedPod={[]}
       setAnalyzedData={() => {}}
       setShowGraphs={() => {}}
+      clusterChartData={[]}
     />
   );
 });

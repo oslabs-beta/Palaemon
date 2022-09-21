@@ -137,6 +137,7 @@ const HomePage = (props: any): JSX.Element => {
           setAnalyzedPod={props.setAnalyzedPod}
           setAnalyzedData={props.setAnalyzedData}
           setShowGraphs={props.setShowGraphs}
+          clusterChartData={clusterChartData}
         />
       </div>
       {modalState && theModal}
