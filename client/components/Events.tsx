@@ -59,6 +59,7 @@ const Events = (props: EventProps): JSX.Element => {
             clusterChartData={props.clusterChartData}
             setAnalyzedData={props.setAnalyzedData}
             setShowGraphs={setShowGraphs}
+            setLoading={setLoading}
           />
         );
       }

@@ -17,6 +17,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
   const [tooltipState, setTooltipState]: any = useState(false);
   const [tooltip, setTooltip]: any = useState(<></>);
   const [hiddenInputs, setHiddenInputs]: any = useState([])
+  const [loading, setLoading]: any = useState(false);
   const {
     analyzedPod,
     setAnalyzedPod,
@@ -27,31 +28,35 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
   }: any = props;
 
   const handleQuery = async (e: any) => {
+    setLoading(true)
     let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
     const podName = e.target['oomkill-selector'].value;    
+    if (podName === 'default' ) {
+      setLoading(false)
+      return
+    }
+    if (timeInterval === 'default' || !e.target["analysis-interval"].value) timeInterval = '5m'
+    
     const nodeName = e.target[podName].value;
     const timeOfDeath = new Date(analyzedPod.started).toISOString();
+
     console.log('analyzed pod', analyzedPod.started)
     console.log('Query button pressed with: ', nodeName, timeInterval)
-    // console.log('what time is it', new Date(analyzedPod.started).toISOString())
-    // console.log(e.target['oomkill-selector'].label)
-    // console.log(e.target['oomkill-selector'])    
-    
-    if (nodeName === 'default' ) return;
-    if (timeInterval === 'default' ) timeInterval = '5m'
     try {
       const analyzeData1 = await window.api.getAnalysis(nodeName, timeInterval, timeOfDeath)
       console.log('this should give us arrobjs ', analyzeData1);
       props.setAnalyzedData(analyzeData1);
       setShowGraphs(true)
+      setLoading(false)
     } catch(err) {
+      setLoading(false)
       return console.log('error: ', err)
     }
   }
 
   const updateAnalyzedPod = (e: any) => {
     const podName = e.target.value;
-    console.log('targval',e.target.value)
+    // console.log('targetval',e.target.value)
     const newAnalysis = allOOMKills.filter(
       (oomkill: any) => oomkill.podName === podName
     );
@@ -177,6 +182,12 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
             </div>
           </form>
           {/* -------------------- END OF FORM -------------------- */}
+          {loading && (
+          <div className='loading-bar'>
+            <p id='loadname'>Loading  </p>
+            <p className="loader"></p>
+          </div>
+        )}
         </div>
           {/* -------------------- START OF TOP RIGHT -------------------- */}
         <div className="analysis-oomkill-data">
@@ -211,7 +222,8 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
       <div className="analysis-main">
         {/* -------------------- START OF LEFT AREA -------------------- */}
         <div id="left-side">
-          <div className="pod-overview">
+
+          {/* <div className="pod-overview">
             <span className="summary">Summary</span>
             {analyzedPod.podName && podOverviewData.length > 0 ? (
               podOverviewData
@@ -222,7 +234,8 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
                 Select OOMKilled Pod to Display Data
               </p>
             )}
-          </div>
+          </div> */}
+          
           <div className="filtered-log-container">
             <span className="filtered-events-heading">Events</span>
             {analyzedPod.podName && filteredLogs.length > 0 ? (

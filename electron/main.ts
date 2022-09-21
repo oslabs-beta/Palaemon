@@ -375,7 +375,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
 /* -------------- Analysis Page -------------- */
 
 ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfDeath) => {
-  console.log('time of deasth', timeOfDeath)
+  // console.log('time of death', timeOfDeath)
 
   const endTime = timeOfDeath;
   const now = new Date(timeOfDeath);
@@ -396,7 +396,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
   
   // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
-  rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""[5m])
+  rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""}[5m])
   &start=${startTime}&end=${endTime}&step=${interval}`;
     const podCPURes = await fetch(podCPUQuery);
     const podCPUData = await podCPURes.json();

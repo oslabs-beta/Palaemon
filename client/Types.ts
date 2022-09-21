@@ -87,6 +87,7 @@ export interface LogCardProps {
   clusterChartData: any;
   setAnalyzedData: (input: any) => void;
   setShowGraphs: (input: any) => void;
+  setLoading?: (input: any) => void;
 }
 
 export type EventObject = {
