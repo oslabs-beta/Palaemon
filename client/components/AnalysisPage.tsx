@@ -211,7 +211,8 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
       <div className="analysis-main">
         {/* -------------------- START OF LEFT AREA -------------------- */}
         <div id="left-side">
-          <div className="pod-overview">
+
+          {/* <div className="pod-overview">
             <span className="summary">Summary</span>
             {analyzedPod.podName && podOverviewData.length > 0 ? (
               podOverviewData
@@ -222,7 +223,8 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
                 Select OOMKilled Pod to Display Data
               </p>
             )}
-          </div>
+          </div> */}
+          
           <div className="filtered-log-container">
             <span className="filtered-events-heading">Events</span>
             {analyzedPod.podName && filteredLogs.length > 0 ? (

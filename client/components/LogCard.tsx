@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
   const navigate = useNavigate();
-  const { analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
+  const {setLoading, analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
 
   const handleAnalyze = async () => {
+    setLoading(true)
     setAnalyzedPod({ ...props.oomObj });
     try {
       if (props.oomObj) {
@@ -18,6 +19,7 @@ const LogCard = (props: LogCardProps): JSX.Element => {
         setShowGraphs(true);
         props.setAnalyzedData(analyzeData);
       }
+      setLoading(false)
       navigate('/analysis');
     } catch (err) {
       return console.log('error: ', err);
