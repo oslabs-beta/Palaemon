@@ -14,6 +14,8 @@ interface graph {
   [key: string]: {
     times: string[];
     values: number[];
+    limits?: number[];
+    requests?: number[];
     // units?: string;
   };
 }
@@ -71,19 +73,46 @@ export function formatUsage(matrix: matrix, unitType?: string) {
   return output;
 }
 
-export function formatAnalysis(matrix: matrix, unitType?: string) {
+export async function getPodReqLimits(podName: string, startTime?: string, endTime?: string) {
+  const limitsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+  const requestsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+  const limit = await fetch(limitsQuery);
+  const request = await fetch(requestsQuery);
+  const limitData: any = await limit.json();
+  const requestData: any = await request.json();
+  const output: graph = {}
+
+  limitData.data.result.forEach((obj: any) => {
+    output[limitData] = obj.values.map((el: number) => {
+      return 
+    })
+    console.log(obj.values)
+    
+  })
+  return {
+    limitData,
+    requestData
+  }
+}
+
+export async function formatAnalysis(matrix: matrix, unitType?: string,  startTime?: string, endTime?: string) {
   const arr: any = [];
+  let reqObj: any = {
+    limitData: [],
+    requestData: []
+  }
   // console.log('matrix THIS IS ', matrix)
 
   const dateOptions: any = {
     timeStyle: "short",
   };
 
-  matrix.result.forEach((obj: any) => {
+  matrix.result.forEach(async (obj: any) => {
     const output: graph = {};
     let name: string = 'n/a';
     if (obj.metric.pod) {
       name = obj.metric.pod;
+      reqObj = await getPodReqLimits(name, startTime, endTime)
     }
     // if theres no metric.pod, then the object being passed in is a node
     else if (!obj.metric.pod) {
@@ -92,7 +121,8 @@ export function formatAnalysis(matrix: matrix, unitType?: string) {
     output[name] = {
       times: [],
       values: [],
-      // units: '',
+      limits: reqObj.limitData,
+      requests: reqObj.requestData
     };
 
     output[name].times = obj.values.map((el: [number, number]) => {
