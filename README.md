@@ -14,7 +14,7 @@ Prerequisites:
 - [ ] Prometheus installed
 - [ ] Prometheus port-forwarded to `localhost:9090`
 
-## Launching in dev mode with Hot-Module Reload (HMR):
+## Launching in dev mode with Hot-Module Reload (HMR)
 If this is the first time launching the app then run the following commands:
 ```
 npm install
@@ -31,7 +31,7 @@ npm run electronmon
 The build command for webpack will run webpack with the --watch flag to watch for any changes in the files, and rebuild the dist folder when any files are changed. Electronmon is watching the dist folder for any changes and will either refresh or relaunch the electron app when it detects any of the dist folder files have been changed.
 
 
-## After the initial build, you can now run the following command:
+## After the initial build, you can now run the following command
 ```
 npm start
 ``` 
@@ -84,16 +84,12 @@ curl https://sdk.cloud.google.com | bash
 
 # Prometheus Requirements
 Palaemon utilizes Prometheus to scrape for data on your pods. Therefore, please ensure you have Prometheus installed on your node.
-```
-Cloud hosting platforms such as GCP and AWS already have managed Prometheus services. If you are new to Prometheus, we recommend installing the Prometheus monitoring package, Prometheus Operator. This includes a full monitoring stack: Prometheus, Alert Manager, Node Exporter, Grafana, and Kube State Metrics. See link [here](https://artifacthub.io/packages/helm/choerodon/prometheus-operator) to deploy Prometheus Operator via Helm.
 
-Once you have Prometheus installed into your Kubernetes cluster, utilize kubectl to port-forward or expose your Prometheus operator service to port: 9090.
+Cloud hosting platforms such as GCP and AWS already have managed Prometheus services. If you are new to Prometheus, we recommend installing the Prometheus monitoring package, Prometheus Operator. This includes a full monitoring stack: Prometheus, Alert Manager, Node Exporter, Grafana, and Kube State Metrics. Prometheus Operator can be installed onto your cluster via Helm at the link [here](https://artifacthub.io/packages/helm/choerodon/prometheus-operator).
 
-You should now be able to access the Palaemon application. If you are still getting an error with port 9090 being closed, double-check that you are exposing the correct service: It should be listening on port 9090 (see picture below).
+Once you have Prometheus installed into your Kubernetes cluster, follow the steps below to port-forward your Prometheus operator service.
 
-```
-
-## Connecting Prometheus to Palaemon:
+## Connecting Prometheus to Palaemon
 
  Make sure a Prometheus pod is installed onto your node/cluster, and forward its port (default 9090) to your localhost. The following command is a *sample* of how you can forward the port.
 ```
@@ -107,6 +103,7 @@ kubectl get services -A
 ```
    Find the service with a 9090/TCP Port assigned, and forward that service to your local 9090.
     
+Once you have port-forwarded the service, you should now be able to access the Palaemon application. If you are still getting an error with port 9090 being closed, double-check that you are exposing the correct service: It should be listening on port 9090 (see picture below).
 
 ## How to Run Tests
 ### Unit and Integration tests using Jest
@@ -138,6 +135,7 @@ There are settings to enable HTML report and video, snapshot, trace recordings t
 - [React](https://reactjs.org/)
 - [React Router](https://reactrouter.com/)
 - [Jest](https://jestjs.io/)
+- [Playwright](https://playwright.dev/)
 - [Node](https://nodejs.org/)
 - [Prometheus](https://prometheus.io/)
 - [Chart.js](https://www.chartjs.org/)
