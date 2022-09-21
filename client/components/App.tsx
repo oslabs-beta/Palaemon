@@ -112,6 +112,7 @@ const App = () => {
                 setAnalyzedPod={setAnalyzedPod}
                 analyzedData={analyzedData}
                 setAnalyzedData={setAnalyzedData}
+                clusterChartData={[]}
               />
             }
           />

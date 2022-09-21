@@ -63,6 +63,7 @@ export type ClusterChartCardProps = {
 export type EventProps = {
   setAnalyzedPod: (input: any) => void;
   analyzedPod: any[];
+  clusterChartData: any[];
   setAnalyzedData: (input: any) => void;
 };
 
@@ -75,6 +76,7 @@ export interface LogCardProps {
   logType: string;
   analyzedPod: oomObject;
   setAnalyzedPod: (input: any) => void;
+  clusterChartData: any;
   setAnalyzedData: (input: any) => void;
 }
 
@@ -154,6 +156,7 @@ export type AnalysisPageProps = {
   analyzedPod: any[];
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
+  clusterChartData: any;
   setAnalyzedData: (input: any) => void;
 };
 

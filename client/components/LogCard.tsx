@@ -8,11 +8,11 @@ const LogCard = (props: LogCardProps): JSX.Element => {
 
   const handleAnalyze = async () => {
     setAnalyzedPod({ ...props.oomObj });
-    console.log('this is oomobj', props.oomObj)
     try {
       if (props.oomObj){
       const analyzeData = await window.api.getAnalysis(props.oomObj.node)
-      console.log('this should give us arrobjs ', analyzeData);
+      //access to cluster chart data which shows limits/requests
+      console.log('inside handle analyze cluster chard data', props.clusterChartData.node)
       props.setAnalyzedData(analyzeData);
     }
     navigate('/analysis');

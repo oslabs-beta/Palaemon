@@ -376,6 +376,7 @@ ipcMain.handle("getUsage", async (event, ...args) => {
 ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
   console.log('parentnode from mainWindow.ts',parentNode)
   console.log('this is interval', interval)
+  // gives you right now, and the hour before
   const { startTime, endTime } = setStartAndEndTime();
   // const interval = '15s'
   // const namespace = await mainWindow.webContents
@@ -391,7 +392,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
   &start=${startTime}&end=${endTime}&step=${interval}`;
   const podMEMRes = await fetch(podMEMQuery);
   const podMEMData = await podMEMRes.json();
-  const podMem = await formatAnalysis(podMEMData.data, "megabytes")
+  const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime)
   console.log('this is podMem', podMem)
   // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
@@ -422,6 +423,8 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
       Port9090isClosed: {
         times: ["a", "b", "c"],
         values: [1, 2, 3],
+        // limit
+        // request
       },
     },
     {

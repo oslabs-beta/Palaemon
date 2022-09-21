@@ -24,7 +24,7 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  render(<Events setAnalyzedPod={() => {}} analyzedPod={[]} setAnalyzedData={() => {}}  />);
+  render(<Events setAnalyzedPod={() => {}} analyzedPod={[]} setAnalyzedData={() => {}} clusterChartData={[]} />);
 });
 
 const mockEvents = [

@@ -8,7 +8,7 @@ import { filter } from "../../webpack.config";
 import DetailsModal from "./Modal";
 import Tooltip from "./Tooltip";
 
-const AnalysisPage = (props: AnalysisPageProps) => {
+const AnalysisPage =  (props: AnalysisPageProps) => {
   const [OOMKillsList, setOOMKillsList]: any = useState([]);
   const [allOOMKills, setAllOOMKills]: any = useState([]);
   const [podOverviewData, setPodOverviewData]: any = useState([]);
@@ -19,18 +19,28 @@ const AnalysisPage = (props: AnalysisPageProps) => {
 
   const { analyzedPod, setAnalyzedPod, setAnalyzedData, analyzedData }: any = props;
   
-  const handleQuery = (e: any) => {
+  const handleQuery = async (e: any) => {
     // console.log('this is the event and data ', e)
     // console.log('formtarget', e.target['interval-unit'].value)
-    const timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
-    const nodeName = 'undefined'
-    // setAnalyzedData(e.target.value)
-
-    // window.api.getAnalysis(nodeName, timeInterval)
-    // .then((data) => {
-    //   console.log('getanalysis', data)
-
-    // })
+    let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
+    const nodeName = e.target['oomkill-selector'].value;
+    console.log('Query button pressed with: ', nodeName, timeInterval)
+    console.log(e.target['oomkill-selector'].label)    
+    console.log(e.target['oomkill-selector'])    
+    
+    if (nodeName === 'default' ) return;
+    if (timeInterval === 'default' ) timeInterval = '5m'
+    
+    try {
+      // if (props.oomObj){
+      const analyzeData = await window.api.getAnalysis(nodeName, timeInterval)
+      // console.log('this should give us arrobjs ', analyzeData);
+      props.setAnalyzedData(analyzeData);
+    // }
+    // navigate('/analysis');
+    } catch(err) {
+      return console.log('error: ', err)
+    }
   }
 
   const updateAnalyzedPod = (e: any) => {
@@ -62,8 +72,9 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       const oomkillData = await window.api.getOOMKills();
       const oomKillOptions: JSX.Element[] = oomkillData.map(
         (oomkill: any, i: number): JSX.Element => {
+          // console.log('oomkill obj',oomkill)
           return (
-            <option key={oomkill.podName + i} value={oomkill.podName}>
+            <option key={oomkill.podName + i} label={oomkill.podName} value={oomkill.node} >
               {oomkill.podName}
             </option>
           );
@@ -90,6 +101,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             logType={logType}
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
+            clusterChartData={props.clusterChartData}
             setAnalyzedData={setAnalyzedData}
           />
         );
@@ -110,7 +122,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
         <div className="analysis-nav-left">
         <form onSubmit={(event) => {
           event.preventDefault()
-          // handleQuery(event)
+          handleQuery(event)
           }}>
           <select id="oomkill-selector" name="oomkill-selector" onChange={(e) => updateAnalyzedPod(e)}>
             <option value="default">Select OOMKilled Pod</option>
