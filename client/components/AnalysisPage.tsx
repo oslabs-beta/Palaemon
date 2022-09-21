@@ -14,9 +14,26 @@ const AnalysisPage = (props: AnalysisPageProps) => {
   const [podOverviewData, setPodOverviewData]: any = useState([]);
   const [filteredLogs, setFilteredLogs]: any = useState([]);
   const [logType, setLogType]: any = useState<string>('events');
-  const { analyzedPod, setAnalyzedPod }: any = props;
   const [tooltipState, setTooltipState]: any = useState(false);
   const [tooltip, setTooltip]: any = useState(<></>);
+
+  const { analyzedPod, setAnalyzedPod, setAnalyzedData, analyzedData }: any =
+    props;
+
+  const handleQuery = (e: any) => {
+    // console.log('this is the event and data ', e)
+    // console.log('formtarget', e.target['interval-unit'].value)
+    const timeInterval =
+      e.target['analysis-interval'].value + e.target['interval-unit'].value;
+    const nodeName = 'undefined';
+    // setAnalyzedData(e.target.value)
+
+    // window.api.getAnalysis(nodeName, timeInterval)
+    // .then((data) => {
+    //   console.log('getanalysis', data)
+
+    // })
+  };
 
   const updateAnalyzedPod = (e: any) => {
     const podName = e.target.value;
@@ -75,6 +92,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             logType={logType}
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
+            setAnalyzedData={setAnalyzedData}
           />
         );
       }
@@ -85,30 +103,48 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     renderOOMKills();
     createLogs();
 
-    console.log('ANALYZED POD CHANGED', analyzedPod);
+    //console.log("ANALYZED POD CHANGED", analyzedPod);
   }, [analyzedPod]);
 
   return (
     <div id="analysis-container">
       <nav className="analysis-nav">
         <div className="analysis-nav-left">
-          <select id="oomkill-selector" onChange={e => updateAnalyzedPod(e)}>
-            <option value="default">Select OOMKilled Pod</option>
-            {OOMKillsList}
-          </select>
-          <input className="analysis-interval" placeholder="Time"></input>
-          <select className="interval-unit">
-            <option value="default">Select Unit</option>
-            <option value="s">Seconds</option>
-            <option value="m">Minutes</option>
-            <option value="h">Hours</option>
-          </select>
-          <button className="query-btn">Query</button>
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              // handleQuery(event)
+            }}
+          >
+            <select
+              id="oomkill-selector"
+              name="oomkill-selector"
+              onChange={e => updateAnalyzedPod(e)}
+            >
+              <option value="default">Select OOMKilled Pod</option>
+              {OOMKillsList}
+            </select>
+
+            <input
+              type={'text'}
+              className="analysis-interval"
+              name="analysis-interval"
+              placeholder="Time"
+            ></input>
+            <select className="interval-unit" name="interval-unit">
+              <option value="default">Select Unit</option>
+              <option value="s">Seconds</option>
+              <option value="m">Minutes</option>
+              <option value="h">Hours</option>
+            </select>
+            <button className="query-btn">Query</button>
+          </form>
+
           <div className="tooltip-container">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
+              width="16"
+              height="16"
               fill="#00695c"
               className="bi bi-question-circle-fill tooltip"
               viewBox="0 0 16 16"
@@ -121,22 +157,23 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           </div>
         </div>
         <div className="analysis-oomkill-data">
+          <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
           {analyzedPod.podName ? (
             <div className="analysis-oomkill-data-container">
               <div className="analysis-oomkill-data-left">
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Pod:</strong> {analyzedPod.podName}
                 </p>
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Restarts:</strong> {analyzedPod.restartcount}
                 </p>
               </div>
               <div className="analysis-oomkill-data-right">
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Terminated at:</strong>{' '}
                   {analyzedPod.started.slice(0, -6)}
                 </p>
-                <p>
+                <p className="analysis-oomkill-data-msg">
                   <strong>Restarted at:</strong>{' '}
                   {analyzedPod.finished.slice(0, -6)}
                 </p>
@@ -150,6 +187,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       <div className="analysis-main">
         <div id="left-side">
           <div className="pod-overview">
+            <span className="summary">Summary</span>
             {analyzedPod.podName && podOverviewData.length > 0 ? (
               podOverviewData
             ) : analyzedPod.podName ? (
@@ -161,6 +199,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             )}
           </div>
           <div className="filtered-log-container">
+            <span className="filtered-events-heading">Events</span>
             {analyzedPod.podName && filteredLogs.length > 0 ? (
               filteredLogs
             ) : analyzedPod.podName ? (
@@ -173,7 +212,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
           </div>
         </div>
         <div id="chartarea">
-          <ChartGrid />
+          <ChartGrid analyzedData={analyzedData} />
         </div>
       </div>
     </div>

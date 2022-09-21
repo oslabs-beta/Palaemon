@@ -1,3 +1,10 @@
+// Types for APP
+
+export type SidebarProps = {
+  menuOpen: string;
+  setMenuOpen: (input: boolean) => void;
+};
+
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
   name: string; // name of pod, node, or cluster, or deployment
@@ -63,6 +70,7 @@ export type ClusterChartCardProps = {
 export type EventProps = {
   setAnalyzedPod: (input: any) => void;
   analyzedPod: any[];
+  setAnalyzedData: (input: any) => void;
 };
 
 export type AnalyzeCount = any[];
@@ -74,6 +82,7 @@ export interface LogCardProps {
   logType: string;
   analyzedPod: oomObject;
   setAnalyzedPod: (input: any) => void;
+  setAnalyzedData: (input: any) => void;
 }
 
 export type EventObject = {
@@ -128,6 +137,8 @@ export type ChartGraphData = {
   nodeCPU: GraphData;
   podMem: GraphData;
   podCPU: GraphData;
+  netRead: GraphData;
+  netWrite: GraphData;
 };
 
 export type GraphableData = {
@@ -141,12 +152,16 @@ export type GraphableData = {
 
 export type AnalysisPage = {
   analyzedPod: any[];
+  analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
+  setAnalyzedData: (input: any) => void;
 };
 
 export type AnalysisPageProps = {
-  setAnalyzedPod: (input: any) => void;
   analyzedPod: any[];
+  analyzedData: any[];
+  setAnalyzedPod: (input: any) => void;
+  setAnalyzedData: (input: any) => void;
 };
 
 export type TooltipProps = {

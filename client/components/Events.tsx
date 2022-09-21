@@ -56,10 +56,10 @@ const Events = (props: EventProps): JSX.Element => {
             logType={logType}
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
+            setAnalyzedData={props.setAnalyzedData}
           />
         );
       }
-
 
       if (severityType !== 'Default') {
         const filteredLogs = logCards.filter((log: any) => {

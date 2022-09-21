@@ -1,6 +1,6 @@
-import { Line } from 'react-chartjs-2';
-import { useState, useEffect } from 'react';
-import { GraphData, ChartGraphData, GraphableData } from '../Types';
+import { Line } from "react-chartjs-2";
+import { useState, useEffect } from "react";
+import { GraphData, ChartGraphData, GraphableData } from "../Types";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -27,13 +27,13 @@ const ChartGrid = (props: any) => {
   const initData: GraphData = [
     {
       Port9090isClosed: {
-        times: ['a', 'b', 'c'],
+        times: ["a", "b", "c"],
         values: [1, 2, 3],
       },
     },
     {
       Port9090isClosedOpenIt: {
-        times: ['a', 'b', 'c'],
+        times: ["a", "b", "c"],
         values: [3, 2, 1],
       },
     },
@@ -42,36 +42,50 @@ const ChartGrid = (props: any) => {
   const initData1: GraphData = [
     {
       TempPodInfo: {
-        times: ['a', 'b', 'c'],
+        times: ["a", "b", "c"],
         values: [1, 2, 3],
       },
     },
     {
       OtherFakePods: {
-        times: ['a', 'b', 'c'],
+        times: ["a", "b", "c"],
         values: [3, 2, 1],
       },
     },
   ];
 
   const [graphState, setGraphState] = useState<ChartGraphData>({
-    nodeMem: initData,
-    nodeCPU: initData1,
     podMem: initData,
     podCPU: initData,
+    nodeMem: initData,
+    nodeCPU: initData1,
+    netRead: initData,
+    netWrite: initData,
   });
 
+  useEffect(() => {
+    // console.log("THIS IS PROPS DATA ", props.analyzedData);
+    // console.log("useeffect on [], before the set", graphState);
+    setGraphState(props.analyzedData);
+    // console.log("after it gets set", graphState);
+  }, []);
+
   const colorArray = [
-    'red',
-    'blue',
-    'green',
-    'black',
-    'purple',
-    'cyan',
-    'yellow',
-    'orange',
-    '#003d33',
+    "red",
+    "blue",
+    "green",
+    "black",
+    "purple",
+    "cyan",
+    "yellow",
+    "orange",
+    "#003d33",
+    "#003d33",
+    "#003d33",
+    "#003d33",
   ];
+
+  // console.log("before a crash", graphState);
 
   const xLabels: string[] =
     graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
@@ -80,24 +94,24 @@ const ChartGrid = (props: any) => {
     responsive: true,
     responsiveAnimationDuration: 1000,
     pointRadius: 0,
-    indexAxis: 'x',
+    indexAxis: "x",
     plugins: {
       legend: {
         display: buttonClicked,
-        position: 'bottom' as const,
+        position: "bottom" as const,
       },
       title: {
         display: true,
-        text: 'working title',
+        text: "working title",
       },
     },
     scales: {
       x: {
         grid: {
-          color: 'rgb(240, 240, 240)',
+          color: "rgb(240, 240, 240)",
         },
         ticks: {
-          color: '#797676',
+          color: "#797676",
         },
         title: {
           display: true,
@@ -106,14 +120,14 @@ const ChartGrid = (props: any) => {
       },
       y: {
         grid: {
-          color: 'rgb(240, 240, 240)',
+          color: "rgb(240, 240, 240)",
         },
         ticks: {
-          color: '#797676',
+          color: "#797676",
         },
         title: {
           display: true,
-          text: 'Mibibytes',
+          text: "Mibibytes",
         },
       },
     },
@@ -124,6 +138,8 @@ const ChartGrid = (props: any) => {
     nodeCPU: JSON.parse(options),
     podMem: JSON.parse(options),
     podCPU: JSON.parse(options),
+    netRead: JSON.parse(options),
+    netWrite: JSON.parse(options),
   };
 
   const charts: JSX.Element[] = [];
@@ -133,13 +149,13 @@ const ChartGrid = (props: any) => {
   //   console.log('multiopt', multiOptions);
 
   const handleLegendClick = () => {
-    setButtonClicked(prevCheck => !prevCheck);
+    setButtonClicked((prevCheck) => !prevCheck);
   };
 
   // first we iterate of the total number of graphs we want
   (Object.keys(graphState) as (keyof typeof graphState)[]).forEach(
     (key, index) => {
-      // console.log('whats this ', key, graphState[key], index);
+      console.log("whats this ", key, graphState[key], index);
 
       // then we iterate over all of the lines in that graph
       for (let i = 0; i < graphState[key].length; i++) {
@@ -153,13 +169,13 @@ const ChartGrid = (props: any) => {
       }
 
       // this is part of the each individual graphs
-      multiOptions[key].scales.y.title.text = 'y-axis label';
+      multiOptions[key].scales.y.title.text = "y-axis label";
       multiOptions[key].plugins.title.text = key;
       charts.push(
         <div
           className="line-chart-div"
           style={{
-            position: 'relative',
+            position: "relative",
             // height: '40vh',
             // width: '30vw',
           }}

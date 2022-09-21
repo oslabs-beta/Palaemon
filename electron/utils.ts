@@ -8,7 +8,7 @@ const fetch: any = (...args: any) =>
 export const setStartAndEndTime = () => {
   var now = new Date();
   var copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 24);
+  copyNow.setHours(copyNow.getHours() - 1);
   var startTime = copyNow.toISOString();
   var endTime = new Date().toISOString();
   return {
@@ -102,7 +102,7 @@ export async function fetchMem(obj: any) {
   const output: SvgInfo = new SvgInfoObj();
   const podName = obj.metadata.name;
   const { startTime, endTime } = setStartAndEndTime();
-  
+
   if (obj?.metadata?.name) {
     output.name = obj.metadata.name;
     output.parent = obj.spec.nodeName;
@@ -117,6 +117,7 @@ export async function fetchMem(obj: any) {
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
+
     if (limitData.data.result[0]) {
       if (limitData.data.result[0].metric.resource === 'memory') {
         output.resource = 'memory';
@@ -137,8 +138,7 @@ export async function fetchMem(obj: any) {
       request: 1,
       parent: '',
       namespace: '',
-    }
-
+    };
   }
 }
 
@@ -192,7 +192,7 @@ export const formatOOMKills = (data: string[]) => {
     const updatedPodData = podData.map(pod =>
       pod.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
     );
-    // console.log(updatedPodData);
+    // console.log("this is updated pod data", updatedPodData);
     const indexOfTerm = updatedPodData.indexOf('Last State: Terminated');
     // console.log(indexOfTerm);
     const filteredPodData: string[] = updatedPodData.slice(
@@ -206,6 +206,11 @@ export const formatOOMKills = (data: string[]) => {
     const namespaceStr: string = updatedPodData[1];
     const nsColonIdx: any = namespaceStr.indexOf(':');
     const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
+
+    const nodeStr: any = updatedPodData.filter(str => str.includes('Node:'))[0];
+    const nodeColonIdx: any = nodeStr.indexOf(':');
+    const nodeSlashIdx: any = nodeStr.indexOf('/');
+    const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
 
     const limitIdx: any = filteredPodData.indexOf('Limits:');
     const limitCpu = filteredPodData[limitIdx + 1];
@@ -227,7 +232,7 @@ export const formatOOMKills = (data: string[]) => {
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
-
+    oomObject.node = node;
     filteredPodData.slice(0, 7).forEach((el: any) => {
       const colon: any = el.indexOf(':');
       // Extracts key from the left of colon and lowercases to send properly to frontend

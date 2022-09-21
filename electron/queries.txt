@@ -67,3 +67,14 @@ sum(
 gives us usage by milicores
 0.07031443141175173
 0.06659781737942783
+
+-------------------- ANALYSIS PAGE --------------------
+
+add variable to node=${} and check which node the analyzed pod belongs to
+
+CONTAINER NETWORK BYTES RECEIVED AVG 5m
+rate(container_network_receive_bytes_total{service!~"daddy-kube-prometheus-stac-kubelet",node="gke-guestbook-my-first-c-default-pool-feaf7786-h6kd"}[5m])
+
+CONTAINER NETWORK BYTES TRANSMIT AVG 5m
+rate(container_network_transmit_bytes_total{service!~"daddy-kube-prometheus-stac-kubelet",node="gke-guestbook-my-first-c-default-pool-feaf7786-h6kd"}[5m])
+

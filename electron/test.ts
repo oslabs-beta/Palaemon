@@ -105,7 +105,7 @@
 //     const nodeStr: string = updatedPodData[4];
 //     const nodeColonIdx: any = nodeStr.indexOf(':');
 //     const nodeSlashIdx: any = nodeStr.indexOf('/');
-//     const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
+//     const node: string = nodeStr.slice(nodeColonIdx + 1).trim();
 
 //     const limitIdx: any = filteredPodData.indexOf('Limits:');
 //     const limitCpu = filteredPodData[limitIdx + 1];

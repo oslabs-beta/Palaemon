@@ -20,9 +20,9 @@ const WINDOW_API = {
   getLimits: async () => ipcRenderer.invoke('getLimits'),
   getAllInfo: async () => ipcRenderer.invoke('getAllInfo'),
   getOOMKills: async () => ipcRenderer.invoke('getOOMKills'),
-  getUsage: async (...args: any) => {
-    return ipcRenderer.invoke('getUsage', ...args)
-  }
+  getUsage: async (...args: any) => ipcRenderer.invoke('getUsage', ...args),
+  getAnalysis: async (...args: any) =>
+    ipcRenderer.invoke('getAnalysis', ...args),
 };
 
 // exposes WINDOW_API methods to the frontend under "window.api" object
