@@ -31,12 +31,11 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
     setLoading(true)
     let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
     const podName = e.target['oomkill-selector'].value;    
-    
     if (podName === 'default' ) {
       setLoading(false)
       return
     }
-    if (timeInterval === 'default' ) timeInterval = '5m'
+    if (timeInterval === 'default' || !e.target["analysis-interval"].value) timeInterval = '5m'
     
     const nodeName = e.target[podName].value;
     const timeOfDeath = new Date(analyzedPod.started).toISOString();
@@ -57,7 +56,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
 
   const updateAnalyzedPod = (e: any) => {
     const podName = e.target.value;
-    console.log('targval',e.target.value)
+    // console.log('targetval',e.target.value)
     const newAnalysis = allOOMKills.filter(
       (oomkill: any) => oomkill.podName === podName
     );
