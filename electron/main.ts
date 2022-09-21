@@ -449,7 +449,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
       },
     ];
     
-    console.log('podmem part2', podMem)
+    // console.log('podmem part2', podMem)
 
     return {
       podMem,

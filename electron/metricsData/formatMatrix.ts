@@ -95,8 +95,8 @@ export async function getPodReqLimits(podName: string, startTime?: string, endTi
     })
   })
   
-  console.log('limitdata', limitData)
-  console.log('requestdata', requestData)
+  // console.log('limitdata', limitData)
+  // console.log('requestdata', requestData)
   })
   return {
     limitData,

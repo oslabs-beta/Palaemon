@@ -215,7 +215,7 @@ const ChartGrid = (props: any) => {
           // height={'300px'}
           />
           <button className="legend-btn-grid" onClick={() => handleLegendClick(key)}>
-            {!buttonClicked ? 'Show Pods' : 'Hide Pods'}
+            {!buttonClicked[key] ? 'Show Legend' : 'Hide Legend'}
           </button>
         </div>
       );

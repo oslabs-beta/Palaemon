@@ -162,7 +162,7 @@ beforeEach(() => {
     }
 
     const pod1: SvgInfoObj = await fetchMem(mockObj)
-    console.log('mypod9090', pod1)
+    // console.log('mypod9090', pod1)
     expect(pod1).toStrictEqual(defaultData)
   })
 
@@ -192,7 +192,7 @@ beforeEach(() => {
 
     const pod: SvgInfoObj = await fetchMem(mockObj)
 
-    console.log('mypodTrue', pod)
+    // console.log('mypodTrue', pod)
     expect(pod).toHaveProperty('name');
     expect(pod.request).toBe(52.4288);
     expect(pod.limit).toBe(102.4288);
