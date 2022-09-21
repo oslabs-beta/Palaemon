@@ -26,7 +26,8 @@ body,
 #root,
 #sidebar,
 #contents,
-#landing-container {
+#landing-container,
+#analysis-container {
   height: 100%;
 }
 
@@ -57,20 +58,6 @@ body {
   padding: 0px;
   display: flex;
 }
-
-// $ugly-sewage-green: #00695c;
-// $p-light-color: #439889;
-// $p-dark-color: #003d33;
-
-// $font-color: #002a25;
-
-// $secondary-color: #b2dfdb;
-// $tertiary-color: #d1ece9;
-// $s-light-color: #e5ffff;
-// $s-dark-color: #82ada9;
-
-// $sidebar-width: 240px;
-// $sidebar-width-closed: 80px;
 
 #sidebar {
   width: $sidebar-width;
@@ -158,6 +145,12 @@ body {
 
   a {
     text-decoration: none;
+
+    // logo-hat load as "focus-visible" with a yellow outline on app load
+    // this is to disable that :(
+    &:focus-visible {
+      outline: none;
+    }
   }
 
   h1 {
@@ -196,11 +189,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
-  // & > * {
-  //   margin: 1rem;
-  //   padding: 12px;
-  // }
 }
 
 #tagline {
@@ -548,7 +536,7 @@ button:focus-visible {
   outline: 2px solid $p-light-color;
 }
 
-// ANALYSIS PAGE
+// ANALYSIS PAGE ------------------------------------------------------------------------------------------>>
 
 #analysis-container {
   display: flex;
@@ -562,10 +550,20 @@ button:focus-visible {
     margin: 1rem 2rem;
     color: $font-color;
 
-    .analysis-nav-left {
+    &-left {
       .analysis-form {
         display: grid;
         grid-template-columns: repeat(5, auto);
+        width: fit-content;
+        
+        .loading-bar{
+          display: flex;
+          align-items: center;
+          // justify-content: space-between;
+          #loadname{
+            padding-right: 1rem;
+          }
+        }
         flex: 1;
         justify-content: center;
         align-items: center;
@@ -635,7 +633,7 @@ button:focus-visible {
       justify-content: center;
       align-items: center;
       flex: 1;
-      min-width: 40vw;
+      min-width: 30vw;
       min-height: 5.4rem;
       background-color: white;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
@@ -645,6 +643,7 @@ button:focus-visible {
       font-size: 0.4rem;
       max-width: auto;
 
+    
       .oomkilled-pod-data {
         margin-top: 0.4rem;
         text-transform: uppercase;
@@ -654,7 +653,7 @@ button:focus-visible {
         text-align: center;
       }
 
-      .analysis-oomkill-data-container {
+      &-container {
         display: flex;
         font-size: 1rem;
         justify-content: center;
@@ -677,8 +676,14 @@ button:focus-visible {
   }
 
   .analysis-main {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    display: flex;
+    width: 100%;
+    height: 78vh;
+      flex-grow: 1;
+
+    &>div {
+      margin: 1rem 2rem;
+    }
 
     .pod-overview {
       display: flex;
@@ -708,10 +713,9 @@ button:focus-visible {
       background-color: whitesmoke;
       border-radius: 10px;
       // height: 30rem; // use this height for when the summary works
-      height: 75.5vh;
+      height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
-      margin: 0rem 1rem 0rem 1rem;
 
       .filtered-events-heading {
         text-transform: uppercase;
@@ -732,19 +736,22 @@ button:focus-visible {
       }
     }
 
+    #left-side {
+      width: 400px;
+    }
+
     // chart styling
     #chartarea {
       background-color: white;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: minmax(100px, auto);
+      flex-grow: 1;
+      display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       justify-items: center;
+      margin-left: 0;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
-      margin: 0 1rem 0rem 1rem;
-      height: 78vh;
-      width: 70vw;
+      // height: 100%;
       overflow-y: scroll;
       overflow-x: hidden;
     }
@@ -756,6 +763,7 @@ button:focus-visible {
       margin-top: 1rem;
       padding: 0.4rem;
       width: 40rem;
+      height: 40rem;
     }
 
     .legend-btn-grid {
@@ -814,32 +822,14 @@ button:focus-visible {
   }
 
   #analysis-container {
+   
+
     .analysis-nav {
-      .analysis-nav-left {
-        .loading-bar{
-          display: flex;
-          align-items: center;
-          // justify-content: space-between;
-          #loadname{
-            padding-right: 1rem;
-          }
-        }
-        .analysis-form {
-          grid-template-columns: repeat(3, auto);
-          grid-template-rows: repeat(2, auto);
-          width: fit-content;
-        }
-      }
-      .analysis-oomkill-data {
-        min-width: 30vw;
-      }
+     
+
       .analysis-oomkill-data-msg {
         font-size: 0.7rem;
       }
     }
-  }
-
-  #chartarea {
-    max-width: 62.5vw;
   }
 }
