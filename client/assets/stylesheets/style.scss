@@ -707,7 +707,8 @@ button:focus-visible {
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       background-color: whitesmoke;
       border-radius: 10px;
-      height: 30rem;
+      // height: 30rem; // use this height for when the summary works
+      height: 75.5vh;
       overflow-y: auto;
       overflow-x: hidden;
       margin: 0rem 1rem 0rem 1rem;
