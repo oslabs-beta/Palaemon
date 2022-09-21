@@ -372,7 +372,7 @@ ipcMain.handle("getUsage", async (event, ...args) => {
 
 /* -------------- Analysis Page -------------- */
 
-ipcMain.handle("getAnalysis", async (event, parentNode, interval = '15s') => {
+ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
   console.log('parentnode from mainWindow.ts',parentNode)
   console.log('this is interval', interval)
   const { startTime, endTime } = setStartAndEndTime();

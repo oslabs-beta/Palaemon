@@ -80,6 +80,9 @@ const ChartGrid = (props: any) => {
     "yellow",
     "orange",
     "#003d33",
+    "#003d33",
+    "#003d33",
+    "#003d33",
   ];
 
   // console.log("before a crash", graphState);
