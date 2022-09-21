@@ -78,7 +78,7 @@ const HomePage = (props: any): JSX.Element => {
 
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
-    console.log('this is all info', allTheInfo);
+    // console.log('this is all info', allTheInfo);
 
     if (resource === 'memory' || resource === 'cpu') {
       allTheInfo.Pods = allTheInfo.Pods.filter(
