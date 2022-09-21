@@ -669,6 +669,12 @@ button:focus-visible {
     border-radius: 10px;
     padding: 1rem;
     color: $font-color;
+    
+    &.graph-msg {
+      margin-top: 2rem;
+      max-height: 2rem;
+      width: 80%;
+    }
   }
 
   .analysis-oomkill-data-msg {
@@ -746,12 +752,12 @@ button:focus-visible {
       flex-grow: 1;
       display: flex;
       flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 2rem;
       justify-content: center;
-      justify-items: center;
       margin-left: 0;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
-      // height: 100%;
       overflow-y: scroll;
       overflow-x: hidden;
     }
@@ -760,10 +766,13 @@ button:focus-visible {
       display: flex;
       // border: 1px solid black;
       flex-direction: column;
-      margin-top: 1rem;
+      margin: 2rem;
       padding: 0.4rem;
-      width: 40rem;
-      height: 40rem;
+      min-width: 30rem;
+      max-width: 50rem;
+      min-height: 10rem;
+      max-height: 24rem;
+      flex: 1 1;
     }
 
     .legend-btn-grid {
@@ -786,13 +795,6 @@ button:focus-visible {
       cursor: pointer;
       border: none;
       // filter: drop-shadow(2px 2px 3px $font-color);
-    }
-
-    .no-data-msg.graph-msg {
-      grid-column: 1/-1;
-      margin-top: 2rem;
-      max-height: 2rem;
-      width: 80%;
     }
   }
 }
@@ -819,17 +821,5 @@ button:focus-visible {
     grid-row: 2;
     margin: 0;
     padding: 0;
-  }
-
-  #analysis-container {
-   
-
-    .analysis-nav {
-     
-
-      .analysis-oomkill-data-msg {
-        font-size: 0.7rem;
-      }
-    }
   }
 }
