@@ -35,7 +35,7 @@ const Sidebar = (props: SidebarProps) => {
       </Link>
       <ul id="sidebar-list">
         <li>
-          <Link to="/">
+          <Link to="/" id="link-namespace">
             <div className="sidebar-page-container">
               <img
                 className={menuOpen ? 'sidebar-icon' : 'sidebar-icon-closed'}
@@ -48,7 +48,7 @@ const Sidebar = (props: SidebarProps) => {
           </Link>
         </li>
         <li>
-          <Link to="/home">
+          <Link to="/home" id="link-dashboard">
             <div className="sidebar-page-container">
               <img
                 className={menuOpen ? 'sidebar-icon' : 'sidebar-icon-closed'}
@@ -61,7 +61,7 @@ const Sidebar = (props: SidebarProps) => {
           </Link>
         </li>
         <li>
-          <Link to="/analysis">
+          <Link to="/analysis" id="link-analysis">
             <div className="sidebar-page-container">
               <img
                 className={menuOpen ? 'sidebar-icon' : 'sidebar-icon-closed'}

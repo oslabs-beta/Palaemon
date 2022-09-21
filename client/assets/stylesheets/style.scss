@@ -513,6 +513,18 @@ footer {
     box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
 
     text-align: center;
+    #ns-error{
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #error {
+      color: red;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
 
     h2 {
       color: $font-color;

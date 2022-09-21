@@ -10,6 +10,7 @@ import {
   ModalProps,
   ClusterAllInfo,
 } from '../Types';
+import { useNavigate } from 'react-router-dom';
 
 const tempData: SvgInfo[] = [
   {
@@ -38,6 +39,7 @@ const HomePage = (props: any): JSX.Element => {
   const [clusterChartData, setClusterChartData]: any = useState<ClusterAllInfo>(
     initalClusterChartData
   );
+  const navigate = useNavigate();
   const { menuOpen, setMenuOpen } = props;
 
   // Ways to clean up the modal:
@@ -76,13 +78,16 @@ const HomePage = (props: any): JSX.Element => {
 
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
-    console.log(allTheInfo);
+    console.log('this is all info', allTheInfo);
+
     if (resource === 'memory' || resource === 'cpu') {
       allTheInfo.Pods = allTheInfo.Pods.filter(
         (info: any) => info.resource === resource
       );
       setClusterChartData(allTheInfo);
-    } else setClusterChartData(allTheInfo);
+    } else {
+      setClusterChartData(allTheInfo);
+    }
   };
 
   const handleResourceChange = (e: any) => {
@@ -123,13 +128,14 @@ const HomePage = (props: any): JSX.Element => {
           />
         </div>
         <div id="graph">
-          <Graph />
+          <Graph setResourceError={props.setResourceError} />
         </div>
       </div>
       <div id={menuOpen ? 'right-side' : 'right-side-closed'}>
         <Events
           analyzedPod={props.analyzedPod}
           setAnalyzedPod={props.setAnalyzedPod}
+          setAnalyzedData={props.setAnalyzedData}
         />
       </div>
       {modalState && theModal}

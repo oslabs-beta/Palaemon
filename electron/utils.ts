@@ -118,7 +118,6 @@ export async function fetchMem(obj: any) {
     const limitData: any = await limit.json();
     const requestData: any = await request.json();
 
-    // console.log('THIS IS JSONDATA 1', limitData.data.result)
     if (limitData.data.result[0]) {
       if (limitData.data.result[0].metric.resource === 'memory') {
         output.resource = 'memory';
@@ -193,7 +192,7 @@ export const formatOOMKills = (data: string[]) => {
     const updatedPodData = podData.map(pod =>
       pod.replace(/^\s+|\s+$|\s+(?=\s)/g, '')
     );
-    // console.log(updatedPodData);
+    // console.log("this is updated pod data", updatedPodData);
     const indexOfTerm = updatedPodData.indexOf('Last State: Terminated');
     // console.log(indexOfTerm);
     const filteredPodData: string[] = updatedPodData.slice(
@@ -208,7 +207,7 @@ export const formatOOMKills = (data: string[]) => {
     const nsColonIdx: any = namespaceStr.indexOf(':');
     const namespace: string = namespaceStr.slice(nsColonIdx + 1).trim();
 
-    const nodeStr: string = updatedPodData[4];
+    const nodeStr: any = updatedPodData.filter(str => str.includes('Node:'))[0];
     const nodeColonIdx: any = nodeStr.indexOf(':');
     const nodeSlashIdx: any = nodeStr.indexOf('/');
     const node: string = nodeStr.slice(nodeColonIdx + 1, nodeSlashIdx).trim();
@@ -230,11 +229,10 @@ export const formatOOMKills = (data: string[]) => {
     };
 
     oomObject.namespace = namespace;
-    oomObject.node = node;
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
-
+    oomObject.node = node;
     filteredPodData.slice(0, 7).forEach((el: any) => {
       const colon: any = el.indexOf(':');
       // Extracts key from the left of colon and lowercases to send properly to frontend
@@ -248,7 +246,6 @@ export const formatOOMKills = (data: string[]) => {
     });
 
     OOMKills.push(oomObject);
-    console.log(oomObject);
   });
 
   return OOMKills;

@@ -1,5 +1,12 @@
-import { app, session, BrowserWindow, ipcMain, dialog, IpcMainEvent } from 'electron';
-import { ClusterAllInfo } from '../client/Types';
+import {
+  app,
+  session,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  IpcMainEvent,
+} from 'electron';
+import { ClusterAllInfo, ChartGraphData } from '../client/Types';
 import path from 'path';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
@@ -23,7 +30,11 @@ import {
 } from './utils';
 
 // metrics modules
-import { formatMatrix, formatUsage } from './metricsData/formatMatrix';
+import {
+  formatMatrix,
+  formatUsage,
+  formatAnalysis,
+} from './metricsData/formatMatrix';
 import { SvgInfo, SvgInfoObj } from '../client/Types';
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
@@ -67,11 +78,12 @@ const loadMainWindow = () => {
       .catch((err: Error) => {
         console.log('fetch to 9090 has failed in main.ts in loadMainWindow');
         const num = dialog.showMessageBoxSync({
-          message: 'Please make sure port-forwarding to 9090 is set up.',
+          message:
+            'PALAEMON: Please make sure port-forwarding to 9090 is set up.',
           type: 'warning',
           // Cancel returns 0, OK returns 1
           buttons: ['Cancel', 'OK'],
-          title: 'Port 9090 missing',
+          title: 'PALAEMON: Port 9090 missing',
           detail: 'Open Port 9090 for prometheus, then click OK.',
         });
         if (num === 1) checkPort();
@@ -127,12 +139,12 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
         return localStorage.namespace;
       });
     const getNodes = await k8sApiCore.listNode(`${nsSelect}`);
-
     const nodeData = getNodes.body.items.map(node => {
       return parseNode(node);
     }); // end of nodeData
 
     const getPods = await k8sApiCore.listNamespacedPod(`${nsSelect}`);
+    // console.log('this is getPods: ',getPods.body.items[0]);
 
     const memData = await Promise.all(
       getPods.body.items.map(pod => {
@@ -248,7 +260,6 @@ ipcMain.handle('getNamespaces', async () => {
   }
 });
 
-
 // COMMAND LINE //
 // get events
 ipcMain.handle('getEvents', async () => {
@@ -292,34 +303,6 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   }
 });
 
-// QUERY FOR CLUSTER CHART HEALTH
-ipcMain.handle('getCPUUsage', async () => {
-  const { startTime, endTime } = setStartAndEndTime();
-  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
-  const interval = '15s';
-  try {
-    const nsSelect = await mainWindow.webContents
-      .executeJavaScript('({...localStorage});', true)
-      /* check what type this is with team */ /* check what type this is with team */
-      .then((localStorage: any) => {
-        return localStorage.namespace;
-      });
-    // fetch time series data from prom api
-    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
-    const query = `${PROM_URL}query_range?query=sum(
-      rate(container_cpu_usage_seconds_total{container!~"POD|",namespace="${nsSelect}",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]) by (pod)&start=${startTime}&end=${endTime}&step=${interval}`;
-    // fetch request
-    const res = await fetch(query);
-    const data = await res.json();
-
-    // data.data.result returns matrix
-    return formatMatrix(data.data, 'milicores');
-  } catch (error) {
-    console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
-    return { err: error };
-  }
-});
-
 // get alerts
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
@@ -351,40 +334,130 @@ ipcMain.handle('getOOMKills', async (): Promise<any> => {
   }
 });
 
-
-
-// TEST FOR USAGE
+// TEST FOR USAGE ON HOMEPAGE AND ANALYSIS PAGE
 
 ipcMain.handle('getUsage', async (event, ...args) => {
-  const time = new Date().toISOString()
+  const time = new Date().toISOString();
   const interval = '15s';
   const podName = args[0];
   const resource = args[1];
   let namespace;
   try {
-
     await mainWindow.webContents
       .executeJavaScript('({...localStorage});', true)
       .then((localStorage: any) => {
-        namespace = localStorage.namespace
-
+        namespace = localStorage.namespace;
       });
 
     // fetch time series data from prom api
     // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
-    const query = resource === "memory" ? `${PROM_URL}query_range?query=
+    const query =
+      resource === 'memory'
+        ? `${PROM_URL}query_range?query=
     container_memory_working_set_bytes{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
-    &start=${time}&end=${time}&step=${interval}` : `${PROM_URL}query_range?query=
-    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]))
     &start=${time}&end=${time}&step=${interval}`
+        : `${PROM_URL}query_range?query=
+    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]))
+    &start=${time}&end=${time}&step=${interval}`;
 
-    const res = await fetch(query)
+    const res = await fetch(query);
     const data = await res.json();
 
-    return resource === "memory" ? formatUsage(data.data, "megabytes") : formatUsage(data.data, "milicores")
-
+    return resource === 'memory'
+      ? formatUsage(data.data, 'megabytes')
+      : formatUsage(data.data, 'milicores');
   } catch (error) {
     console.log(`Error in getUSAGE function: ERROR: ${error}`);
     return { err: error };
   }
 });
+
+/* -------------- Analysis Page -------------- */
+
+ipcMain.handle('getAnalysis', async (event, parentNode, interval = '5m') => {
+  console.log('parentnode from mainWindow.ts', parentNode);
+  console.log('this is interval', interval);
+  const { startTime, endTime } = setStartAndEndTime();
+  // const interval = '15s'
+  // const namespace = await mainWindow.webContents
+  // .executeJavaScript("({...localStorage});", true)
+  // .then((localStorage: any) => {
+  //   return localStorage.namespace;
+  // });
+  try {
+    // build mem usage by PODS graph
+    const podMEMQuery = `${PROM_URL}query_range?query=
+  container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+    const podMEMRes = await fetch(podMEMQuery);
+    const podMEMData = await podMEMRes.json();
+    const podMem = await formatAnalysis(podMEMData.data, 'megabytes');
+    console.log('this is podMem', podMem);
+    // build mem usage by PODS graph
+    const podCPUQuery = `${PROM_URL}query_range?query=
+  rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+    const podCPURes = await fetch(podCPUQuery);
+    const podCPUData = await podCPURes.json();
+    const podCPU = await formatAnalysis(podCPUData.data, 'milicores');
+
+    // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
+    const nodeMEMQuery = `${PROM_URL}query_range?query=
+  sum(container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}) by (node)
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+    const nodeMEMRes = await fetch(nodeMEMQuery);
+    const nodeMEMData = await nodeMEMRes.json();
+    const nodeMem = await formatAnalysis(nodeMEMData.data, 'megabytes');
+
+    // build node usage by CPU graph
+    const nodeCPUQuery = `${PROM_URL}query_range?query=
+  sum(rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])) by (node)
+  &start=${startTime}&end=${endTime}&step=${interval}`;
+    const nodeCPURes = await fetch(nodeCPUQuery);
+    const nodeCPUData = await nodeCPURes.json();
+    const nodeCPU = await formatAnalysis(nodeCPUData.data, 'milicores');
+
+    const initData: any = [
+      {
+        Port9090isClosed: {
+          times: ['a', 'b', 'c'],
+          values: [1, 2, 3],
+        },
+      },
+      {
+        Port9090isClosedOpenIt: {
+          times: ['a', 'b', 'c'],
+          values: [3, 2, 1],
+        },
+      },
+    ];
+
+    return {
+      podMem,
+      podCPU,
+      nodeMem,
+      nodeCPU,
+      netRead: initData,
+      netWrite: initData,
+    };
+  } catch (error) {
+    console.log(`Error in getAnalysis function: ERROR: ${error}`);
+    return { err: error };
+  }
+});
+
+// export type GraphData = {
+//   [podName: string]: {
+//     times: string[];
+//     values: number[];
+//   };
+// }[];
+
+// export type ChartGraphData = {
+//   nodeMem: GraphData;
+//   nodeCPU: GraphData;
+//   podMem: GraphData;
+//   podCPU: GraphData;
+//   netRead: GraphData;
+//   netWrite: GraphData;
+// };

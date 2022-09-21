@@ -20,6 +20,7 @@ declare global {
       getAllInfo: () => Promise<any>;
       getOOMKills: () => Promise<any>;
       getUsage: (name: string, resource: string) => Promise<any>;
+      getAnalysis: (nodeName: string, timeInterval?: string) => Promise<any>;
     };
   }
 }
