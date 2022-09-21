@@ -10,6 +10,9 @@ $s-light-color: #e5ffff;
 $s-dark-color: #82ada9;
 
 $sidebar-width: 240px;
+$sidebar-width-closed: 80px;
+
+$header-height: 56px;
 
 $grey: #ddd;
 
@@ -41,6 +44,12 @@ body {
 #logo {
   width: 180px;
   margin: 8px;
+  transition: all 0.3s;
+}
+
+#logo-menu-closed {
+  width: 60px;
+  margin: 8px;
 }
 
 #root {
@@ -49,18 +58,19 @@ body {
   display: flex;
 }
 
-$ugly-sewage-green: #00695c;
-$p-light-color: #439889;
-$p-dark-color: #003d33;
+// $ugly-sewage-green: #00695c;
+// $p-light-color: #439889;
+// $p-dark-color: #003d33;
 
-$font-color: #002a25;
+// $font-color: #002a25;
 
-$secondary-color: #b2dfdb;
-$tertiary-color: #d1ece9;
-$s-light-color: #e5ffff;
-$s-dark-color: #82ada9;
+// $secondary-color: #b2dfdb;
+// $tertiary-color: #d1ece9;
+// $s-light-color: #e5ffff;
+// $s-dark-color: #82ada9;
 
-$sidebar-width: 240px;
+// $sidebar-width: 240px;
+// $sidebar-width-closed: 80px;
 
 #sidebar {
   width: $sidebar-width;
@@ -69,6 +79,7 @@ $sidebar-width: 240px;
   flex-direction: column;
   align-items: center;
   position: relative;
+  transition: all 0.3s;
 
   a {
     & > img {
@@ -89,23 +100,43 @@ $sidebar-width: 240px;
     }
   }
 
-  .menu-close-icon {
-    width: 1.4rem;
+  #close-menu-icon,
+  #open-menu-icon {
+    width: 1.2rem;
     position: absolute;
-    top: -2rem;
+    top: 0.4rem;
     right: 0.4rem;
+    cursor: pointer;
   }
 
   .sidebar-page-container {
     display: flex;
     align-items: center;
     gap: 1rem;
+    transition: all 0.3s;
 
     .sidebar-icon {
       width: 2.4rem;
       color: white;
+      transition: all 0.3s;
+    }
+
+    .sidebar-icon-closed {
+      @extend .sidebar-icon;
+      width: 2rem;
+      transition: all 0.3s;
+    }
+
+    .sidebar-names {
+      transition: all 1s;
     }
   }
+}
+
+#sidebar-closed {
+  @extend #sidebar;
+  width: $sidebar-width-closed;
+  transition: all 0.3s;
 }
 
 #page {
@@ -113,6 +144,7 @@ $sidebar-width: 240px;
   display: flex;
   flex-direction: column;
   background-color: $secondary-color;
+  height: 100vh;
 }
 
 #header {
@@ -143,11 +175,20 @@ $sidebar-width: 240px;
   display: flex;
   justify-content: space-between;
   background-color: #b2dfdb;
+  // transition: all 0.3s;
 
   & #left-side,
   #right-side {
     height: 100%;
     width: calc((100vw - $sidebar-width) / 2);
+    transition: all 0.3s;
+  }
+
+  & #left-side-closed,
+  #right-side-closed {
+    height: 100%;
+    width: calc((100vw - $sidebar-width-closed) / 2);
+    transition: all 0.3s;
   }
 }
 
@@ -486,6 +527,7 @@ footer {
     }
 
     h2 {
+      color: $font-color;
       font-size: 1.25rem;
     }
 
@@ -509,34 +551,28 @@ button:focus-visible {
 // ANALYSIS PAGE
 
 #analysis-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: $secondary-color;
-  height: 100vh;
-
+  // height: calc(100vh - $header-height);
   .analysis-nav {
     display: flex;
     justify-content: flex-start;
-    margin: 2rem 2rem;
+    margin: 1rem 2rem;
     color: $font-color;
 
     .analysis-nav-left {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      flex: 1;
       justify-content: center;
       align-items: center;
       gap: 1rem;
       min-height: 4rem;
 
       #oomkill-selector {
-        font-size: 1.1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-      }
-
-      .interval-unit {
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
@@ -546,7 +582,7 @@ button:focus-visible {
       }
 
       .analysis-interval {
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
@@ -556,8 +592,18 @@ button:focus-visible {
         width: 3rem;
       }
 
+      .interval-unit {
+        font-size: 1rem;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        border: none;
+        height: fit-content;
+      }
+
       .query-btn {
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
         box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
@@ -579,36 +625,32 @@ button:focus-visible {
       .tooltip {
         cursor: pointer;
       }
-
-      // .analysis-delete-btn {
-      //   font-size: 1.1rem;
-      //   padding: 0.25rem 0.5rem;
-      //   cursor: pointer;
-      //   box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-      //   border-radius: 10px;
-      //   border: none;
-      //   color: $font-color;
-      //   background-color: $secondary-color;
-      //   transition: all 0.3s;
-      //   height: fit-content;
-      // }
-
-      // .analysis-delete-btn:hover {
-      //   background-color: $font-color;
-      //   color: white;
-      //   cursor: pointer;
-      // }
     }
 
     .analysis-oomkill-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-width: 40vw;
       min-height: 5.4rem;
       background-color: white;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
-      margin: 0rem 2rem;
-      padding: 0rem 4rem;
+      margin: 0rem 1rem;
+      padding: 0rem 1rem;
       font-size: 0.4rem;
-      min-width: 40rem;
+      max-width: auto;
+
+      .oomkilled-pod-data {
+        margin-top: 0.4rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+      }
 
       .analysis-oomkill-data-container {
         display: flex;
@@ -619,7 +661,8 @@ button:focus-visible {
     }
   }
   .no-data-msg {
-    font-size: 1rem;
+    flex-wrap: nowrap;
+    font-size: 0.8rem;
     text-align: center;
     background-color: #ddd;
     border-radius: 10px;
@@ -627,11 +670,25 @@ button:focus-visible {
     color: $font-color;
   }
 
+  .analysis-oomkill-data-msg {
+    font-size: 0.9rem;
+  }
+
   .analysis-main {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
 
     .pod-overview {
+      display: flex;
+      flex-direction: column;
+      .summary {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
       padding: 1rem 1.5rem;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       background-color: white;
@@ -641,6 +698,18 @@ button:focus-visible {
     }
 
     .filtered-log-container {
+      display: flex;
+      flex-direction: column;
+
+      .filtered-events-heading {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
       padding: 1rem 1.5rem;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       background-color: whitesmoke;
@@ -671,15 +740,58 @@ button:focus-visible {
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
       margin: 0 2rem 0rem 1rem;
-
-      canvas {
-        width: 200px;
-        height: 200px;
-      }
+      height: 100%;
+      width: 70vw;
     }
 
     .line-chart-div {
       padding: 2rem;
     }
+  }
+}
+
+// MEDIA QUERIES
+@media only screen and (max-width: 1400px) {
+  #logo {
+    width: 10rem;
+  }
+  #sidebar {
+    .sidebar-page-container {
+      .sidebar-icon {
+        width: 1.2rem;
+      }
+      .sidebar-names {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .analysis-nav-left {
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(2, auto);
+    width: fit-content;
+    font-size: 0.6rem;
+  }
+  .interval-unit,
+  .query-btn,
+  .tooltip-container {
+    grid-row: 2;
+    margin: 0;
+    padding: 0;
+  }
+
+  #analysis-container {
+    .analysis-nav {
+      .analysis-oomkill-data {
+        min-width: 48vw;
+      }
+      .analysis-oomkill-data-msg {
+        font-size: 0.7rem;
+      }
+    }
+  }
+
+  #chartarea {
+    max-width: 62.5vw;
   }
 }

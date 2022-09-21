@@ -61,7 +61,6 @@ const Events = (props: EventProps): JSX.Element => {
         );
       }
 
-
       if (severityType !== 'Default') {
         const filteredLogs = logCards.filter((log: any) => {
           if (
