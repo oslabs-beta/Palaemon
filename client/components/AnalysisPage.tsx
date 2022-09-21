@@ -189,20 +189,21 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
           </div>
         )}
         </div>
-          {/* -------------------- START OF TOP RIGHT -------------------- */}
+      </nav>
+      <div className="analysis-main">
+        {/* -------------------- START OF LEFT AREA -------------------- */}
+        <div id="left-side">
+          {/* -------------------- START OF OOM KILL DATA -------------------- */}
         <div className="analysis-oomkill-data">
           <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
           {analyzedPod.podName ? (
             <div className="analysis-oomkill-data-container">
-              <div className="analysis-oomkill-data-left">
                 <p className="analysis-oomkill-data-msg">
                   <strong>Pod:</strong> {analyzedPod.podName}
                 </p>
                 <p className="analysis-oomkill-data-msg">
                   <strong>Restarts:</strong> {analyzedPod.restartcount}
                 </p>
-              </div>
-              <div className="analysis-oomkill-data-right">
                 <p className="analysis-oomkill-data-msg">
                   <strong>Terminated at:</strong>{' '}
                   {analyzedPod.started.slice(0, -6)}
@@ -211,17 +212,12 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
                   <strong>Restarted at:</strong>{' '}
                   {analyzedPod.finished.slice(0, -6)}
                 </p>
-              </div>
             </div>
           ) : (
             <p className="no-data-msg">Select OOMKilled Pod to Display Data</p>
-          )}
+            )}
         </div>
-      </nav>
-      {/* -------------------- END OF TOP AREA -------------------- */}
-      <div className="analysis-main">
-        {/* -------------------- START OF LEFT AREA -------------------- */}
-        <div id="left-side">
+            {/* -------------------- END OF OOMKILL Data -------------------- */}
 
           {/* <div className="pod-overview">
             <span className="summary">Summary</span>

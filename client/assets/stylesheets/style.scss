@@ -549,15 +549,49 @@ button:focus-visible {
 #analysis-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   background-color: $secondary-color;
 
   // height: calc(100vh - $header-height);
   .analysis-nav {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     margin: 1rem 2rem;
     color: $font-color;
+
+    .analysis-oomkill-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-width: 30vw;
+      min-height: 5.4rem;
+      background-color: white;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      padding: 0rem 1rem;
+      font-size: 0.4rem;
+      max-width: auto;
+
+
+      .oomkilled-pod-data {
+        margin-top: 0.4rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      &-container {
+        display: flex;
+        font-size: 1rem;
+        justify-content: center;
+        gap: 3rem;
+      }
+    }
 
     &-left {
       .analysis-form {
@@ -638,39 +672,6 @@ button:focus-visible {
       }
     }
 
-    .analysis-oomkill-data {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      min-width: 30vw;
-      min-height: 5.4rem;
-      background-color: white;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      border-radius: 10px;
-      margin: 0rem 1rem;
-      padding: 0rem 1rem;
-      font-size: 0.4rem;
-      max-width: auto;
-
-
-      .oomkilled-pod-data {
-        margin-top: 0.4rem;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        color: $font-color;
-        font-weight: 700;
-        text-align: center;
-      }
-
-      &-container {
-        display: flex;
-        font-size: 1rem;
-        justify-content: center;
-        gap: 3rem;
-      }
-    }
   }
 
   .no-data-msg {
@@ -723,6 +724,43 @@ button:focus-visible {
       }
     }
 
+
+    .analysis-oomkill-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 5.4rem;
+      height: fit-content;
+      background-color: whitesmoke;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      padding: 1rem 24px;
+      font-size: 0.4rem;
+
+      &-container {
+        background-color: white;
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        margin-right: 8px;
+        padding: 16px 24px;
+        font-size: 1rem;
+
+        &>p {
+          margin: 0.5rem;
+        }
+      }
+
+      .oomkilled-pod-data {
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+      }
+    }
+
     .filtered-log-container {
       display: flex;
       flex-direction: column;
@@ -731,9 +769,9 @@ button:focus-visible {
       background-color: whitesmoke;
       border-radius: 10px;
       // height: 30rem; // use this height for when the summary works
-      height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
+      flex: 1;
 
       .filtered-events-heading {
         text-transform: uppercase;
@@ -756,7 +794,8 @@ button:focus-visible {
     }
 
     #left-side {
-      width: 400px;
+      width: 500px;
+      gap: 16px;
     }
 
     // chart styling
