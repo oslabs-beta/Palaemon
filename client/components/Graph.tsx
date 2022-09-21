@@ -67,8 +67,8 @@ const Graph = (props: any): JSX.Element => {
         .then((output: any) => {
           // console.log(output)
           if (output.length < 1) {
-            console.log("returning out without setGraphState");
-            props.setResourceError("No resources found in this namespace");
+            // console.log("returning out without setGraphState");
+            // props.setResourceError("No resources found in this namespace");
             return navigate("/");
           } else if (!output.err) setGraphState(output);
           // console.log('itworks')

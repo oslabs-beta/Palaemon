@@ -8,7 +8,7 @@ const fetch: any = (...args: any) =>
 export const setStartAndEndTime = () => {
   var now = new Date();
   var copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 24);
+  copyNow.setHours(copyNow.getHours() - 1);
   var startTime = copyNow.toISOString();
   var endTime = new Date().toISOString();
   return {
@@ -234,7 +234,7 @@ export const formatOOMKills = (data: string[]) => {
     oomObject.podName = el;
     oomObject[filteredPodData[limitIdx]] = limits;
     oomObject[filteredPodData[requestIdx]] = requests;
-
+    oomObject.node = node;
     filteredPodData.slice(0, 7).forEach((el: any) => {
       const colon: any = el.indexOf(":");
       // Extracts key from the left of colon and lowercases to send properly to frontend
