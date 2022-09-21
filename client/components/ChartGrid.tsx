@@ -174,6 +174,7 @@ const ChartGrid = (props: any) => {
         case 'podCPU':
           multiOptions[key].scales.y.title.text = 'Milicores';
           multiOptions[key].plugins.title.text = 'Pod CPU Usage';
+          console.log('podcpu is broekn?',graphState[key])
           break;
         case 'netRead':
           multiOptions[key].scales.y.title.text = 'KibiBytes';

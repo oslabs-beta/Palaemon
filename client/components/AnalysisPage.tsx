@@ -16,6 +16,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
   const [logType, setLogType]: any = useState<string>('events');
   const [tooltipState, setTooltipState]: any = useState(false);
   const [tooltip, setTooltip]: any = useState(<></>);
+  const [hiddenInputs, setHiddenInputs]: any = useState([])
   const {
     analyzedPod,
     setAnalyzedPod,
@@ -29,10 +30,12 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
     // console.log('this is the event and data ', e)
     // console.log('formtarget', e.target['interval-unit'].value)
     let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
-    const nodeName = e.target['oomkill-selector'].value;
+    const podName = e.target['oomkill-selector'].value;    
+    const nodeName = e.target[e.target['oomkill-selector'].value].value;
+
     console.log('Query button pressed with: ', nodeName, timeInterval)
-    console.log(e.target['oomkill-selector'].label)    
-    console.log(e.target['oomkill-selector'])    
+    // console.log(e.target['oomkill-selector'].label)    
+    // console.log(e.target['oomkill-selector'])    
     
     if (nodeName === 'default' ) return;
     if (timeInterval === 'default' ) timeInterval = '5m'
@@ -51,6 +54,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
 
   const updateAnalyzedPod = (e: any) => {
     const podName = e.target.value;
+    console.log('targval',e.target.value)
     const newAnalysis = allOOMKills.filter(
       (oomkill: any) => oomkill.podName === podName
     );
@@ -75,12 +79,14 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
     // 1) oomKillOptions - array of pod names used for drop down list
     // 2) allOomKills - array of oomkilled objects
     const renderOOMKills = async () => {
+      const hiddenInps: any[] = []
       const oomkillData = await window.api.getOOMKills();
       const oomKillOptions: JSX.Element[] = oomkillData.map(
         (oomkill: any, i: number): JSX.Element => {
           // console.log('oomkill obj',oomkill)
-          return (
-            <option key={oomkill.podName + i} label={oomkill.podName} value={oomkill.node} >
+          hiddenInps.push(<input type='hidden' name={oomkill.podName} value={oomkill.node} key={i + 700}></input>)
+          return (           
+            <option key={oomkill.podName + i} label={oomkill.podName} value={oomkill.podName} >
               {oomkill.podName}
             </option>
           );
@@ -88,6 +94,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
       );
       setOOMKillsList([...oomKillOptions]);
       setAllOOMKills([...oomkillData]);
+      setHiddenInputs([...hiddenInps])
     };
 
     // Queries and generates filtered logs of events for pod being analyzed
@@ -127,6 +134,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
     <div id="analysis-container">
       <nav className="analysis-nav">
         <div className="analysis-nav-left">
+          {/* -------------------- START OF FORM -------------------- */}
           <form
             className="analysis-form"
             onSubmit={event => {
@@ -142,7 +150,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
               <option value="default">Select OOMKilled Pod</option>
               {OOMKillsList}
             </select>
-
+            {hiddenInputs}
             <input
               type={'text'}
               className="analysis-interval"
@@ -171,7 +179,9 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
               {tooltipState ? tooltip : null}
             </div>
           </form>
+          {/* -------------------- END OF FORM -------------------- */}
         </div>
+          {/* -------------------- START OF TOP RIGHT -------------------- */}
         <div className="analysis-oomkill-data">
           <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
           {analyzedPod.podName ? (
@@ -200,7 +210,9 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
           )}
         </div>
       </nav>
+      {/* -------------------- END OF TOP AREA -------------------- */}
       <div className="analysis-main">
+        {/* -------------------- START OF LEFT AREA -------------------- */}
         <div id="left-side">
           <div className="pod-overview">
             <span className="summary">Summary</span>
@@ -227,6 +239,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
             )}
           </div>
         </div>
+        {/* -------------------- CHART AREA -------------------- */}
         <div id="chartarea">
           {showGraphs ? (
             <ChartGrid analyzedData={analyzedData} />

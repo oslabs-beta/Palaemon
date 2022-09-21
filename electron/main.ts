@@ -392,8 +392,9 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
   &start=${startTime}&end=${endTime}&step=${interval}`;
   const podMEMRes = await fetch(podMEMQuery);
   const podMEMData = await podMEMRes.json();
-  const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime)
-  console.log('this is podMem', podMem)
+  const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime);
+  // console.log('this is podMemData', podMEMData)
+  // console.log('podmem', podMem)
   // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
   rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
@@ -401,7 +402,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
     const podCPURes = await fetch(podCPUQuery);
     const podCPUData = await podCPURes.json();
     const podCPU = await formatAnalysis(podCPUData.data, 'milicores');
-
+    // console.log('this is podCPU', podCPU)
     // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
     const nodeMEMQuery = `${PROM_URL}query_range?query=
   sum(container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}) by (node)
@@ -432,6 +433,8 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
         },
       },
     ];
+    
+    console.log('podmem part2', podMem)
 
     return {
       podMem,
