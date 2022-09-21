@@ -69,14 +69,23 @@ body {
   transition: all 0.3s;
 
   a {
-    & > img {
+    &>img {
       margin-top: 50px;
     }
+
+    // logo-hat load as "focus-visible" with a yellow outline on app load
+    // this is to disable that :(
+    &:focus-visible {
+      outline: none !important;
+    }
   }
+
   ul {
     list-style-type: none;
     padding: 0;
+
     li {
+
       &,
       * {
         text-decoration: none;
@@ -145,12 +154,6 @@ body {
 
   a {
     text-decoration: none;
-
-    // logo-hat load as "focus-visible" with a yellow outline on app load
-    // this is to disable that :(
-    &:focus-visible {
-      outline: none;
-    }
   }
 
   h1 {
@@ -264,6 +267,7 @@ footer {
     top: 0.4rem;
     left: 4.3rem;
   }
+
   .select-cpu {
     top: 1.8rem;
     left: 4.3rem;
@@ -277,6 +281,7 @@ footer {
     filter: drop-shadow(2px 2px 3px $font-color);
   }
 }
+
 .modal {
   animation-name: opac;
   animation-fill-mode: both;
@@ -331,6 +336,7 @@ footer {
   //   margin: 0.5rem;
   // }
 }
+
 // Right side of event styling
 #container-event-logs {
   flex-grow: 1;
@@ -384,7 +390,7 @@ footer {
   margin-top: 0.4rem;
   margin-left: 1rem;
 
-  & > select {
+  &>select {
     width: 140px;
     font-size: 1.1rem;
     padding: 0.25rem 0.5rem;
@@ -438,6 +444,7 @@ footer {
     align-self: center;
     transition: all 0.2s;
   }
+
   .legend-btn-main:hover {
     background-color: white;
     color: $font-color;
@@ -501,6 +508,7 @@ footer {
     box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
 
     text-align: center;
+
     #ns-error {
       margin-top: 1rem;
       display: flex;
@@ -543,6 +551,7 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   background-color: $secondary-color;
+
   // height: calc(100vh - $header-height);
   .analysis-nav {
     display: flex;
@@ -555,15 +564,17 @@ button:focus-visible {
         display: grid;
         grid-template-columns: repeat(5, auto);
         width: fit-content;
-        
-        .loading-bar{
+
+        .loading-bar {
           display: flex;
           align-items: center;
+
           // justify-content: space-between;
-          #loadname{
+          #loadname {
             padding-right: 1rem;
           }
         }
+
         flex: 1;
         justify-content: center;
         align-items: center;
@@ -643,7 +654,7 @@ button:focus-visible {
       font-size: 0.4rem;
       max-width: auto;
 
-    
+
       .oomkilled-pod-data {
         margin-top: 0.4rem;
         text-transform: uppercase;
@@ -661,6 +672,7 @@ button:focus-visible {
       }
     }
   }
+
   .no-data-msg {
     flex-wrap: nowrap;
     font-size: 0.8rem;
@@ -669,7 +681,7 @@ button:focus-visible {
     border-radius: 10px;
     padding: 1rem;
     color: $font-color;
-    
+
     &.graph-msg {
       margin-top: 2rem;
       max-height: 2rem;
@@ -685,7 +697,7 @@ button:focus-visible {
     display: flex;
     width: 100%;
     height: 78vh;
-      flex-grow: 1;
+    flex-grow: 1;
 
     &>div {
       margin: 1rem 2rem;
@@ -731,6 +743,7 @@ button:focus-visible {
         text-align: center;
         margin-bottom: 1rem;
       }
+
       .event-card {
         position: relative;
         font-size: 0.6rem;
@@ -807,11 +820,13 @@ button:focus-visible {
   #logo {
     width: 10rem;
   }
+
   #sidebar {
     .sidebar-page-container {
       .sidebar-icon {
         width: 1.2rem;
       }
+
       .sidebar-names {
         font-size: 0.8rem;
       }
