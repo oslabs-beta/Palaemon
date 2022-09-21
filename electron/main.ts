@@ -136,6 +136,7 @@ ipcMain.handle("getAllInfo", async (): Promise<any> => {
       });
     const getNodes = await k8sApiCore.listNode(`${nsSelect}`);
     const nodeData = getNodes.body.items.map((node) => {
+      console.log('THIS IS NODE', node)
       return parseNode(node);
     }); // end of nodeData
 
