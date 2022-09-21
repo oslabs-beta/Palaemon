@@ -160,7 +160,7 @@ const ChartGrid = (props: any) => {
       // multiOptions[key].scales.y.title.text = 'y-axis label';
       switch (key) {
         case 'nodeMem':
-          multiOptions[key].scales.y.title.text = 'MibiBytes';
+          multiOptions[key].scales.y.title.text = 'MegaBytes';
           multiOptions[key].plugins.title.text = 'Node Memory Usage';
           break;
         case 'nodeCPU':
@@ -168,20 +168,19 @@ const ChartGrid = (props: any) => {
           multiOptions[key].plugins.title.text = 'Node CPU Usage';
           break;
         case 'podMem':
-          multiOptions[key].scales.y.title.text = 'MibiBytes';
+          multiOptions[key].scales.y.title.text = 'MegaBytes';
           multiOptions[key].plugins.title.text = 'Pod Memory Usage';
           break;
         case 'podCPU':
           multiOptions[key].scales.y.title.text = 'Milicores';
           multiOptions[key].plugins.title.text = 'Pod CPU Usage';
-          console.log('podcpu is broekn?',graphState[key])
           break;
         case 'netRead':
-          multiOptions[key].scales.y.title.text = 'KibiBytes';
+          multiOptions[key].scales.y.title.text = 'KiloBytes';
           multiOptions[key].plugins.title.text = 'Network Read';
           break;
         case 'netWrite':
-          multiOptions[key].scales.y.title.text = 'KibiBytes';
+          multiOptions[key].scales.y.title.text = 'KiloBytes';
           multiOptions[key].plugins.title.text = 'Network Write';
           break;
         default:

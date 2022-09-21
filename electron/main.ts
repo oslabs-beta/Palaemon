@@ -374,17 +374,17 @@ ipcMain.handle('getUsage', async (event, ...args) => {
 
 /* -------------- Analysis Page -------------- */
 
-ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
-  console.log('parentnode from mainWindow.ts',parentNode)
-  console.log('this is interval', interval)
-  // gives you right now, and the hour before
-  const { startTime, endTime } = setStartAndEndTime();
-  // const interval = '15s'
-  // const namespace = await mainWindow.webContents
-  // .executeJavaScript("({...localStorage});", true)
-  // .then((localStorage: any) => {
-  //   return localStorage.namespace;
-  // });
+ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfDeath) => {
+  console.log('time of deasth', timeOfDeath)
+
+  const endTime = timeOfDeath;
+  const now = new Date(timeOfDeath);
+  const copyNow = new Date(now.getTime());
+  copyNow.setHours(copyNow.getHours() - 1); // 13 - 1 = 12
+  const startTime: string = copyNow.toISOString();
+
+
+
   try {
     // build mem usage by PODS graph
     const podMEMQuery = `${PROM_URL}query_range?query=
@@ -393,8 +393,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
   const podMEMRes = await fetch(podMEMQuery);
   const podMEMData = await podMEMRes.json();
   const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime);
-  // console.log('this is podMemData', podMEMData)
-  // console.log('podmem', podMem)
+
   // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
   rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
@@ -402,7 +401,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
     const podCPURes = await fetch(podCPUQuery);
     const podCPUData = await podCPURes.json();
     const podCPU = await formatAnalysis(podCPUData.data, 'milicores');
-    // console.log('this is podCPU', podCPU)
+
     // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
     const nodeMEMQuery = `${PROM_URL}query_range?query=
   sum(container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}) by (node)
@@ -418,6 +417,22 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
     const nodeCPURes = await fetch(nodeCPUQuery);
     const nodeCPUData = await nodeCPURes.json();
     const nodeCPU = await formatAnalysis(nodeCPUData.data, 'milicores');
+
+    // build network bytes read graph
+    const networkReadQuery = `${PROM_URL}query_range?query=
+    rate(container_network_receive_bytes_total{service!~"daddy-kube-prometheus-stac-kubelet",node="${parentNode}"}[5m])
+    &start=${startTime}&end=${endTime}&step=${interval}`
+    const networkReadRes = await fetch(networkReadQuery);
+    const networkReadData = await networkReadRes.json();
+    const netRead = await formatAnalysis(networkReadData.data, 'bytes')
+
+    // build network bytes write graph
+    const networkWriteQuery = `${PROM_URL}query_range?query=
+    rate(container_network_transmit_bytes_total{service!~"daddy-kube-prometheus-stac-kubelet",node="${parentNode}"}[5m])
+    &start=${startTime}&end=${endTime}&step=${interval}`
+    const networkWriteRes = await fetch(networkWriteQuery);
+    const networkWriteData = await networkWriteRes.json();
+    const netWrite = await formatAnalysis(networkWriteData.data, 'kilobytes')
 
     const initData: any = [
       {
@@ -441,27 +456,11 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m') => {
       podCPU,
       nodeMem,
       nodeCPU,
-      netRead: initData,
-      netWrite: initData,
+      netRead,
+      netWrite
     };
   } catch (error) {
     console.log(`Error in getAnalysis function: ERROR: ${error}`);
     return { err: error };
   }
 });
-
-// export type GraphData = {
-//   [podName: string]: {
-//     times: string[];
-//     values: number[];
-//   };
-// }[];
-
-// export type ChartGraphData = {
-//   nodeMem: GraphData;
-//   nodeCPU: GraphData;
-//   podMem: GraphData;
-//   podCPU: GraphData;
-//   netRead: GraphData;
-//   netWrite: GraphData;
-// };

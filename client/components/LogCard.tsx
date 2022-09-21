@@ -10,9 +10,11 @@ const LogCard = (props: LogCardProps): JSX.Element => {
     setAnalyzedPod({ ...props.oomObj });
     try {
       if (props.oomObj) {
-        const analyzeData = await window.api.getAnalysis(props.oomObj.node);
+        // console.log('props oom obj', typeof props.oomObj.started)
+        const timeOfDeath = new Date(props.oomObj.started).toISOString();
+        const analyzeData = await window.api.getAnalysis(props.oomObj.node, '15s', timeOfDeath);
         //access to cluster chart data which shows limits/requests
-      console.log('inside handle analyze cluster chard data', props.clusterChartData.node)
+        console.log('inside handle analyze cluster chard data', props.clusterChartData.node)
         setShowGraphs(true);
         props.setAnalyzedData(analyzeData);
       }

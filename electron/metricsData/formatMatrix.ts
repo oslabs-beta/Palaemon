@@ -47,22 +47,22 @@ export function formatMatrix(matrix: matrix, unitType?: string) {
 
     output[podName].values = obj.values.map((el: [number, number]) => {
       // change to megabytes
-      // console.log('this is MEM usage', Number(el[1] / 1000000));
+
       return Number(el[1] / 1000000);
     });
     arr.push(output);
   });
-  // console.log(arr);
+
   return arr;
 }
 
 export function formatUsage(matrix: matrix, unitType?: string) {
   let output;
-  // console.log('matrix THIS IS ', matrix)
+
   matrix.result.forEach((obj: any) => {
     output = obj.values.map((el: [number, number]) => {
       // change to megabytes
-      // console.log('this is MEM usage', Number(el[1] / 1000000));
+
       if (unitType === "megabytes") {
         return Number(el[1] / 1000000);
       } else {
@@ -114,9 +114,9 @@ export async function formatAnalysis(matrix: matrix, unitType?: string,  startTi
   const dateOptions: any = {
     timeStyle: "short",
   };
-  // console.log('matrix result', matrix.result[0])
+
   await matrix.result.forEach(async (obj: any) => {
-    // console.log('this is obj', obj)
+
     const output: graph = {};
     let name: string = 'n/a';
     if (obj.metric.pod) {
@@ -130,7 +130,7 @@ export async function formatAnalysis(matrix: matrix, unitType?: string,  startTi
       name = obj.metric.node;
     }
     if (!reqObj.limitData){
-      // console.log('the limit does not exist')
+
       reqObj = {
         limitData: [],
         requestData: []
@@ -155,9 +155,10 @@ export async function formatAnalysis(matrix: matrix, unitType?: string,  startTi
       if (unitType === "megabytes") return Number(el[1] / 1000000);
       else if (unitType === "milicores") return Number(el[1]*1000)
       else if (unitType === "kilobytes") return Number(el[1]/1000)
+      else if (unitType === "bytes") return Number(el[1])
       return;
     });
-    // console.log('output', output)
+
     arr.push(output);
   });
   

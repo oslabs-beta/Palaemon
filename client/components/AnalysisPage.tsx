@@ -27,26 +27,23 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
   }: any = props;
 
   const handleQuery = async (e: any) => {
-    // console.log('this is the event and data ', e)
-    // console.log('formtarget', e.target['interval-unit'].value)
     let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
     const podName = e.target['oomkill-selector'].value;    
-    const nodeName = e.target[e.target['oomkill-selector'].value].value;
-
+    const nodeName = e.target[podName].value;
+    const timeOfDeath = new Date(analyzedPod.started).toISOString();
+    console.log('analyzed pod', analyzedPod.started)
     console.log('Query button pressed with: ', nodeName, timeInterval)
-    // console.log(e.target['oomkill-selector'].label)    
+    // console.log('what time is it', new Date(analyzedPod.started).toISOString())
+    // console.log(e.target['oomkill-selector'].label)
     // console.log(e.target['oomkill-selector'])    
     
     if (nodeName === 'default' ) return;
     if (timeInterval === 'default' ) timeInterval = '5m'
-    
     try {
-      // if (props.oomObj){
-      const analyzeData = await window.api.getAnalysis(nodeName, timeInterval)
-      // console.log('this should give us arrobjs ', analyzeData);
-      props.setAnalyzedData(analyzeData);
-    // }
-    // navigate('/analysis');
+      const analyzeData1 = await window.api.getAnalysis(nodeName, timeInterval, timeOfDeath)
+      console.log('this should give us arrobjs ', analyzeData1);
+      props.setAnalyzedData(analyzeData1);
+      setShowGraphs(true)
     } catch(err) {
       return console.log('error: ', err)
     }
@@ -94,7 +91,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
       );
       setOOMKillsList([...oomKillOptions]);
       setAllOOMKills([...oomkillData]);
-      setHiddenInputs([...hiddenInps])
+      setHiddenInputs([...hiddenInps]);
     };
 
     // Queries and generates filtered logs of events for pod being analyzed
@@ -152,7 +149,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
             </select>
             {hiddenInputs}
             <input
-              type={'text'}
+              type='number'
               className="analysis-interval"
               name="analysis-interval"
               placeholder="Time"
@@ -245,7 +242,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
             <ChartGrid analyzedData={analyzedData} />
           ) : (
             <p className="no-data-msg graph-msg">
-              Select OOMKilled Pod to Display Data
+              Please Query an OOMKilled Pod to Display Charts
             </p>
           )}
         </div>
