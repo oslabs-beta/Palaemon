@@ -289,8 +289,8 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
-    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}&start=${startTime}&end=${endTime}&step=${interval}`;
+
+    const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image=""}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
@@ -350,14 +350,14 @@ ipcMain.handle('getUsage', async (event, ...args) => {
       });
 
     // fetch time series data from prom api
-    // included regex bang to exclude a random helm install we did on our GKE. remove or replace before deploying
+
     const query =
       resource === 'memory'
         ? `${PROM_URL}query_range?query=
-    container_memory_working_set_bytes{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
+    container_memory_working_set_bytes{namespace="${namespace}",pod="${podName}",image=""}
     &start=${time}&end=${time}&step=${interval}`
         : `${PROM_URL}query_range?query=
-    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m]))
+    sum(rate(container_cpu_usage_seconds_total{namespace="${namespace}",pod="${podName}",image=""}[5m]))
     &start=${time}&end=${time}&step=${interval}`;
 
     const res = await fetch(query);
@@ -388,15 +388,15 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
   try {
     // build mem usage by PODS graph
     const podMEMQuery = `${PROM_URL}query_range?query=
-  container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}
+  container_memory_working_set_bytes{node="${parentNode}",image=""}
   &start=${startTime}&end=${endTime}&step=${interval}`;
   const podMEMRes = await fetch(podMEMQuery);
   const podMEMData = await podMEMRes.json();
   const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime);
-
+  
   // build mem usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
-  rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])
+  rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""[5m])
   &start=${startTime}&end=${endTime}&step=${interval}`;
     const podCPURes = await fetch(podCPUQuery);
     const podCPUData = await podCPURes.json();
@@ -404,7 +404,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
 
     // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
     const nodeMEMQuery = `${PROM_URL}query_range?query=
-  sum(container_memory_working_set_bytes{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}) by (node)
+  sum(container_memory_working_set_bytes{node="${parentNode}",image=""}) by (node)
   &start=${startTime}&end=${endTime}&step=${interval}`;
     const nodeMEMRes = await fetch(nodeMEMQuery);
     const nodeMEMData = await nodeMEMRes.json();
@@ -412,7 +412,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
 
     // build node usage by CPU graph
     const nodeCPUQuery = `${PROM_URL}query_range?query=
-  sum(rate(container_cpu_usage_seconds_total{node="${parentNode}",image="",service!~"daddy-kube-prometheus-stac-kubelet"}[5m])) by (node)
+  sum(rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""}[5m])) by (node)
   &start=${startTime}&end=${endTime}&step=${interval}`;
     const nodeCPURes = await fetch(nodeCPUQuery);
     const nodeCPUData = await nodeCPURes.json();
@@ -420,7 +420,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
 
     // build network bytes read graph
     const networkReadQuery = `${PROM_URL}query_range?query=
-    rate(container_network_receive_bytes_total{service!~"daddy-kube-prometheus-stac-kubelet",node="${parentNode}"}[5m])
+    rate(container_network_receive_bytes_total{node="${parentNode}"}[5m])
     &start=${startTime}&end=${endTime}&step=${interval}`
     const networkReadRes = await fetch(networkReadQuery);
     const networkReadData = await networkReadRes.json();
@@ -428,7 +428,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
 
     // build network bytes write graph
     const networkWriteQuery = `${PROM_URL}query_range?query=
-    rate(container_network_transmit_bytes_total{service!~"daddy-kube-prometheus-stac-kubelet",node="${parentNode}"}[5m])
+    rate(container_network_transmit_bytes_total{node="${parentNode}"}[5m])
     &start=${startTime}&end=${endTime}&step=${interval}`
     const networkWriteRes = await fetch(networkWriteQuery);
     const networkWriteData = await networkWriteRes.json();
