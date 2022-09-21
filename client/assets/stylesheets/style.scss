@@ -770,12 +770,12 @@ button:focus-visible {
       padding: 0.4rem;
 
       // when row can add a new 30 rem wide chart, it will be added
-      min-width: 30rem;
-      max-width: 50rem;
+      min-width: 0;
+      // max-width: 50rem;
 
       // chart height is fixed to prevent infinite height increase
-      max-height: 24rem;
-      flex: 1;
+      max-height: 20rem;
+      flex: 0 1 calc(40% - 2rem);
     }
 
     .legend-btn-grid {
