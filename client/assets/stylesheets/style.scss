@@ -815,6 +815,14 @@ button:focus-visible {
   #analysis-container {
     .analysis-nav {
       .analysis-nav-left {
+        .loading-bar{
+          display: flex;
+          align-items: center;
+          // justify-content: space-between;
+          #loadname{
+            padding-right: 1rem;
+          }
+        }
         .analysis-form {
           grid-template-columns: repeat(3, auto);
           grid-template-rows: repeat(2, auto);
