@@ -9,7 +9,7 @@ const Events = (props: EventProps): JSX.Element => {
   const [logType, setLogType]: any = useState<string>('events');
   const [severityType, setSeverityType]: any = useState<string>('Default');
   const [loading, setLoading]: any = useState(true);
-  const { analyzedPod, setAnalyzedPod }: any = props;
+  const { analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
@@ -57,6 +57,7 @@ const Events = (props: EventProps): JSX.Element => {
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
             setAnalyzedData={props.setAnalyzedData}
+            setShowGraphs={setShowGraphs}
           />
         );
       }

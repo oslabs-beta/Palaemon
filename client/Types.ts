@@ -71,6 +71,7 @@ export type EventProps = {
   setAnalyzedPod: (input: any) => void;
   analyzedPod: any[];
   setAnalyzedData: (input: any) => void;
+  setShowGraphs: (input: any) => void;
 };
 
 export type AnalyzeCount = any[];
@@ -83,6 +84,7 @@ export interface LogCardProps {
   analyzedPod: oomObject;
   setAnalyzedPod: (input: any) => void;
   setAnalyzedData: (input: any) => void;
+  setShowGraphs: (input: any) => void;
 }
 
 export type EventObject = {
@@ -155,6 +157,8 @@ export type AnalysisPage = {
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
   setAnalyzedData: (input: any) => void;
+  showGraphs: boolean;
+  setShowGraphs: (input: boolean) => void;
 };
 
 export type AnalysisPageProps = {
@@ -162,6 +166,8 @@ export type AnalysisPageProps = {
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
   setAnalyzedData: (input: any) => void;
+  showGraphs: boolean;
+  setShowGraphs: (input: boolean) => void;
 };
 
 export type TooltipProps = {

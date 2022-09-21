@@ -40,7 +40,7 @@ const HomePage = (props: any): JSX.Element => {
     initalClusterChartData
   );
   const navigate = useNavigate();
-  const { menuOpen, setMenuOpen } = props;
+  const { menuOpen, setShowGraphs } = props;
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
@@ -136,6 +136,7 @@ const HomePage = (props: any): JSX.Element => {
           analyzedPod={props.analyzedPod}
           setAnalyzedPod={props.setAnalyzedPod}
           setAnalyzedData={props.setAnalyzedData}
+          setShowGraphs={props.setShowGraphs}
         />
       </div>
       {modalState && theModal}

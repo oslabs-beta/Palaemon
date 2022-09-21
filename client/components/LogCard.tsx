@@ -4,22 +4,23 @@ import { useNavigate } from 'react-router-dom';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
   const navigate = useNavigate();
-  const { analyzedPod, setAnalyzedPod }: any = props;
+  const { analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
 
   const handleAnalyze = async () => {
     setAnalyzedPod({ ...props.oomObj });
-    console.log('this is oomobj', props.oomObj)
+    console.log('this is oomobj', props.oomObj);
     try {
-      if (props.oomObj){
-      const analyzeData = await window.api.getAnalysis(props.oomObj.node)
-      console.log('this should give us arrobjs ', analyzeData);
-      props.setAnalyzedData(analyzeData);
+      if (props.oomObj) {
+        const analyzeData = await window.api.getAnalysis(props.oomObj.node);
+        console.log('this should give us arrobjs ', analyzeData);
+        setShowGraphs(true);
+        props.setAnalyzedData(analyzeData);
+      }
+      navigate('/analysis');
+    } catch (err) {
+      return console.log('error: ', err);
     }
-    navigate('/analysis');
-    } catch(err) {
-      return console.log('error: ', err)
-    }
-  }
+  };
 
   // create the header elements
   let headerObj: { [key: string]: string } = {};
