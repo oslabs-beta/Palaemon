@@ -1,6 +1,5 @@
 import {
   app,
-  session,
   BrowserWindow,
   ipcMain,
   dialog,
@@ -234,7 +233,6 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
     const res = await fetch(query);
     const data = await res.json();
 
-    // data.data.result returns matrix
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
@@ -242,7 +240,7 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   }
 });
 
-// get alerts
+// get alerts from alert manager
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
     const data: any = await fetch(`${PROM_URL}rules`);
@@ -288,7 +286,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
         namespace = localStorage.namespace;
       });
 
-    // fetch time series data from prom api
+    // fetch time series matrix both cpu and mem usage filtered by pod
 
     const query =
       resource === 'memory'
@@ -302,6 +300,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
     const res = await fetch(query);
     const data = await res.json();
 
+    // based on second argument, different calculations for units will take place in formatUsage
     return resource === 'memory'
       ? formatUsage(data.data, 'megabytes')
       : formatUsage(data.data, 'milicores');
@@ -314,15 +313,13 @@ ipcMain.handle('getUsage', async (event, ...args) => {
 /* -------------- Analysis Page -------------- */
 
 ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfDeath) => {
-  // console.log('time of death', timeOfDeath)
-
+  
   const endTime = timeOfDeath;
   const now = new Date(timeOfDeath);
   const copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 1); // 13 - 1 = 12
+  // convert to ISO String for promQL
+  copyNow.setHours(copyNow.getHours() - 1);
   const startTime: string = copyNow.toISOString();
-
-
 
   try {
     // build mem usage by PODS graph
@@ -333,7 +330,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
   const podMEMData = await podMEMRes.json();
   const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime);
   
-  // build mem usage by PODS graph
+  // build CPU usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
   rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""}[5m])
   &start=${startTime}&end=${endTime}&step=${interval}`;
@@ -341,7 +338,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
     const podCPUData = await podCPURes.json();
     const podCPU = await formatAnalysis(podCPUData.data, 'milicores');
 
-    // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
+    // build sum of mem usage by node from start to end
     const nodeMEMQuery = `${PROM_URL}query_range?query=
   sum(container_memory_working_set_bytes{node="${parentNode}",image=""}) by (node)
   &start=${startTime}&end=${endTime}&step=${interval}`;
@@ -349,7 +346,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
     const nodeMEMData = await nodeMEMRes.json();
     const nodeMem = await formatAnalysis(nodeMEMData.data, 'megabytes');
 
-    // build node usage by CPU graph
+    // build sum of CPU usage by node from start to end
     const nodeCPUQuery = `${PROM_URL}query_range?query=
   sum(rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""}[5m])) by (node)
   &start=${startTime}&end=${endTime}&step=${interval}`;
