@@ -4,7 +4,7 @@ declare global {
   /**
    * We define all IPC APIs here to give devs auto-complete
    * use window.electron anywhere in app
-   * Also note the capital "Window" here
+   * Also note the capital "Window" here. When accessing window object, the "w" is not capitalized.
    */
   interface Window {
     api: {

@@ -1,9 +1,4 @@
-// Types for APP
-
-export type SidebarProps = {
-  menuOpen: string;
-  setMenuOpen: (input: boolean) => void;
-};
+//--------------------------------Types for Home Page----------------------------------------------------
 
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
@@ -41,10 +36,8 @@ export class SvgInfoObj implements SvgInfo {
 }
 
 export type ClusterAllInfo = {
-  Clusters: SvgInfo[];
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
-  Deployments: SvgInfo[];
 };
 
 export interface ModalProps extends SvgInfo {
@@ -176,4 +169,9 @@ export type AnalysisPageProps = {
 
 export type TooltipProps = {
   position: { left: string; top: string };
+};
+
+export type SidebarProps = {
+  menuOpen: string;
+  setMenuOpen: (input: boolean) => void;
 };

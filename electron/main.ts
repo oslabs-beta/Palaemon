@@ -1,17 +1,11 @@
 import {
   app,
-  session,
   BrowserWindow,
   ipcMain,
   dialog,
-  IpcMainEvent,
 } from 'electron';
-import { ClusterAllInfo, ChartGraphData } from '../client/Types';
+import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} from 'electron-devtools-installer';
 
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
@@ -20,7 +14,6 @@ const fetch: any = (...args: any) =>
 
 import {
   setStartAndEndTime,
-  formatClusterData,
   formatEvents,
   formatAlerts,
   parseNode,
@@ -36,6 +29,7 @@ import {
   formatAnalysis,
 } from './metricsData/formatMatrix';
 import { SvgInfo, SvgInfoObj } from '../client/Types';
+
 // K8S API BOILERPLATE
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -116,7 +110,7 @@ app.on('window-all-closed', () => {
 
 // K8S API //
 
-// get all info function for initial load and reloads
+// populates cluster chart cards
 
 ipcMain.handle('getAllInfo', async (): Promise<any> => {
   // nodes
@@ -167,20 +161,8 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
 
     if (filteredPods) {
       const newObj: ClusterAllInfo = {
-        Clusters: [
-          {
-            name: '',
-            usage: 1,
-            resource: 'memory',
-            limit: 1,
-            request: 1,
-            parent: '',
-            namespace: '',
-          },
-        ],
         Nodes: nodeData,
         Pods: filteredPods,
-        Deployments: [tempData],
       };
       return newObj;
     }
@@ -189,7 +171,7 @@ ipcMain.handle('getAllInfo', async (): Promise<any> => {
   }
 });
 
-// get nodes in cluster
+// get names of nodes in cluster related to selected namespace
 ipcMain.handle('getNodes', async (): Promise<any> => {
   // dynamically get this from frontend later
   try {
@@ -207,49 +189,7 @@ ipcMain.handle('getNodes', async (): Promise<any> => {
   }
 });
 
-// get deployments in cluster
-// ipcMain.handle('getDeployments', async (): Promise<any> => {
-//   try {
-//     const data = await k8sApiApps.listDeploymentForAllNamespaces();
-//     const formattedData: any = data.body.items.map(pod => pod?.metadata?.name);
-//     // console.log("THIS IS DATA ", formattedData);
-//     return formattedData;
-//   } catch (error) {
-//     console.log(`Error in getDeployments function: ERROR: ${error}`);
-//   }
-// });
-
-// // get pods in cluster
-// ipcMain.handle('getPods', async (): Promise<any> => {
-//   try {
-//     const nsSelect = await mainWindow.webContents
-//       .executeJavaScript('({...localStorage});', true)
-//         /* check what type this is with team */        /* check what type this is with team */
-//       .then((localStorage: any) => {
-//         return localStorage.namespace
-//       });
-//     // const data = await k8sApiCore.listPodForAllNamespaces();
-//     const data = await k8sApiCore.listNamespacedPod('default')
-//     console.log('HERES THE PODS', data)
-//     // const data = await k8sApiCore.listPodForAllNamespaces();
-//     // console.log('THIS OS BODY.ITEMS ', data.body.items);
-//     const podNames: (string | undefined)[] = data.body.items.map(
-//       pod => pod?.metadata?.name
-//     );
-//     const node: (string | undefined)[] = data.body.items.map(
-//       pod => pod?.spec?.nodeName
-//     );
-//     const namespace: (string | undefined)[] = data.body.items.map(
-//       pod => pod?.metadata?.namespace
-//     );
-//     // console.log('I AM INEVITABLSDFSDFSDFSDFS: ', data.body.items[0])
-//     return { podNames, node, namespace };
-//   } catch (error) {
-//     return console.log(`Error in getPods function: ERROR: ${error}`);
-//   }
-// });
-
-// get namespaces
+// get namespaces in cluster. used for multiple queries and to display relevant data
 ipcMain.handle('getNamespaces', async () => {
   try {
     const data = await k8sApiCore.listNamespace();
@@ -261,7 +201,7 @@ ipcMain.handle('getNamespaces', async () => {
 });
 
 // COMMAND LINE //
-// get events
+// get all events in all namespaces
 ipcMain.handle('getEvents', async () => {
   try {
     const response: string = cp
@@ -275,27 +215,24 @@ ipcMain.handle('getEvents', async () => {
   }
 });
 
-// HOMEPAGE CHART QUERY FOR MEMORY //
+// HOMEPAGE CHART QUERY FOR MEMORY
 
 ipcMain.handle('getMemoryUsageByPods', async () => {
   const { startTime, endTime } = setStartAndEndTime();
-  // const query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes{namespace="default"}) by (pod)&start=2022-09-07T05:13:25.098Z&end=2022-09-08T05:13:59.818Z&step=1m`
+
   const interval = '15s';
   try {
     const nsSelect = await mainWindow.webContents
       .executeJavaScript('({...localStorage});', true)
-      /* check what type this is with team */ /* check what type this is with team */
       .then((localStorage: any) => {
         return localStorage.namespace;
       });
     // fetch time series data from prom api
-
     const query = `${PROM_URL}query_range?query=container_memory_working_set_bytes{namespace="${nsSelect}",image=""}&start=${startTime}&end=${endTime}&step=${interval}`;
     // fetch request
     const res = await fetch(query);
     const data = await res.json();
 
-    // data.data.result returns matrix
     return formatMatrix(data.data);
   } catch (error) {
     console.log(`Error in getMemoryUsageByPod function: ERROR: ${error}`);
@@ -303,7 +240,7 @@ ipcMain.handle('getMemoryUsageByPods', async () => {
   }
 });
 
-// get alerts
+// get alerts from alert manager
 ipcMain.handle('getAlerts', async (): Promise<any> => {
   try {
     const data: any = await fetch(`${PROM_URL}rules`);
@@ -349,7 +286,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
         namespace = localStorage.namespace;
       });
 
-    // fetch time series data from prom api
+    // fetch time series matrix both cpu and mem usage filtered by pod
 
     const query =
       resource === 'memory'
@@ -363,6 +300,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
     const res = await fetch(query);
     const data = await res.json();
 
+    // based on second argument, different calculations for units will take place in formatUsage
     return resource === 'memory'
       ? formatUsage(data.data, 'megabytes')
       : formatUsage(data.data, 'milicores');
@@ -375,15 +313,13 @@ ipcMain.handle('getUsage', async (event, ...args) => {
 /* -------------- Analysis Page -------------- */
 
 ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfDeath) => {
-  // console.log('time of death', timeOfDeath)
-
+  
   const endTime = timeOfDeath;
   const now = new Date(timeOfDeath);
   const copyNow = new Date(now.getTime());
-  copyNow.setHours(copyNow.getHours() - 1); // 13 - 1 = 12
+  // convert to ISO String for promQL
+  copyNow.setHours(copyNow.getHours() - 1);
   const startTime: string = copyNow.toISOString();
-
-
 
   try {
     // build mem usage by PODS graph
@@ -394,7 +330,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
   const podMEMData = await podMEMRes.json();
   const podMem = await formatAnalysis(podMEMData.data, "megabytes", startTime, endTime);
   
-  // build mem usage by PODS graph
+  // build CPU usage by PODS graph
   const podCPUQuery = `${PROM_URL}query_range?query=
   rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""}[5m])
   &start=${startTime}&end=${endTime}&step=${interval}`;
@@ -402,7 +338,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
     const podCPUData = await podCPURes.json();
     const podCPU = await formatAnalysis(podCPUData.data, 'milicores');
 
-    // build node usage by MEMS graph gke-guestbook-my-first-c-default-pool-feaf7786-h6kd
+    // build sum of mem usage by node from start to end
     const nodeMEMQuery = `${PROM_URL}query_range?query=
   sum(container_memory_working_set_bytes{node="${parentNode}",image=""}) by (node)
   &start=${startTime}&end=${endTime}&step=${interval}`;
@@ -410,7 +346,7 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
     const nodeMEMData = await nodeMEMRes.json();
     const nodeMem = await formatAnalysis(nodeMEMData.data, 'megabytes');
 
-    // build node usage by CPU graph
+    // build sum of CPU usage by node from start to end
     const nodeCPUQuery = `${PROM_URL}query_range?query=
   sum(rate(container_cpu_usage_seconds_total{node="${parentNode}",image=""}[5m])) by (node)
   &start=${startTime}&end=${endTime}&step=${interval}`;
@@ -433,23 +369,6 @@ ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfD
     const networkWriteRes = await fetch(networkWriteQuery);
     const networkWriteData = await networkWriteRes.json();
     const netWrite = await formatAnalysis(networkWriteData.data, 'kilobytes')
-
-    const initData: any = [
-      {
-        Port9090isClosed: {
-          times: ['a', 'b', 'c'],
-          values: [1, 2, 3],
-        },
-      },
-      {
-        Port9090isClosedOpenIt: {
-          times: ['a', 'b', 'c'],
-          values: [3, 2, 1],
-        },
-      },
-    ];
-    
-    // console.log('podmem part2', podMem)
 
     return {
       podMem,

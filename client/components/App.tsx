@@ -9,6 +9,7 @@ import AnalysisPage from './AnalysisPage';
 // import styles sheet here
 import '../assets/stylesheets/style.scss';
 
+// initial data for charts. app breaks if there's no initial data
 const initData: any = [
   {
     Port9090isClosed: {
