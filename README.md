@@ -64,6 +64,15 @@ npm start:production
     - Here is where you can find all of the information on your node and other pods at the time of death, along with pertinent events.
   
 
+<p align="center">
+  <img src="./client/assets/Home-to-Analysis.gif" alt="drawing" width="800"/>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="./client/assets/Landing-to-Home.gif" alt="drawing" width="800"/>
+</p>
 # Kubernetes Requirements
 Palaemon utilizes the kubernetes command line tool (kubectl) to gather data on your nodes and clusters. Kubectl can be downloaded and installed [here](https://kubernetes.io/docs/tasks/tools/).
 

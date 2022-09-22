@@ -115,3 +115,5 @@ __tests__/playwright_reports
 
 # do not include /build
 build
+# do not include .DS_STORE
+.DS_STORE
