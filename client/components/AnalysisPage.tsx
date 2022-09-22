@@ -250,6 +250,7 @@ const AnalysisPage = (props: AnalysisPageProps) => {
         </div>
         {/* -------------------- CHART AREA -------------------- */}
         <div id="chartarea">
+          <div className='chartarea-heading'>Metrics</div>
           {showGraphs ? (
             <ChartGrid analyzedData={analyzedData} />
           ) : (

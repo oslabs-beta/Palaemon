@@ -67,6 +67,7 @@ body {
   align-items: center;
   position: relative;
   transition: all 0.3s;
+  padding: 0.5rem;
 
   a {
     &>img {
@@ -685,7 +686,7 @@ button:focus-visible {
     color: $font-color;
 
     &.graph-msg {
-      margin-top: 2rem;
+      // margin-top: 2rem;
       max-height: 2rem;
       width: 80%;
     }
@@ -819,18 +820,28 @@ button:focus-visible {
 
     // chart styling
     #chartarea {
-      background-color: white;
-      flex-grow: 1;
+      @extend .filtered-log-container;
+      // flex-grow: 1;
       display: flex;
       flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 2rem;
-      justify-content: center;
+      align-items: center;
+      // gap: 2rem;
+      // justify-content: center;
+      
+      // adjust for non-overlapping margins
       margin-left: 0;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      border-radius: 10px;
-      overflow-y: scroll;
-      overflow-x: hidden;
+      // overflow-y: scroll;
+      // overflow-x: hidden;
+
+      .chartarea-heading{
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.6rem;
+        margin-right: calc(24px - 0.5rem);
+      }
     }
 
     .line-chart-div {
@@ -871,7 +882,7 @@ button:focus-visible {
 }
 
 // MEDIA QUERIES
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 800px) {
   #logo {
     width: 10rem;
   }
@@ -882,9 +893,9 @@ button:focus-visible {
         width: 1.2rem;
       }
 
-      .sidebar-names {
-        font-size: 0.8rem;
-      }
+      // .sidebar-names {
+      //   font-size: 0.8rem;
+      // }
     }
   }
 
