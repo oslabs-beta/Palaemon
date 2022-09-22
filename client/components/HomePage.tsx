@@ -25,10 +25,8 @@ const tempData: SvgInfo[] = [
 ];
 
 const initalClusterChartData: ClusterAllInfo = {
-  Clusters: tempData,
   Nodes: tempData,
   Pods: tempData,
-  Deployments: tempData,
 };
 
 const HomePage = (props: any): JSX.Element => {
@@ -40,7 +38,7 @@ const HomePage = (props: any): JSX.Element => {
     initalClusterChartData
   );
   const navigate = useNavigate();
-  const { menuOpen, setMenuOpen } = props;
+  const { menuOpen, setShowGraphs } = props;
 
   // Ways to clean up the modal:
   // the modal is split into two states. the modalState could probably accept the JSX component as a key value
@@ -76,9 +74,9 @@ const HomePage = (props: any): JSX.Element => {
     close: closeModal,
   };
 
+  // loads all cluster chart info. number of nodes, pods and names, etc.
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
-    console.log('this is all info', allTheInfo);
 
     if (resource === 'memory' || resource === 'cpu') {
       allTheInfo.Pods = allTheInfo.Pods.filter(
@@ -119,10 +117,8 @@ const HomePage = (props: any): JSX.Element => {
             </button>
           </div>
           <ClusterChart
-            Clusters={gke.Clusters}
             Nodes={gke.Nodes}
             Pods={gke.Pods}
-            Deployments={gke.Deployments}
             click={gke.click}
             close={gke.close}
           />
@@ -136,6 +132,8 @@ const HomePage = (props: any): JSX.Element => {
           analyzedPod={props.analyzedPod}
           setAnalyzedPod={props.setAnalyzedPod}
           setAnalyzedData={props.setAnalyzedData}
+          setShowGraphs={props.setShowGraphs}
+          clusterChartData={clusterChartData}
         />
       </div>
       {modalState && theModal}

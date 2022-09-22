@@ -1,9 +1,4 @@
-// Types for APP
-
-export type SidebarProps = {
-  menuOpen: string;
-  setMenuOpen: (input: boolean) => void;
-};
+//--------------------------------Types for Home Page----------------------------------------------------
 
 export type SvgInfo = {
   // for properties that dont exist in pod, node, cluster or deployment give it a 0 for num or '' for string
@@ -41,10 +36,8 @@ export class SvgInfoObj implements SvgInfo {
 }
 
 export type ClusterAllInfo = {
-  Clusters: SvgInfo[];
   Nodes: SvgInfo[];
   Pods: SvgInfo[];
-  Deployments: SvgInfo[];
 };
 
 export interface ModalProps extends SvgInfo {
@@ -70,7 +63,9 @@ export type ClusterChartCardProps = {
 export type EventProps = {
   setAnalyzedPod: (input: any) => void;
   analyzedPod: any[];
+  clusterChartData: any[];
   setAnalyzedData: (input: any) => void;
+  setShowGraphs: (input: any) => void;
 };
 
 export type AnalyzeCount = any[];
@@ -82,7 +77,10 @@ export interface LogCardProps {
   logType: string;
   analyzedPod: oomObject;
   setAnalyzedPod: (input: any) => void;
+  clusterChartData: any;
   setAnalyzedData: (input: any) => void;
+  setShowGraphs: (input: any) => void;
+  setLoading?: (input: any) => void;
 }
 
 export type EventObject = {
@@ -155,15 +153,25 @@ export type AnalysisPage = {
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
   setAnalyzedData: (input: any) => void;
+  showGraphs: boolean;
+  setShowGraphs: (input: boolean) => void;
 };
 
 export type AnalysisPageProps = {
   analyzedPod: any[];
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
+  clusterChartData: any;
   setAnalyzedData: (input: any) => void;
+  showGraphs: boolean;
+  setShowGraphs: (input: boolean) => void;
 };
 
 export type TooltipProps = {
   position: { left: string; top: string };
+};
+
+export type SidebarProps = {
+  menuOpen: string;
+  setMenuOpen: (input: boolean) => void;
 };

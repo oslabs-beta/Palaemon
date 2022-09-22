@@ -1,25 +1,18 @@
-import { useState, useEffect, EffectCallback, useInsertionEffect } from 'react';
+import { useState, useEffect } from 'react';
 import LogCard from './LogCard';
-import { EventProps, EventObject } from '../Types';
+import { EventProps } from '../Types';
 import { capitalize } from '../../electron/utils';
-import { useNavigate } from 'react-router-dom';
 
 const Events = (props: EventProps): JSX.Element => {
   const [logs, setLogs]: any = useState([]);
   const [logType, setLogType]: any = useState<string>('events');
   const [severityType, setSeverityType]: any = useState<string>('Default');
   const [loading, setLoading]: any = useState(true);
-  const { analyzedPod, setAnalyzedPod }: any = props;
+  const { analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
 
   const handleLogTypeChange = (e: any) => {
     const logTypeStr = e.target.value;
     setLogType(logTypeStr);
-    // console.log(
-    //   'handleLogTypeChange is working and current logType state is ',
-    //   logType,
-    //   ' and e.target.value is ',
-    //   e.target.value
-    // );
   };
 
   const handleSeverityChange = (e: any) => {
@@ -27,12 +20,9 @@ const Events = (props: EventProps): JSX.Element => {
     setSeverityType(severity);
   };
 
-  const handleNoEvents = () => {};
-
   useEffect(() => {
     // populate and set logCards according to what type of logs is requested.
     // this is a helper function as typescript was not playing nicely with useEffect as an async function
-    // window.api.getPods();
     const createLogs = async () => {
       const logCards: JSX.Element[] = [];
       let logsData;
@@ -56,7 +46,10 @@ const Events = (props: EventProps): JSX.Element => {
             logType={logType}
             analyzedPod={analyzedPod}
             setAnalyzedPod={setAnalyzedPod}
+            clusterChartData={props.clusterChartData}
             setAnalyzedData={props.setAnalyzedData}
+            setShowGraphs={setShowGraphs}
+            setLoading={setLoading}
           />
         );
       }

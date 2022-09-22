@@ -26,7 +26,8 @@ body,
 #root,
 #sidebar,
 #contents,
-#landing-container {
+#landing-container,
+#analysis-container {
   height: 100%;
 }
 
@@ -58,20 +59,6 @@ body {
   display: flex;
 }
 
-// $ugly-sewage-green: #00695c;
-// $p-light-color: #439889;
-// $p-dark-color: #003d33;
-
-// $font-color: #002a25;
-
-// $secondary-color: #b2dfdb;
-// $tertiary-color: #d1ece9;
-// $s-light-color: #e5ffff;
-// $s-dark-color: #82ada9;
-
-// $sidebar-width: 240px;
-// $sidebar-width-closed: 80px;
-
 #sidebar {
   width: $sidebar-width;
   background-color: #004941;
@@ -80,15 +67,24 @@ body {
   align-items: center;
   position: relative;
   transition: all 0.3s;
+  padding: 0.5rem;
 
   a {
     & > img {
       margin-top: 50px;
     }
+
+    // logo-hat load as "focus-visible" with a yellow outline on app load
+    // this is to disable that :(
+    &:focus-visible {
+      outline: none !important;
+    }
   }
+
   ul {
     list-style-type: none;
     padding: 0;
+
     li {
       &,
       * {
@@ -196,11 +192,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
-  // & > * {
-  //   margin: 1rem;
-  //   padding: 12px;
-  // }
 }
 
 #tagline {
@@ -276,6 +267,7 @@ footer {
     top: 0.4rem;
     left: 4.3rem;
   }
+
   .select-cpu {
     top: 1.8rem;
     left: 4.3rem;
@@ -289,6 +281,7 @@ footer {
     filter: drop-shadow(2px 2px 3px $font-color);
   }
 }
+
 .modal {
   animation-name: opac;
   animation-fill-mode: both;
@@ -343,6 +336,7 @@ footer {
   //   margin: 0.5rem;
   // }
 }
+
 // Right side of event styling
 #container-event-logs {
   flex-grow: 1;
@@ -366,7 +360,7 @@ footer {
     box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
     background-color: white;
     border-radius: 10px;
-
+    word-wrap: break-word;
     &-header {
       display: flex;
       justify-content: space-between;
@@ -410,21 +404,21 @@ footer {
   position: absolute;
   top: 10px;
   right: 10px;
-  box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+  box-shadow: 0px 2px 3px rgb(64 0 0 / 20%);
   border-radius: 10px;
   border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
   background-color: $ugly-sewage-green;
   color: white;
   transition: all 0.2s;
+  text-transform: uppercase;
 }
 
 .analyze:hover {
   background-color: white;
   color: $font-color;
   cursor: pointer;
-  filter: drop-shadow(2px 2px 3px $font-color);
 }
 
 #graph {
@@ -450,6 +444,7 @@ footer {
     align-self: center;
     transition: all 0.2s;
   }
+
   .legend-btn-main:hover {
     background-color: white;
     color: $font-color;
@@ -513,7 +508,8 @@ footer {
     box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
 
     text-align: center;
-    #ns-error{
+
+    #ns-error {
       margin-top: 1rem;
       display: flex;
       align-items: center;
@@ -548,84 +544,21 @@ button:focus-visible {
   outline: 2px solid $p-light-color;
 }
 
-// ANALYSIS PAGE
+// ANALYSIS PAGE ------------------------------------------------------------------------------------------>>
 
 #analysis-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   background-color: $secondary-color;
+
   // height: calc(100vh - $header-height);
   .analysis-nav {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     margin: 1rem 2rem;
     color: $font-color;
-
-    .analysis-nav-left {
-      display: grid;
-      grid-template-columns: repeat(5, auto);
-      flex: 1;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      min-height: 4rem;
-
-      #oomkill-selector {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-      }
-
-      .analysis-interval {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-        width: 3rem;
-      }
-
-      .interval-unit {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        height: fit-content;
-      }
-
-      .query-btn {
-        font-size: 1rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
-        border-radius: 10px;
-        border: none;
-        background-color: $ugly-sewage-green;
-        color: white;
-        transition: all 0.3s;
-        height: fit-content;
-      }
-
-      .query-btn:hover {
-        background-color: white;
-        color: $font-color;
-        cursor: pointer;
-        filter: drop-shadow(2px 2px 3px $font-color);
-      }
-
-      .tooltip {
-        cursor: pointer;
-      }
-    }
 
     .analysis-oomkill-data {
       display: flex;
@@ -633,12 +566,11 @@ button:focus-visible {
       justify-content: center;
       align-items: center;
       flex: 1;
-      min-width: 40vw;
+      min-width: 30vw;
       min-height: 5.4rem;
       background-color: white;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       border-radius: 10px;
-      margin: 0rem 1rem;
       padding: 0rem 1rem;
       font-size: 0.4rem;
       max-width: auto;
@@ -652,14 +584,98 @@ button:focus-visible {
         text-align: center;
       }
 
-      .analysis-oomkill-data-container {
+      &-container {
         display: flex;
         font-size: 1rem;
         justify-content: center;
         gap: 3rem;
       }
     }
+
+    &-left {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+
+      .loading-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        #loadname {
+          padding-right: 1rem;
+        }
+      }
+
+      .analysis-form {
+        display: grid;
+        grid-template-columns: repeat(5, auto);
+        width: fit-content;
+
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        min-height: 4rem;
+
+        #oomkill-selector {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          height: fit-content;
+          width: 380px;
+        }
+
+        .analysis-interval {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          height: fit-content;
+          width: 3.5rem;
+        }
+
+        .interval-unit {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          height: fit-content;
+        }
+
+        .query-btn {
+          font-size: 1rem;
+          padding: 0.25rem 0.5rem;
+          cursor: pointer;
+          box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+          border-radius: 10px;
+          border: none;
+          background-color: $ugly-sewage-green;
+          color: white;
+          transition: all 0.2s;
+          height: fit-content;
+        }
+
+        .query-btn:hover {
+          background-color: white;
+          color: $font-color;
+          cursor: pointer;
+        }
+
+        .tooltip {
+          cursor: pointer;
+        }
+      }
+    }
   }
+
   .no-data-msg {
     flex-wrap: nowrap;
     font-size: 0.8rem;
@@ -675,12 +691,25 @@ button:focus-visible {
   }
 
   .analysis-main {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    display: flex;
+    width: 100%;
+    height: 78vh;
+    flex-grow: 1;
+
+    & > div {
+      margin: 1rem 2rem;
+    }
 
     .pod-overview {
       display: flex;
       flex-direction: column;
+      padding: 1rem 1.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: white;
+      border-radius: 10px;
+      height: 14rem;
+      margin: 0rem 1rem 2rem 1rem;
+
       .summary {
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -689,17 +718,61 @@ button:focus-visible {
         text-align: center;
         margin-bottom: 1rem;
       }
-      padding: 1rem 1.5rem;
+    }
+
+    .analysis-oomkill-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 5.4rem;
+      height: fit-content;
+      background-color: whitesmoke;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      background-color: white;
       border-radius: 10px;
-      height: 14rem;
-      margin: 0rem 1rem 2rem 2rem;
+      padding: 1rem 24px;
+      font-size: 0.4rem;
+
+      &-container {
+        background-color: white;
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        // margin-right: 8px;
+        padding: 16px 24px;
+        font-size: 1rem;
+
+        & > p {
+          margin: 0.5rem;
+        }
+      }
+
+      .oomkilled-pod-data {
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+      }
     }
 
     .filtered-log-container {
       display: flex;
       flex-direction: column;
+      padding: 1rem 1.5rem;
+      // adjustment for scroll bar
+      padding-right: 0.5rem;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      background-color: whitesmoke;
+      border-radius: 10px;
+      // height: 30rem; // use this height for when the summary works
+      overflow-y: auto;
+      flex: 1;
+
+      .no-data-msg {
+        // also adjustment for scrollbar
+        margin-right: calc(24px - 1rem);
+      }
 
       .filtered-events-heading {
         text-transform: uppercase;
@@ -708,16 +781,14 @@ button:focus-visible {
         font-weight: 700;
         text-align: center;
         margin-bottom: 1rem;
+        margin-right: calc(24px - 0.5rem);
       }
 
-      padding: 1rem 1.5rem;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      background-color: whitesmoke;
-      border-radius: 10px;
-      height: 30rem;
-      overflow-y: auto;
-      overflow-x: hidden;
-      margin: 0rem 1rem 0rem 2rem;
+      .filtered-events-container {
+        padding-right: 0.5rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
 
       .event-card {
         position: relative;
@@ -727,71 +798,121 @@ button:focus-visible {
         box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
         background-color: white;
         border-radius: 10px;
+
+        & > * {
+          word-wrap: break-word;
+        }
       }
+    }
+
+    #left-side {
+      width: 500px;
+      gap: 16px;
     }
 
     // chart styling
     #chartarea {
-      background-color: white;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      grid-auto-rows: minmax(100px, auto);
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      border-radius: 10px;
-      margin: 0 2rem 0rem 1rem;
-      height: 100%;
-      width: 70vw;
+      @extend .filtered-log-container;
+      background-color: whitesmoke;
+
+      // adjust for non-overlapping margins
+      margin-left: 0;
+
+      .chartarea-container {
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        background-color: white;
+        border-radius: 10px;
+        margin-right: 1rem;
+      }
+
+      .chartarea-heading {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.6rem;
+        margin-right: calc(24px - 0.5rem);
+      }
+
+      .graph-msg {
+        margin-right: calc(24px - 0.5rem);
+      }
+
+      .chartarea-container {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-around;
+      }
     }
 
     .line-chart-div {
-      padding: 2rem;
+      display: flex;
+      // border: 1px solid black;
+      flex-direction: column;
+      margin: 2rem;
+      padding: 0.4rem;
+      min-width: 0;
+      min-width: 20rem;
+
+      // chart height is fixed to prevent infinite height increase
+      max-height: 20rem;
+      flex: 0 1 calc(40% - 2rem);
+    }
+
+    .legend-btn-grid {
+      background-color: $ugly-sewage-green;
+      color: white;
+      box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 10px;
+      width: fit-content;
+      align-self: center;
+      transition: all 0.2s;
+      font-size: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .legend-btn-grid:hover {
+      background-color: white;
+      color: $font-color;
+      cursor: pointer;
+      border: none;
+      // filter: drop-shadow(2px 2px 3px $font-color);
     }
   }
 }
 
 // MEDIA QUERIES
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 800px) {
   #logo {
     width: 10rem;
   }
+
   #sidebar {
+    flex: 1;
+
     .sidebar-page-container {
       .sidebar-icon {
         width: 1.2rem;
       }
-      .sidebar-names {
-        font-size: 0.8rem;
-      }
+
+      // .sidebar-names {
+      //   font-size: 0.8rem;
+      // }
     }
   }
 
-  .analysis-nav-left {
-    grid-template-columns: repeat(3, auto);
-    grid-template-rows: repeat(2, auto);
-    width: fit-content;
-    font-size: 0.6rem;
-  }
   .interval-unit,
   .query-btn,
   .tooltip-container {
     grid-row: 2;
     margin: 0;
     padding: 0;
-  }
-
-  #analysis-container {
-    .analysis-nav {
-      .analysis-oomkill-data {
-        min-width: 48vw;
-      }
-      .analysis-oomkill-data-msg {
-        font-size: 0.7rem;
-      }
-    }
-  }
-
-  #chartarea {
-    max-width: 62.5vw;
   }
 }
