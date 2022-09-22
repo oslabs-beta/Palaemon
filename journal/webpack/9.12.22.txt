@@ -1,8 +1,0 @@
-Why node fetch dont work??
-
-Node fetch ^3.0.0 does not work with TS or something.. gives a lot of errors when looking for modules.
-
-Solution: Restart VS code. If this doesn't work try:
-
-Downgrade node-fetch to ^2.0.0
-Install npm i --save-dev @types/node-fetch
