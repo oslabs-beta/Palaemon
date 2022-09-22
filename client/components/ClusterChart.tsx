@@ -15,7 +15,7 @@ const ClusterChart = (props: ClusterChartProps): JSX.Element => {
         const usageData = await window.api.getUsage(name, resource);
         if (usageData) obj.usage = usageData[0]
       } catch(err) {
-        console.log('i am error', err)
+        console.log('Error', err)
       }
     }
 

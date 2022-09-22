@@ -40,11 +40,11 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     const nodeName = e.target[podName].value;
     const timeOfDeath = new Date(analyzedPod.started).toISOString();
 
-    console.log('analyzed pod', analyzedPod.started)
+    // console.log('analyzed pod', analyzedPod.started)
     console.log('Query button pressed with: ', nodeName, timeInterval)
     try {
       const analyzeData1 = await window.api.getAnalysis(nodeName, timeInterval, timeOfDeath)
-      console.log('this should give us arrobjs ', analyzeData1);
+      // console.log('this should give us arrobjs ', analyzeData1);
       props.setAnalyzedData(analyzeData1);
       setShowGraphs(true)
       setLoading(false)
