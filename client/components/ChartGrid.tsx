@@ -23,7 +23,9 @@ ChartJS.register(
   Legend
 );
 
+// populates charts on analysis page
 const ChartGrid = (props: any) => {
+  // show/hide legend buttons
   const [buttonClicked, setButtonClicked] = useState({
     podMem: false,
     podCPU: false,
@@ -47,7 +49,7 @@ const ChartGrid = (props: any) => {
       },
     },
   ];
-
+  // initData so app doesn't crash on load
   const [graphState, setGraphState] = useState<ChartGraphData>({
     podCPU: initData,
     podMem: initData,

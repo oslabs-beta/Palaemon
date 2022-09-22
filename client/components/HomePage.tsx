@@ -74,6 +74,7 @@ const HomePage = (props: any): JSX.Element => {
     close: closeModal,
   };
 
+  // loads all cluster chart info. number of nodes, pods and names, etc.
   const renderData = async () => {
     const allTheInfo = await window.api.getAllInfo();
 

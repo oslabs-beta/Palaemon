@@ -6,6 +6,7 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
     const colors: string[] = ['#69B34C', '#ACB334', '#FAB733', '#FF8E15', '#FF4E11', '#FF0D0D', '#363636']
 
     let index: number = 0;
+    // checks usage of cluster chard cards. if usage is over a certain limit, it will color differently
     for (let i = 0; i < props.data.length; i++) {
         let usage: number = props.data[i].usage - props.data[i].request;
         let limit: number = props.data[i].limit - props.data[i].request;
