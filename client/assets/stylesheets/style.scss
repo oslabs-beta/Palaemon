@@ -597,17 +597,20 @@ button:focus-visible {
       justify-content: flex-start;
       gap: 2rem;
 
+      .loading-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        #loadname {
+          padding-right: 1rem;
+        }
+      }
+
       .analysis-form {
         display: grid;
         grid-template-columns: repeat(5, auto);
         width: fit-content;
-
-        .loading-bar {
-          // justify-content: space-between;
-          #loadname {
-            padding-right: 1rem;
-          }
-        }
 
         flex: 1;
         justify-content: center;
@@ -819,6 +822,7 @@ button:focus-visible {
         box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
         background-color: white;
         border-radius: 10px;
+        margin-right: 1rem;
       }
 
       .chartarea-heading {

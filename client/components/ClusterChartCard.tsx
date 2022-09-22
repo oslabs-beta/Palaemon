@@ -13,7 +13,7 @@ const ClusterChartCard = (props: ClusterChartCardProps): JSX.Element => {
   ];
 
   let index: number = 0;
-
+  // checks usage of cluster chard cards. if usage is over a certain limit, it will color differently
   for (let i = 0; i < props.data.length; i++) {
     let usage: number = props.data[i].usage - props.data[i].request;
     let limit: number = props.data[i].limit - props.data[i].request;

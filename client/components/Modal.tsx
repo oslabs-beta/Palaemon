@@ -13,7 +13,6 @@ const DetailsModal = (props: ModalProps) => {
     position,
     close,
   } = props;
-  // console.log('detail modal rendering soon')
 
   return (
     <div className="modal" style={position}>
