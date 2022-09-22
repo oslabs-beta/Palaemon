@@ -595,14 +595,16 @@ button:focus-visible {
     }
 
     &-left {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem; 
+
       .analysis-form {
         display: grid;
         grid-template-columns: repeat(5, auto);
         width: fit-content;
 
         .loading-bar {
-          display: flex;
-          align-items: center;
 
           // justify-content: space-between;
           #loadname {
@@ -685,10 +687,6 @@ button:focus-visible {
     padding: 1rem;
     color: $font-color;
 
-    &.graph-msg {
-      // adjustment for scrollbar
-      margin-right: calc(24px - 1rem);
-    }
   }
 
   .analysis-oomkill-data-msg {
@@ -834,6 +832,10 @@ button:focus-visible {
         margin-right: calc(24px - 0.5rem);
       }
       
+      .graph-msg {
+        margin-right: calc(24px - 0.5rem);
+      }
+
       .chartarea-container {
         overflow-y: scroll;
         overflow-x: hidden;
