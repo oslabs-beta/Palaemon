@@ -67,16 +67,26 @@ body {
   align-items: center;
   position: relative;
   transition: all 0.3s;
+  padding: 0.5rem;
 
   a {
-    & > img {
+    &>img {
       margin-top: 50px;
     }
+
+    // logo-hat load as "focus-visible" with a yellow outline on app load
+    // this is to disable that :(
+    &:focus-visible {
+      outline: none !important;
+    }
   }
+
   ul {
     list-style-type: none;
     padding: 0;
+
     li {
+
       &,
       * {
         text-decoration: none;
@@ -145,12 +155,6 @@ body {
 
   a {
     text-decoration: none;
-
-    // logo-hat load as "focus-visible" with a yellow outline on app load
-    // this is to disable that :(
-    &:focus-visible {
-      outline: none;
-    }
   }
 
   h1 {
@@ -264,6 +268,7 @@ footer {
     top: 0.4rem;
     left: 4.3rem;
   }
+
   .select-cpu {
     top: 1.8rem;
     left: 4.3rem;
@@ -277,6 +282,7 @@ footer {
     filter: drop-shadow(2px 2px 3px $font-color);
   }
 }
+
 .modal {
   animation-name: opac;
   animation-fill-mode: both;
@@ -331,6 +337,7 @@ footer {
   //   margin: 0.5rem;
   // }
 }
+
 // Right side of event styling
 #container-event-logs {
   flex-grow: 1;
@@ -384,7 +391,7 @@ footer {
   margin-top: 0.4rem;
   margin-left: 1rem;
 
-  & > select {
+  &>select {
     width: 140px;
     font-size: 1.1rem;
     padding: 0.25rem 0.5rem;
@@ -438,6 +445,7 @@ footer {
     align-self: center;
     transition: all 0.2s;
   }
+
   .legend-btn-main:hover {
     background-color: white;
     color: $font-color;
@@ -501,6 +509,7 @@ footer {
     box-shadow: 5px 10px 10px rgba(rgb(64, 0, 0), 0.2);
 
     text-align: center;
+
     #ns-error {
       margin-top: 1rem;
       display: flex;
@@ -541,29 +550,68 @@ button:focus-visible {
 #analysis-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   background-color: $secondary-color;
+
   // height: calc(100vh - $header-height);
   .analysis-nav {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     margin: 1rem 2rem;
     color: $font-color;
 
+    .analysis-oomkill-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      min-width: 30vw;
+      min-height: 5.4rem;
+      background-color: white;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      padding: 0rem 1rem;
+      font-size: 0.4rem;
+      max-width: auto;
+
+
+      .oomkilled-pod-data {
+        margin-top: 0.4rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      &-container {
+        display: flex;
+        font-size: 1rem;
+        justify-content: center;
+        gap: 3rem;
+      }
+    }
+
     &-left {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem; 
+
       .analysis-form {
         display: grid;
         grid-template-columns: repeat(5, auto);
         width: fit-content;
-        
-        .loading-bar{
-          display: flex;
-          align-items: center;
+
+        .loading-bar {
+
           // justify-content: space-between;
-          #loadname{
+          #loadname {
             padding-right: 1rem;
           }
         }
+
         flex: 1;
         justify-content: center;
         align-items: center;
@@ -578,6 +626,7 @@ button:focus-visible {
           border-radius: 10px;
           border: none;
           height: fit-content;
+          width: 380px;
         }
 
         .analysis-interval {
@@ -588,7 +637,7 @@ button:focus-visible {
           border-radius: 10px;
           border: none;
           height: fit-content;
-          width: 3rem;
+          width: 3.5rem;
         }
 
         .interval-unit {
@@ -627,40 +676,8 @@ button:focus-visible {
       }
     }
 
-    .analysis-oomkill-data {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      min-width: 30vw;
-      min-height: 5.4rem;
-      background-color: white;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      border-radius: 10px;
-      margin: 0rem 1rem;
-      padding: 0rem 1rem;
-      font-size: 0.4rem;
-      max-width: auto;
-
-    
-      .oomkilled-pod-data {
-        margin-top: 0.4rem;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        color: $font-color;
-        font-weight: 700;
-        text-align: center;
-      }
-
-      &-container {
-        display: flex;
-        font-size: 1rem;
-        justify-content: center;
-        gap: 3rem;
-      }
-    }
   }
+
   .no-data-msg {
     flex-wrap: nowrap;
     font-size: 0.8rem;
@@ -669,12 +686,7 @@ button:focus-visible {
     border-radius: 10px;
     padding: 1rem;
     color: $font-color;
-    
-    &.graph-msg {
-      margin-top: 2rem;
-      max-height: 2rem;
-      width: 80%;
-    }
+
   }
 
   .analysis-oomkill-data-msg {
@@ -685,7 +697,7 @@ button:focus-visible {
     display: flex;
     width: 100%;
     height: 78vh;
-      flex-grow: 1;
+    flex-grow: 1;
 
     &>div {
       margin: 1rem 2rem;
@@ -711,18 +723,61 @@ button:focus-visible {
       }
     }
 
+
+    .analysis-oomkill-data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 5.4rem;
+      height: fit-content;
+      background-color: whitesmoke;
+      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+      border-radius: 10px;
+      padding: 1rem 24px;
+      font-size: 0.4rem;
+
+      &-container {
+        background-color: white;
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        border-radius: 10px;
+        // margin-right: 8px;
+        padding: 16px 24px;
+        font-size: 1rem;
+
+        &>p {
+          margin: 0.5rem;
+        }
+      }
+
+      .oomkilled-pod-data {
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+      }
+    }
+
     .filtered-log-container {
       display: flex;
       flex-direction: column;
       padding: 1rem 1.5rem;
+      // adjustment for scroll bar
+      padding-right: 0.5rem;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       background-color: whitesmoke;
       border-radius: 10px;
       // height: 30rem; // use this height for when the summary works
-      height: 100%;
       overflow-y: auto;
-      overflow-x: hidden;
+      flex: 1;
 
+      .no-data-msg {
+        // also adjustment for scrollbar
+        margin-right: calc(24px - 1rem);
+      }
+      
       .filtered-events-heading {
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -730,7 +785,16 @@ button:focus-visible {
         font-weight: 700;
         text-align: center;
         margin-bottom: 1rem;
+        margin-right: calc(24px - 0.5rem);
       }
+      
+      .filtered-events-container {
+        padding-right: 0.5rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      
+      
       .event-card {
         position: relative;
         font-size: 0.6rem;
@@ -739,27 +803,47 @@ button:focus-visible {
         box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
         background-color: white;
         border-radius: 10px;
+
+        & > * {
+          word-wrap: break-word;
+        }
       }
     }
 
     #left-side {
-      width: 400px;
+      width: 500px;
+      gap: 16px;
     }
 
     // chart styling
     #chartarea {
-      background-color: white;
-      flex-grow: 1;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 2rem;
-      justify-content: center;
+      @extend .filtered-log-container;
+      
+      // adjust for non-overlapping margins
       margin-left: 0;
-      box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
-      border-radius: 10px;
-      overflow-y: scroll;
-      overflow-x: hidden;
+      
+      .chartarea-heading{
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: $font-color;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.6rem;
+        margin-right: calc(24px - 0.5rem);
+      }
+      
+      .graph-msg {
+        margin-right: calc(24px - 0.5rem);
+      }
+
+      .chartarea-container {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-around;
+      }
     }
 
     .line-chart-div {
@@ -768,10 +852,8 @@ button:focus-visible {
       flex-direction: column;
       margin: 2rem;
       padding: 0.4rem;
-
-      // when row can add a new 30 rem wide chart, it will be added
       min-width: 0;
-      // max-width: 50rem;
+      min-width: 20rem;
 
       // chart height is fixed to prevent infinite height increase
       max-height: 20rem;
@@ -803,18 +885,20 @@ button:focus-visible {
 }
 
 // MEDIA QUERIES
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 800px) {
   #logo {
     width: 10rem;
   }
+
   #sidebar {
     .sidebar-page-container {
       .sidebar-icon {
         width: 1.2rem;
       }
-      .sidebar-names {
-        font-size: 0.8rem;
-      }
+
+      // .sidebar-names {
+      //   font-size: 0.8rem;
+      // }
     }
   }
 

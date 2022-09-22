@@ -8,7 +8,7 @@ import { filter } from '../../webpack.config';
 import DetailsModal from './Modal';
 import Tooltip from './Tooltip';
 
-const AnalysisPage =  (props: AnalysisPageProps) => {
+const AnalysisPage = (props: AnalysisPageProps) => {
   const [OOMKillsList, setOOMKillsList]: any = useState([]);
   const [allOOMKills, setAllOOMKills]: any = useState([]);
   const [podOverviewData, setPodOverviewData]: any = useState([]);
@@ -30,13 +30,13 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
   const handleQuery = async (e: any) => {
     setLoading(true)
     let timeInterval = e.target["analysis-interval"].value + e.target['interval-unit'].value
-    const podName = e.target['oomkill-selector'].value;    
-    if (podName === 'default' ) {
+    const podName = e.target['oomkill-selector'].value;
+    if (podName === 'default') {
       setLoading(false)
       return
     }
     if (timeInterval === 'default' || !e.target["analysis-interval"].value) timeInterval = '5m'
-    
+
     const nodeName = e.target[podName].value;
     const timeOfDeath = new Date(analyzedPod.started).toISOString();
 
@@ -48,7 +48,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
       props.setAnalyzedData(analyzeData1);
       setShowGraphs(true)
       setLoading(false)
-    } catch(err) {
+    } catch (err) {
       setLoading(false)
       return console.log('error: ', err)
     }
@@ -87,7 +87,7 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
         (oomkill: any, i: number): JSX.Element => {
           // console.log('oomkill obj',oomkill)
           hiddenInps.push(<input type='hidden' name={oomkill.podName} value={oomkill.node} key={i + 700}></input>)
-          return (           
+          return (
             <option key={oomkill.podName + i} label={oomkill.podName} value={oomkill.podName} >
               {oomkill.podName}
             </option>
@@ -183,26 +183,27 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
           </form>
           {/* -------------------- END OF FORM -------------------- */}
           {loading && (
-          <div className='loading-bar'>
-            <p id='loadname'>Loading  </p>
-            <p className="loader"></p>
-          </div>
-        )}
+            <div className='loading-bar'>
+              <p id='loadname'>Loading  </p>
+              <p className="loader"></p>
+            </div>
+          )}
         </div>
-          {/* -------------------- START OF TOP RIGHT -------------------- */}
-        <div className="analysis-oomkill-data">
-          <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
-          {analyzedPod.podName ? (
-            <div className="analysis-oomkill-data-container">
-              <div className="analysis-oomkill-data-left">
+      </nav>
+      <div className="analysis-main">
+        {/* -------------------- START OF LEFT AREA -------------------- */}
+        <div id="left-side">
+          {/* -------------------- START OF OOM KILL DATA -------------------- */}
+          <div className="analysis-oomkill-data">
+            <span className="oomkilled-pod-data">OOMKilled Pod Data</span>
+            {analyzedPod.podName ? (
+              <div className="analysis-oomkill-data-container">
                 <p className="analysis-oomkill-data-msg">
                   <strong>Pod:</strong> {analyzedPod.podName}
                 </p>
                 <p className="analysis-oomkill-data-msg">
                   <strong>Restarts:</strong> {analyzedPod.restartcount}
                 </p>
-              </div>
-              <div className="analysis-oomkill-data-right">
                 <p className="analysis-oomkill-data-msg">
                   <strong>Terminated at:</strong>{' '}
                   {analyzedPod.started.slice(0, -6)}
@@ -212,16 +213,11 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
                   {analyzedPod.finished.slice(0, -6)}
                 </p>
               </div>
-            </div>
-          ) : (
-            <p className="no-data-msg">Select OOMKilled Pod to Display Data</p>
-          )}
-        </div>
-      </nav>
-      {/* -------------------- END OF TOP AREA -------------------- */}
-      <div className="analysis-main">
-        {/* -------------------- START OF LEFT AREA -------------------- */}
-        <div id="left-side">
+            ) : (
+              <p className="no-data-msg">Select OOMKilled Pod to Display Data</p>
+            )}
+          </div>
+          {/* -------------------- END OF OOMKILL Data -------------------- */}
 
           {/* <div className="pod-overview">
             <span className="summary">Summary</span>
@@ -235,24 +231,31 @@ const AnalysisPage =  (props: AnalysisPageProps) => {
               </p>
             )}
           </div> */}
-          
+
           <div className="filtered-log-container">
-            <span className="filtered-events-heading">Events</span>
-            {analyzedPod.podName && filteredLogs.length > 0 ? (
-              filteredLogs
-            ) : analyzedPod.podName ? (
-              <p className="no-data-msg">No Events to Display</p>
-            ) : (
-              <p className="no-data-msg">
-                Select OOMKilled Pod to Display Data
-              </p>
-            )}
+            <div className="filtered-events-heading">Events</div>
+            <div className='filtered-events-container'>
+              {analyzedPod.podName && filteredLogs.length > 0 ? (
+                filteredLogs
+              ) : analyzedPod.podName ? (
+                <p className="no-data-msg">No Events to Display</p>
+              ) : (
+                <p className="no-data-msg">
+                  Select OOMKilled Pod to Display Data
+                </p>
+              )}
+
+            </div>
           </div>
         </div>
         {/* -------------------- CHART AREA -------------------- */}
         <div id="chartarea">
+          <div className='chartarea-heading'>Metrics</div>
           {showGraphs ? (
-            <ChartGrid analyzedData={analyzedData} />
+
+            <div className='chartarea-container'>
+              <ChartGrid analyzedData={analyzedData} />
+            </div>
           ) : (
             <p className="no-data-msg graph-msg">
               Please Query an OOMKilled Pod to Display Charts
