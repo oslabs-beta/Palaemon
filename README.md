@@ -73,7 +73,8 @@ npm start:production
 <p align="center">
   <img src="./client/assets/Landing-to-Home.gif" alt="drawing" width="800"/>
 </p>
-# Kubernetes Requirements
+
+## Kubernetes Requirements
 Palaemon utilizes the kubernetes command line tool (kubectl) to gather data on your nodes and clusters. Kubectl can be downloaded and installed [here](https://kubernetes.io/docs/tasks/tools/).
 
 Minikube can also be used to test out Palaemon. More can be found on their official documentation [here](https://minikube.sigs.k8s.io/docs/start/).
