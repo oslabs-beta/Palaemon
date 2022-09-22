@@ -6,7 +6,7 @@
 # Palaemon :fried_shrimp:
 
 - An Electron based developer tool for Kubernetes cluster monitoring and error analysis
-- Palaemon is a Greek, child sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of shrimp.
+- Palaemon is a Greek, child sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of [shrimp](https://en.wikipedia.org/wiki/Palaemon_(crustacean)).
 
 # Running the Electron App
 Prerequisites:
