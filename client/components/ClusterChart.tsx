@@ -1,17 +1,15 @@
-import { useState } from 'react';
 import { ClusterChartProps } from '../Types';
 import ClusterChartCard from './ClusterChartCard';
 
 const ClusterChart = (props: ClusterChartProps): JSX.Element => {
 
-
+    // do not change order of this.
     const names: ["Pods", "Nodes"] = ["Pods", "Nodes"]
     const clusterCards: any = [];
     
     // async function to update each card's usage with query to prom via main process
     const getData = async (name: string, resource: string, obj: any) => {
       try {
-
         const usageData = await window.api.getUsage(name, resource);
         if (usageData) obj.usage = usageData[0]
       } catch(err) {

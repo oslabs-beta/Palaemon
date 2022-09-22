@@ -4,19 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 const LogCard = (props: LogCardProps): JSX.Element => {
   const navigate = useNavigate();
-  const {setLoading, analyzedPod, setAnalyzedPod, setShowGraphs }: any = props;
+  const {setLoading, setAnalyzedPod, setShowGraphs }: any = props;
 
   const handleAnalyze = async () => {
     setLoading(true)
     setAnalyzedPod({ ...props.oomObj });
     try {
       if (props.oomObj) {
-        // console.log('props oom obj', typeof props.oomObj.started)
+        // sets end time as the time of death to query and get data leading up to pod's termination time
         const timeOfDeath = new Date(props.oomObj.started).toISOString();
         const analyzeData = await window.api.getAnalysis(props.oomObj.node, '15s', timeOfDeath);
         //access to cluster chart data which shows limits/requests
-        // console.log('inside handle analyze cluster chard data', props.clusterChartData.node)
         setShowGraphs(true);
+        // sets state of analyzeData so analysispage can preload with selected pod
         props.setAnalyzedData(analyzeData);
       }
       setLoading(false)

@@ -1,17 +1,12 @@
-import Graph from './Graph';
-
 import { useState, useEffect } from 'react';
 import ChartGrid from './ChartGrid';
-import { AnalysisPageProps } from '../Types';
+import { AnalysisPageProps, ChartGraphData } from '../Types';
 import LogCard from './LogCard';
-import { filter } from '../../webpack.config';
-import DetailsModal from './Modal';
 import Tooltip from './Tooltip';
 
 const AnalysisPage = (props: AnalysisPageProps) => {
   const [OOMKillsList, setOOMKillsList]: any = useState([]);
   const [allOOMKills, setAllOOMKills]: any = useState([]);
-  const [podOverviewData, setPodOverviewData]: any = useState([]);
   const [filteredLogs, setFilteredLogs]: any = useState([]);
   const [logType, setLogType]: any = useState<string>('events');
   const [tooltipState, setTooltipState]: any = useState(false);
@@ -40,23 +35,23 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     const nodeName = e.target[podName].value;
     const timeOfDeath = new Date(analyzedPod.started).toISOString();
 
-    // console.log('analyzed pod', analyzedPod.started)
-    console.log('Query button pressed with: ', nodeName, timeInterval)
     try {
-      const analyzeData1 = await window.api.getAnalysis(nodeName, timeInterval, timeOfDeath)
-      // console.log('this should give us arrobjs ', analyzeData1);
+      // analyzeData1 is object with all chart data. see type
+      const analyzeData1: ChartGraphData = await window.api.getAnalysis(nodeName, timeInterval, timeOfDeath)
+
       props.setAnalyzedData(analyzeData1);
       setShowGraphs(true)
       setLoading(false)
     } catch (err) {
       setLoading(false)
-      return console.log('error: ', err)
+      return err
     }
   }
 
+  // displays analyzed pod
   const updateAnalyzedPod = (e: any) => {
+    // sets podName as node name. we deliver all pod data based on parent node, so we extract the pod's parent (node)
     const podName = e.target.value;
-    // console.log('targetval',e.target.value)
     const newAnalysis = allOOMKills.filter(
       (oomkill: any) => oomkill.podName === podName
     );
@@ -85,7 +80,6 @@ const AnalysisPage = (props: AnalysisPageProps) => {
       const oomkillData = await window.api.getOOMKills();
       const oomKillOptions: JSX.Element[] = oomkillData.map(
         (oomkill: any, i: number): JSX.Element => {
-          // console.log('oomkill obj',oomkill)
           hiddenInps.push(<input type='hidden' name={oomkill.podName} value={oomkill.node} key={i + 700}></input>)
           return (
             <option key={oomkill.podName + i} label={oomkill.podName} value={oomkill.podName} >
@@ -129,7 +123,6 @@ const AnalysisPage = (props: AnalysisPageProps) => {
     renderOOMKills();
     createLogs();
 
-    //console.log("ANALYZED POD CHANGED", analyzedPod);
   }, [analyzedPod]);
 
   return (
@@ -218,19 +211,6 @@ const AnalysisPage = (props: AnalysisPageProps) => {
             )}
           </div>
           {/* -------------------- END OF OOMKILL Data -------------------- */}
-
-          {/* <div className="pod-overview">
-            <span className="summary">Summary</span>
-            {analyzedPod.podName && podOverviewData.length > 0 ? (
-              podOverviewData
-            ) : analyzedPod.podName ? (
-              <p className="no-data-msg">No Data to Display</p>
-            ) : (
-              <p className="no-data-msg">
-                Select OOMKilled Pod to Display Data
-              </p>
-            )}
-          </div> */}
 
           <div className="filtered-log-container">
             <div className="filtered-events-heading">Events</div>
