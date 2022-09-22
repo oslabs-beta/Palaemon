@@ -139,9 +139,17 @@ const ChartGrid = (props: any) => {
   //   console.log('a');
   //   console.log('multiopt', multiOptions);
 
-  const handleLegendClick = (keyName: 'podCPU' | 'podMem' | 'nodeMem' | 'nodeCPU' | 'netRead' | 'netWrite') => {
-    const newButton = { ...buttonClicked }
-    newButton[keyName] = !newButton[keyName]
+  const handleLegendClick = (
+    keyName:
+      | 'podCPU'
+      | 'podMem'
+      | 'nodeMem'
+      | 'nodeCPU'
+      | 'netRead'
+      | 'netWrite'
+  ) => {
+    const newButton = { ...buttonClicked };
+    newButton[keyName] = !newButton[keyName];
     setButtonClicked(newButton);
   };
 
@@ -211,10 +219,13 @@ const ChartGrid = (props: any) => {
               datasets: datasetData,
             }}
             key={70 + keyCounter++}
-          // width={'300px'}
-          // height={'300px'}
+            // width={'300px'}
+            // height={'300px'}
           />
-          <button className="legend-btn-grid" onClick={() => handleLegendClick(key)}>
+          <button
+            className="legend-btn-grid"
+            onClick={() => handleLegendClick(key)}
+          >
             {!buttonClicked[key] ? 'Show Legend' : 'Hide Legend'}
           </button>
         </div>

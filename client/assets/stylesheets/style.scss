@@ -70,7 +70,7 @@ body {
   padding: 0.5rem;
 
   a {
-    &>img {
+    & > img {
       margin-top: 50px;
     }
 
@@ -86,7 +86,6 @@ body {
     padding: 0;
 
     li {
-
       &,
       * {
         text-decoration: none;
@@ -391,7 +390,7 @@ footer {
   margin-top: 0.4rem;
   margin-left: 1rem;
 
-  &>select {
+  & > select {
     width: 140px;
     font-size: 1.1rem;
     padding: 0.25rem 0.5rem;
@@ -405,21 +404,21 @@ footer {
   position: absolute;
   top: 10px;
   right: 10px;
-  box-shadow: 2px 2px 6px rgb(64 0 0 / 20%);
+  box-shadow: 0px 2px 3px rgb(64 0 0 / 20%);
   border-radius: 10px;
   border: none;
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
   background-color: $ugly-sewage-green;
   color: white;
   transition: all 0.2s;
+  text-transform: uppercase;
 }
 
 .analyze:hover {
   background-color: white;
   color: $font-color;
   cursor: pointer;
-  filter: drop-shadow(2px 2px 3px $font-color);
 }
 
 #graph {
@@ -576,7 +575,6 @@ button:focus-visible {
       font-size: 0.4rem;
       max-width: auto;
 
-
       .oomkilled-pod-data {
         margin-top: 0.4rem;
         text-transform: uppercase;
@@ -597,7 +595,7 @@ button:focus-visible {
     &-left {
       display: flex;
       justify-content: flex-start;
-      gap: 2rem; 
+      gap: 2rem;
 
       .analysis-form {
         display: grid;
@@ -605,7 +603,6 @@ button:focus-visible {
         width: fit-content;
 
         .loading-bar {
-
           // justify-content: space-between;
           #loadname {
             padding-right: 1rem;
@@ -659,7 +656,7 @@ button:focus-visible {
           border: none;
           background-color: $ugly-sewage-green;
           color: white;
-          transition: all 0.3s;
+          transition: all 0.2s;
           height: fit-content;
         }
 
@@ -667,7 +664,6 @@ button:focus-visible {
           background-color: white;
           color: $font-color;
           cursor: pointer;
-          filter: drop-shadow(2px 2px 3px $font-color);
         }
 
         .tooltip {
@@ -675,7 +671,6 @@ button:focus-visible {
         }
       }
     }
-
   }
 
   .no-data-msg {
@@ -686,7 +681,6 @@ button:focus-visible {
     border-radius: 10px;
     padding: 1rem;
     color: $font-color;
-
   }
 
   .analysis-oomkill-data-msg {
@@ -699,7 +693,7 @@ button:focus-visible {
     height: 78vh;
     flex-grow: 1;
 
-    &>div {
+    & > div {
       margin: 1rem 2rem;
     }
 
@@ -723,7 +717,6 @@ button:focus-visible {
       }
     }
 
-
     .analysis-oomkill-data {
       display: flex;
       flex-direction: column;
@@ -745,7 +738,7 @@ button:focus-visible {
         padding: 16px 24px;
         font-size: 1rem;
 
-        &>p {
+        & > p {
           margin: 0.5rem;
         }
       }
@@ -777,7 +770,7 @@ button:focus-visible {
         // also adjustment for scrollbar
         margin-right: calc(24px - 1rem);
       }
-      
+
       .filtered-events-heading {
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -787,14 +780,13 @@ button:focus-visible {
         margin-bottom: 1rem;
         margin-right: calc(24px - 0.5rem);
       }
-      
+
       .filtered-events-container {
         padding-right: 0.5rem;
         overflow-y: auto;
         overflow-x: hidden;
       }
-      
-      
+
       .event-card {
         position: relative;
         font-size: 0.6rem;
@@ -818,11 +810,18 @@ button:focus-visible {
     // chart styling
     #chartarea {
       @extend .filtered-log-container;
-      
+      background-color: whitesmoke;
+
       // adjust for non-overlapping margins
       margin-left: 0;
-      
-      .chartarea-heading{
+
+      .chartarea-container {
+        box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      .chartarea-heading {
         text-transform: uppercase;
         font-size: 0.8rem;
         color: $font-color;
@@ -831,7 +830,7 @@ button:focus-visible {
         margin-bottom: 0.6rem;
         margin-right: calc(24px - 0.5rem);
       }
-      
+
       .graph-msg {
         margin-right: calc(24px - 0.5rem);
       }
@@ -872,6 +871,7 @@ button:focus-visible {
       align-self: center;
       transition: all 0.2s;
       font-size: 0.6rem;
+      margin-top: 1rem;
     }
 
     .legend-btn-grid:hover {
@@ -891,6 +891,8 @@ button:focus-visible {
   }
 
   #sidebar {
+    flex: 1;
+
     .sidebar-page-container {
       .sidebar-icon {
         width: 1.2rem;
