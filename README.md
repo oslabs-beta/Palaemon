@@ -5,7 +5,7 @@
 
 # Palaemon :fried_shrimp:
 
-- A gentle, euthanization and diagnosis tool for out-of-memory (OOM) kubernetes pods. 
+- An Electron based developer tool for Kubernetes cluster monitoring and error analysis
 - Palaemon is a Greek, child sea-god who came to aid sailors in distress. He was often depicted as riding a dolphin. Also, a genus of shrimp.
 
 # Running the Electron App
