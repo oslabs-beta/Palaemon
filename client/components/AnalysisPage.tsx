@@ -252,7 +252,10 @@ const AnalysisPage = (props: AnalysisPageProps) => {
         <div id="chartarea">
           <div className='chartarea-heading'>Metrics</div>
           {showGraphs ? (
-            <ChartGrid analyzedData={analyzedData} />
+
+            <div className='chartarea-container'>
+              <ChartGrid analyzedData={analyzedData} />
+            </div>
           ) : (
             <p className="no-data-msg graph-msg">
               Please Query an OOMKilled Pod to Display Charts

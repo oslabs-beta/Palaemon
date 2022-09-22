@@ -686,9 +686,8 @@ button:focus-visible {
     color: $font-color;
 
     &.graph-msg {
-      // margin-top: 2rem;
-      max-height: 2rem;
-      width: 80%;
+      // adjustment for scrollbar
+      margin-right: calc(24px - 1rem);
     }
   }
 
@@ -821,18 +820,10 @@ button:focus-visible {
     // chart styling
     #chartarea {
       @extend .filtered-log-container;
-      // flex-grow: 1;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      // gap: 2rem;
-      // justify-content: center;
       
       // adjust for non-overlapping margins
       margin-left: 0;
-      // overflow-y: scroll;
-      // overflow-x: hidden;
-
+      
       .chartarea-heading{
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -841,6 +832,15 @@ button:focus-visible {
         text-align: center;
         margin-bottom: 0.6rem;
         margin-right: calc(24px - 0.5rem);
+      }
+      
+      .chartarea-container {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-around;
       }
     }
 
@@ -851,6 +851,7 @@ button:focus-visible {
       margin: 2rem;
       padding: 0.4rem;
       min-width: 0;
+      min-width: 20rem;
 
       // chart height is fixed to prevent infinite height increase
       max-height: 20rem;
