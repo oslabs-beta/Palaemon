@@ -597,20 +597,23 @@ button:focus-visible {
     &-left {
       display: flex;
       justify-content: flex-start;
-      gap: 2rem; 
+      gap: 2rem;
+
+      .loading-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        #loadname {
+          padding-right: 1rem;
+        }
+      }
 
       .analysis-form {
         display: grid;
         grid-template-columns: repeat(5, auto);
         width: fit-content;
 
-        .loading-bar {
-
-          // justify-content: space-between;
-          #loadname {
-            padding-right: 1rem;
-          }
-        }
 
         flex: 1;
         justify-content: center;
@@ -777,7 +780,7 @@ button:focus-visible {
         // also adjustment for scrollbar
         margin-right: calc(24px - 1rem);
       }
-      
+
       .filtered-events-heading {
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -787,14 +790,14 @@ button:focus-visible {
         margin-bottom: 1rem;
         margin-right: calc(24px - 0.5rem);
       }
-      
+
       .filtered-events-container {
         padding-right: 0.5rem;
         overflow-y: auto;
         overflow-x: hidden;
       }
-      
-      
+
+
       .event-card {
         position: relative;
         font-size: 0.6rem;
@@ -804,7 +807,7 @@ button:focus-visible {
         background-color: white;
         border-radius: 10px;
 
-        & > * {
+        &>* {
           word-wrap: break-word;
         }
       }
@@ -818,11 +821,11 @@ button:focus-visible {
     // chart styling
     #chartarea {
       @extend .filtered-log-container;
-      
+
       // adjust for non-overlapping margins
       margin-left: 0;
-      
-      .chartarea-heading{
+
+      .chartarea-heading {
         text-transform: uppercase;
         font-size: 0.8rem;
         color: $font-color;
@@ -831,7 +834,7 @@ button:focus-visible {
         margin-bottom: 0.6rem;
         margin-right: calc(24px - 0.5rem);
       }
-      
+
       .graph-msg {
         margin-right: calc(24px - 0.5rem);
       }

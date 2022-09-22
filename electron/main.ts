@@ -6,6 +6,10 @@ import {
 } from 'electron';
 import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
+// import installExtension, {
+//   REACT_DEVELOPER_TOOLS,
+//   REDUX_DEVTOOLS,
+// } from 'electron-devtools-installer';
 
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
@@ -73,12 +77,12 @@ const loadMainWindow = () => {
         console.log('fetch to 9090 has failed in main.ts in loadMainWindow');
         const num = dialog.showMessageBoxSync({
           message:
-            'PALAEMON: Please make sure port-forwarding to 9090 is set up.',
+            'PALAEMON ERROR: 9090',
           type: 'warning',
           // Cancel returns 0, OK returns 1
           buttons: ['Cancel', 'OK'],
-          title: 'PALAEMON: Port 9090 missing',
-          detail: 'Open Port 9090 for prometheus, then click OK.',
+          title: 'PALAEMON',
+          detail: 'Port-forward Prometheus service to port 9090, then press OK.\n \nVisit palaemon.io for more information.',
         });
         if (num === 1) checkPort();
         else if (num === 0) app.quit();
