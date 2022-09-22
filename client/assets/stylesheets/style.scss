@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Sofia Pro Soft';
+  src: url('./Sofia-Pro-Soft.otf') format('opentype');
+}
+
 $ugly-sewage-green: #00695c;
 $p-light-color: #439889;
 $p-dark-color: #003d33;
@@ -163,6 +168,7 @@ body {
     padding-right: 12px;
     margin: 12px;
     font-size: 1.7rem;
+    font-family: "Sofia Pro Soft";
   }
 }
 
@@ -361,6 +367,7 @@ footer {
     background-color: white;
     border-radius: 10px;
     word-wrap: break-word;
+    
     &-header {
       display: flex;
       justify-content: space-between;
