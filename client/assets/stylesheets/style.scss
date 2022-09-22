@@ -360,7 +360,7 @@ footer {
     box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
     background-color: white;
     border-radius: 10px;
-
+    word-wrap: break-word;
     &-header {
       display: flex;
       justify-content: space-between;
