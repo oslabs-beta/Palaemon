@@ -623,6 +623,7 @@ button:focus-visible {
           border-radius: 10px;
           border: none;
           height: fit-content;
+          width: 380px;
         }
 
         .analysis-interval {
@@ -633,7 +634,7 @@ button:focus-visible {
           border-radius: 10px;
           border: none;
           height: fit-content;
-          width: 3rem;
+          width: 3.5rem;
         }
 
         .interval-unit {
@@ -742,7 +743,7 @@ button:focus-visible {
         background-color: white;
         box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
         border-radius: 10px;
-        margin-right: 8px;
+        // margin-right: 8px;
         padding: 16px 24px;
         font-size: 1rem;
 
@@ -765,14 +766,20 @@ button:focus-visible {
       display: flex;
       flex-direction: column;
       padding: 1rem 1.5rem;
+      // adjustment for scroll bar
+      padding-right: 0.5rem;
       box-shadow: 5px 10px 10px rgb(64 0 0 / 20%);
       background-color: whitesmoke;
       border-radius: 10px;
       // height: 30rem; // use this height for when the summary works
       overflow-y: auto;
-      overflow-x: hidden;
       flex: 1;
 
+      .no-data-msg {
+        // also adjustment for scrollbar
+        margin-right: calc(24px - 1rem);
+      }
+      
       .filtered-events-heading {
         text-transform: uppercase;
         font-size: 0.8rem;
@@ -780,8 +787,16 @@ button:focus-visible {
         font-weight: 700;
         text-align: center;
         margin-bottom: 1rem;
+        margin-right: calc(24px - 0.5rem);
       }
-
+      
+      .filtered-events-container {
+        padding-right: 0.5rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      
+      
       .event-card {
         position: relative;
         font-size: 0.6rem;
@@ -820,10 +835,7 @@ button:focus-visible {
       flex-direction: column;
       margin: 2rem;
       padding: 0.4rem;
-
-      // when row can add a new 30 rem wide chart, it will be added
       min-width: 0;
-      // max-width: 50rem;
 
       // chart height is fixed to prevent infinite height increase
       max-height: 20rem;
