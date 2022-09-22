@@ -6,6 +6,10 @@ import {
 } from 'electron';
 import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
+// import installExtension, {
+//   REACT_DEVELOPER_TOOLS,
+//   REDUX_DEVTOOLS,
+// } from 'electron-devtools-installer';
 
 import * as k8s from '@kubernetes/client-node';
 import * as cp from 'child_process';
