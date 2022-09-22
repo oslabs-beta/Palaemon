@@ -149,6 +149,14 @@ There are settings to enable HTML report and video, snapshot, trace recordings t
 ## Features
 
 * Realtime Pod memory usage, sorted by namespaces
+* Connect to locally hosted or cloud hosted Kubernetes clusters and Prometheus monitoring tools
+* Filter by namespaces for meaningful reports
+* Monitoring for health and resource usage per pod and nodes
+* Records and curates reports based on recent out-of-memory kill (OOMKill) errors
+* Displays event and alert logs
+* Visualize health of pods and nodes by namespace in a Kubernetes cluster
+* Execute customized queries based on user-defined time intervals
+* Documentation available on the official website
 
 ## Planned Features
 
