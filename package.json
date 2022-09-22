@@ -9,13 +9,14 @@
     "rmdir": "node -e \"var fs = require('fs'); process.argv.slice(1).map((fpath) => fs.rmdirSync(fpath, { recursive: true })); process.exit(0);\"",
     "clean:prebuild": "npm run rmdir -- dist",
     "electronmon": "electronmon ./dist/electron/main.js",
-    "dev": "npm run clean:prebuild && npm run dev",
+    "dev": "concurrently \"webpack --watch --config ./webpack.config.js\" \"wait-on ./dist/electron/main.js && electronmon ./dist/electron/main.js\"",
     "start": "electron dist/electron/main.js",
+    "start:dev": "npm run clean:prebuild && npm run dev",
     "start:production": "npm run build:production && electron ./dist/electron/main.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test",
-    "pack": "electron-builder -mwl",
+    "pack": "electron-builder -m",
     "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
