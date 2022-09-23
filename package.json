@@ -11,6 +11,7 @@
     "electronmon": "electronmon ./dist/electron/main.js",
     "start": "npm run clean:prebuild && npm run dev",
     "start:production": "npm run build:production && electron ./dist/electron/main.js",
+    "start:docker": "electron ./dist/electron/main.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test"

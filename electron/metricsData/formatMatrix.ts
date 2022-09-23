@@ -4,7 +4,7 @@ import { SvgInfo, ClusterChartProps } from "../../client/Types";
 
 const fetch: any = (...args: any) =>
   import("node-fetch").then(({ default: fetch }: any) => fetch(...args));
-
+  const LOCALHOST = 'host.docker.internal';
 interface matrix {
   resultType?: string;
   result: [{ metric: {}; values: Array<[number, string]> }];
@@ -74,8 +74,8 @@ export function formatUsage(matrix: matrix, unitType?: string) {
 }
 
 export async function getPodReqLimits(podName: string, startTime?: string, endTime?: string) {
-  const limitsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
-  const requestsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+  const limitsQuery = `http://${LOCALHOST}:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+  const requestsQuery = `http://${LOCALHOST}:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
   const limit = await fetch(limitsQuery);
   const request = await fetch(requestsQuery);
   const limits: any = await limit.json();

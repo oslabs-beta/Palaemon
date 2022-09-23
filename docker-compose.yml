@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+    node:
+        image: palaemon
+        privileged: true
+        container_name: node
+        environment:
+            - DISPLAY=host.docker.internal:0
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        extra_hosts:
+            - "host.docker.internal:host-gateway"

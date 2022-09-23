@@ -1,0 +1,8 @@
+node_modules
+package_lock.json
+__mocks__
+__tests__
+build_src
+dist
+jest.config.js
+playwright.config.ts

@@ -3,6 +3,7 @@ import * as cp from 'child_process';
 
 const fetch: any = (...args: any) =>
   import('node-fetch').then(({ default: fetch }: any) => fetch(...args));
+const LOCALHOST = 'host.docker.internal';
 
 // utilized for start and end times when querying for metrics
 export const setStartAndEndTime = () => {
@@ -113,8 +114,8 @@ export async function fetchMem(obj: any) {
 
   try {
     // PromQL to query resource limits for pods in all namespaces
-    const limitsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
-    const requestsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+    const limitsQuery = `http://${LOCALHOST}:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
+    const requestsQuery = `http://${LOCALHOST}:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="memory"}&start=${startTime}&end=${endTime}&step=24h`;
     const limit = await fetch(limitsQuery);
     const request = await fetch(requestsQuery);
     const limitData: any = await limit.json();
@@ -156,8 +157,8 @@ export async function fetchCPU(obj: any) {
   }
 
   try {
-    const limitsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="cpu"}&start=${startTime}&end=${endTime}&step=24h`;
-    const requestsQuery = `http://127.0.0.1:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="cpu"}&start=${startTime}&end=${endTime}&step=24h`;
+    const limitsQuery = `http://${LOCALHOST}:9090/api/v1/query_range?query=kube_pod_container_resource_limits{pod="${podName}",resource="cpu"}&start=${startTime}&end=${endTime}&step=24h`;
+    const requestsQuery = `http://${LOCALHOST}:9090/api/v1/query_range?query=kube_pod_container_resource_requests{pod="${podName}",resource="cpu"}&start=${startTime}&end=${endTime}&step=24h`;
     const limit = await fetch(limitsQuery);
     const limitData: any = await limit.json();
     const request = await fetch(requestsQuery);

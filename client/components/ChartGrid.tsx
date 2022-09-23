@@ -11,7 +11,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { watchPlugins } from '../../jest.config';
 
 ChartJS.register(
   CategoryScale,

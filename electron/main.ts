@@ -40,7 +40,9 @@ kc.loadFromDefault();
 const k8sApiCore = kc.makeApiClient(k8s.CoreV1Api);
 const k8sApiApps = kc.makeApiClient(k8s.AppsV1Api);
 
-const PROM_URL = 'http://127.0.0.1:9090/api/v1/';
+const LOCALHOST = 'host.docker.internal';
+
+const PROM_URL = `http://${LOCALHOST}:9090/api/v1/`;
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 // const PORT: string | number = process.env.PORT || 8080;
@@ -48,6 +50,7 @@ const isDev: boolean = process.env.NODE_ENV === 'development';
 // this is to allow the BrowserWindow object to be referrable globally
 // however, BrowserWindow cannot be created before app is 'ready'
 let mainWindow: any = null;
+// app.commandLine.appendSwitch('--no-sandbox --disable-gpu');
 
 const loadMainWindow = () => {
   mainWindow = new BrowserWindow({
@@ -68,7 +71,7 @@ const loadMainWindow = () => {
 
   // check to see if port 9090 is open
   const checkPort = () => {
-    fetch('http://localhost:9090/')
+    fetch(`http://${LOCALHOST}:9090/`)
       .then((res: any) => {
         console.log('status code in loadMainWindow is ', res.status);
         mainWindow.show();
