@@ -7,7 +7,7 @@ interface Props {
 interface State {
   hasError: boolean;
 }
-
+// make progress
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false
