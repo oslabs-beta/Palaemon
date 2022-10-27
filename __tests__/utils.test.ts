@@ -40,12 +40,9 @@ describe('setStartAnEndTime', () => {
     copyNow.setHours(copyNow.getHours() - 1);
     const startTime = copyNow.toISOString();
     const endTime = new Date().toISOString();
-    
+
     const result = setStartAndEndTime();
 
-    console.log(result)
-    console.log('start',startTime)
-    console.log('end',endTime)
     expect(result.startTime).toBe(startTime);
     expect(result.endTime).toBe(endTime);
   });
