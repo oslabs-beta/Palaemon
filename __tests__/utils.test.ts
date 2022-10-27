@@ -29,12 +29,23 @@ describe('setStartAnEndTime', () => {
   });
 
   test('sets startTime to an hour before now, and endTime to now', () => {
+    // const now = new Date();
+    // const startTime = now.toISOString();
+    // now.setHours(now.getHours() - 24);
+    // const endTime = now.toISOString();
+    // const result = setStartAndEndTime();
+    
     const now = new Date();
-    const endTime = now.toISOString();
-    now.setHours(now.getHours() - 24);
-    const startTime = now.toISOString();
+    const copyNow = new Date(now.getTime());
+    copyNow.setHours(copyNow.getHours() - 1);
+    const startTime = copyNow.toISOString();
+    const endTime = new Date().toISOString();
+    
     const result = setStartAndEndTime();
 
+    console.log(result)
+    console.log('start',startTime)
+    console.log('end',endTime)
     expect(result.startTime).toBe(startTime);
     expect(result.endTime).toBe(endTime);
   });
