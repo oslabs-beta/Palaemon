@@ -5,8 +5,10 @@ import LogCard from './LogCard';
 import Tooltip from './Tooltip';
 
 const AnalysisPage = (props: AnalysisPageProps) => {
-  const [OOMKillsList, setOOMKillsList]: any = useState([]);
-  const [allOOMKills, setAllOOMKills]: any = useState([]);
+  // const [user, setUser] = useState<User | null>(null);
+
+  const [OOMKillsList, setOOMKillsList] = useState<JSX.Element[] | null>([]);
+  const [allOOMKills, setAllOOMKills] = useState<Promise<any>[]>([]);
   const [filteredLogs, setFilteredLogs]: any = useState([]);
   const [logType, setLogType]: any = useState<string>('events');
   const [tooltipState, setTooltipState]: any = useState(false);
