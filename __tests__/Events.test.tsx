@@ -83,8 +83,31 @@ const mockOomObject: oomObject = {
 const mockOOMKills = [mockOomObject];
 
 const setStateMock = jest.fn();
-const useStateMock: any = (useState: any) => [useState, setStateMock];
+const use1 = jest.spyOn(React, 'useState');
+
+type MyType = string;
+
+const use2Func = (init?: any) => [init, setStateMock];
+
+// const use3Func = (init: MyType = **'Initial value'**) => [init = MyType.TYPE_1, setStateMock];
+
+use1.mockImplementation(use2Func)
+
+const useStateMock: any = (useState?: any) => [useState, setStateMock];
+
 jest.spyOn(React, 'useState').mockImplementation(useStateMock);
+
+/*
+
+import * as React from 'react'
+
+const setState = jest.fn();
+const useStateSpy = jest.spyOn(React, 'useState');
+
+useStateSpy.mockImplementation((init: MyType = **'Initial value'**) => [init = MyType.TYPE_1, setState]);
+or 
+useStateSpy.mockImplementation((init?: MyType) => [init = MyType.TYPE_1, setState]);
+*/
 
 describe('<Events />', () => {
   test('should render without crashing', () => {});

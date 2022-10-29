@@ -136,8 +136,8 @@ describe('fetchMem should return the memory usage of a pod', () => {
     json: jest.fn().mockReturnValue(Promise.resolve(mockRequest))
   }
 
-  let returnValue: any;
-  let returnValueOnce: any;
+  let returnValue: typeof jsonReqObj;
+  let returnValueOnce: typeof jsonReqObj;
 
 
 
