@@ -48,20 +48,20 @@ export interface ModalProps extends SvgInfo {
 
 export interface ClusterChartProps extends ClusterAllInfo {
   close: () => void;
-  click: (e: any, input: SvgInfo) => void;
+  click: (e: Event, input: SvgInfo) => void;
 }
 
 export type ClusterChartCardProps = {
   title: string; // Cluster, or Pod, or Node, or Deployment
   data: SvgInfo[];
-  click: (e: any, input: SvgInfo) => void;
+  click: (e: Event, input: SvgInfo) => void;
   close: () => void;
 };
 
 //--------------------------------Types for the right side and alerts/events ----------------------------------------------------
 
 export type EventProps = {
-  setAnalyzedPod: (input: any) => void;
+  setAnalyzedPod: (input: string) => void;
   analyzedPod: any[];
   clusterChartData: any[];
   setAnalyzedData: (input: any) => void;
@@ -149,7 +149,7 @@ export type GraphableData = {
 //--------------------------------Types for Analysis Page----------------------------------------------------
 
 export type AnalysisPage = {
-  analyzedPod: any[];
+  analyzedPod: any;
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
   setAnalyzedData: (input: any) => void;
@@ -158,7 +158,7 @@ export type AnalysisPage = {
 };
 
 export type AnalysisPageProps = {
-  analyzedPod: any[];
+  analyzedPod: any;
   analyzedData: any[];
   setAnalyzedPod: (input: any) => void;
   clusterChartData: any;

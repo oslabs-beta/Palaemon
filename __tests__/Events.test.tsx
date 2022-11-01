@@ -85,13 +85,13 @@ const mockOOMKills = [mockOomObject];
 const setStateMock = jest.fn();
 const use1 = jest.spyOn(React, 'useState');
 
-type MyType = string;
+// type MyType = string;
 
-const use2Func = (init?: any) => [init, setStateMock];
+// const use2Func = (init?: any) => [init, setStateMock];
 
 // const use3Func = (init: MyType = **'Initial value'**) => [init = MyType.TYPE_1, setStateMock];
 
-use1.mockImplementation(use2Func)
+// use1.mockImplementation(use2Func)
 
 const useStateMock: any = (useState?: any) => [useState, setStateMock];
 

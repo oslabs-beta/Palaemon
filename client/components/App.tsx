@@ -5,6 +5,7 @@ import { HashRouter, Link, Route, Routes } from 'react-router-dom';
 import HomePage from './HomePage';
 import LandingPage from './LandingPage';
 import AnalysisPage from './AnalysisPage';
+import Sidebar from './Sidebar';
 
 // import styles sheet here
 import '../assets/stylesheets/style.scss';
@@ -25,10 +26,13 @@ const initData: any = [
   },
 ];
 
-import Sidebar from './Sidebar';
+
+type AnalyzedPod = {
+  [key: string]: any
+}
 
 const App = () => {
-  const [analyzedPod, setAnalyzedPod]: any = React.useState({});
+  const [analyzedPod, setAnalyzedPod] = React.useState<AnalyzedPod>({} as AnalyzedPod);
   const [resourceError, setResourceError]: any = React.useState('');
   const [menuOpen, setMenuOpen]: any = React.useState(true);
   const [showGraphs, setShowGraphs]: any = React.useState(false);
