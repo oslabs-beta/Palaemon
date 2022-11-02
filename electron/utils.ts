@@ -189,7 +189,11 @@ export const formatOOMKills = (data: string[]) => {
   const OOMKills: {}[] = [];
 
   data.forEach((el: any) => {
-    const podDesc = cp.execSync(`kubectl describe pod ${el}`).toString();
+    if (el === 'prometheus-monitoring2-kube-prometheu-prometheus-0') {
+      var podDesc = cp.execSync(`kubectl describe pod ${el} -n monitoring2`).toString();
+    } else {
+      var podDesc = cp.execSync(`kubectl describe pod ${el}`).toString();
+    }
     const podData = podDesc.split('\n');
     const updatedPodData = podData.map(pod =>
       pod.replace(/^\s+|\s+$|\s+(?=\s)/g, '')

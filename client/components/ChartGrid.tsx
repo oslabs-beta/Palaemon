@@ -137,13 +137,7 @@ const ChartGrid = (props: any) => {
 
   // handles open legend for specific graph instead of all of them
   const handleLegendClick = (
-    keyName:
-      | 'podCPU'
-      | 'podMem'
-      | 'nodeMem'
-      | 'nodeCPU'
-      | 'netRead'
-      | 'netWrite'
+    keyName: keyof ChartGraphData
   ) => {
     const newButton = { ...buttonClicked };
     newButton[keyName] = !newButton[keyName];
@@ -151,7 +145,7 @@ const ChartGrid = (props: any) => {
   };
 
   // first we iterate of the total number of graphs we want
-  (Object.keys(graphState) as (keyof typeof graphState)[]).forEach(key => {
+  (Object.keys(graphState) as (keyof ChartGraphData)[]).forEach(key => {
     // then we iterate over all of the lines in that graph
     for (let i = 0; i < graphState[key].length; i++) {
       const podName: string = Object.keys(graphState[key][i])[0];
@@ -166,6 +160,7 @@ const ChartGrid = (props: any) => {
         data: graphState[key][i][podName].values,
       });
     }
+    // assign each chart its own bool variable for buttons
     multiOptions[key].plugins.legend.display = buttonClicked[key];
 
     // this is part of the each individual graphs
@@ -199,7 +194,7 @@ const ChartGrid = (props: any) => {
         console.log('Default Case Hit');
         break;
     }
-
+    console.log(key, buttonClicked[key])
     charts.push(
       <div className="line-chart-div" key={70 + keyCounter++}>
         <Line
