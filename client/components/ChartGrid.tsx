@@ -74,7 +74,7 @@ const ChartGrid = (props: any) => {
     'yellow',
     'orange',
   ];
-
+// console.log('graph', graphState)
   const xLabels: string[] =
     graphState.nodeMem[0][Object.keys(graphState.nodeMem[0])[0]].times;
 
@@ -144,6 +144,9 @@ const ChartGrid = (props: any) => {
     setButtonClicked(newButton);
   };
 
+  console.log([] as GraphData);
+  console.log([] as GraphableData[]);
+
   // first we iterate of the total number of graphs we want
   (Object.keys(graphState) as (keyof ChartGraphData)[]).forEach(key => {
     // then we iterate over all of the lines in that graph
@@ -194,7 +197,7 @@ const ChartGrid = (props: any) => {
         console.log('Default Case Hit');
         break;
     }
-    console.log(key, buttonClicked[key])
+    // console.log(key, buttonClicked[key])
     charts.push(
       <div className="line-chart-div" key={70 + keyCounter++}>
         <Line
