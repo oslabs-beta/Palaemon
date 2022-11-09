@@ -6,6 +6,7 @@ import HomePage from './HomePage';
 import LandingPage from './LandingPage';
 import AnalysisPage from './AnalysisPage';
 import Sidebar from './Sidebar';
+import ErrorBoundary from './ErrorComponent';
 
 // import styles sheet here
 import '../assets/stylesheets/style.scss';
@@ -54,6 +55,7 @@ const App = () => {
             <h1 id="company-name">PALAEMON</h1>
           </Link>
         </div>
+      <ErrorBoundary>
         <Routes>
           <Route
             path="/"
@@ -93,6 +95,7 @@ const App = () => {
             }
           />
         </Routes>
+    </ErrorBoundary>
       </main>
     </HashRouter>
   );
