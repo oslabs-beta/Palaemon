@@ -151,7 +151,7 @@ const ChartGrid = (props: any) => {
   };
 
   // first we iterate of the total number of graphs we want
-  (Object.keys(graphState) as (keyof typeof graphState)[]).forEach(key => {
+  (Object.keys(graphState) as (keyof ChartGraphData)[]).forEach((key: keyof ChartGraphData) => {
     // then we iterate over all of the lines in that graph
     for (let i = 0; i < graphState[key].length; i++) {
       const podName: string = Object.keys(graphState[key][i])[0];
