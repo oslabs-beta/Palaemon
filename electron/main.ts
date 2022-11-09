@@ -1,9 +1,12 @@
+import "webrtc";
+
 import {
   app,
   BrowserWindow,
   ipcMain,
   dialog,
 } from 'electron';
+
 import { ClusterAllInfo } from '../client/Types';
 import path from 'path';
 // import installExtension, {
@@ -277,7 +280,7 @@ ipcMain.handle('getOOMKills', async (): Promise<any> => {
 
 // TEST FOR USAGE ON HOMEPAGE AND ANALYSIS PAGE
 
-ipcMain.handle('getUsage', async (event, ...args) => {
+ipcMain.handle('getUsage', async (event: Event, ...args: string[]) => {
   const time = new Date().toISOString();
   const interval = '15s';
   const podName = args[0];
@@ -316,7 +319,7 @@ ipcMain.handle('getUsage', async (event, ...args) => {
 
 /* -------------- Analysis Page -------------- */
 
-ipcMain.handle("getAnalysis", async (event, parentNode, interval = '5m', timeOfDeath) => {
+ipcMain.handle("getAnalysis", async (event: Event, parentNode: string, interval = '5m', timeOfDeath: string) => {
   
   const endTime = timeOfDeath;
   const now = new Date(timeOfDeath);
